@@ -41,9 +41,24 @@
                         <div class="content mCustomScrollbar">
                             <div class="incentives-section">
                                 <div class="incentives-section">
-                                    @for($i = 1; $i <= 18; $i++)
-                                        @include('sections.widgets.incentive-box')
-                                    @endfor
+                                    @foreach($files as $file)
+                                        <a href="{{ route('file.show', $file->id) }}">
+                                            <div class="incentive-box favorite">
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <div class="incentive-title">{{ $file->name }}</div>
+                                                <div class="incentive-body">
+                                                    <div class="incentive-txt">Published<br>{{ $file->created_at }}</div>
+                                                    <div class="incentive-info-box">
+                                                        <div class="incentive-info in-views"><i class="fa-solid fa-eye"></i> 203K</div>
+                                                        <div class="incentive-info in-files">
+                                                            <img src="{{ asset('images/pdf-icon.svg') }}" class="mw-100" alt="">
+                                                        </div>
+                                                        <div class="incentive-info in-comments"><i class="fa-solid fa-comment-dots"></i> 203K</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

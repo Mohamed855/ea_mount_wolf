@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\File\FileController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
@@ -32,9 +33,10 @@ Route::get('logout', [AuthController::class, 'logout']) -> name('logout');
 Route::resource('user', UserController::class);
 Route::post('login', [LoginController::class, 'check_credentials']) -> name('check_credentials');
 
+// Incentive
+Route::resource('file', FileController::class);
 
 Route::get('brain-box', [SiteController::class, 'brain_box']);
-Route::get('incentive', [SiteController::class, 'incentive']);
 Route::get('favorites', [SiteController::class, 'favorites']);
 Route::get('video', [SiteController::class, 'videos']);
 
