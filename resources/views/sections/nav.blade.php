@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
             <div class="nav-logos">
-                <a class="navbar-brand">
+                <a class="navbar-brand" href="{{ route('home') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="127.754" height="22.893" viewBox="0 0 127.754 22.893">
                         <g id="Group_34" data-name="Group 34" transform="translate(-446.022 -709.93)">
                             <path id="Path_38" data-name="Path 38" d="M490.431,721.124a.854.854,0,0,1-.191.621.724.724,0,0,1-.542.191h-.908V720.28h.908C490.192,720.28,490.431,720.567,490.431,721.124Z" transform="translate(25.366 6.139)" fill="#fff"/>

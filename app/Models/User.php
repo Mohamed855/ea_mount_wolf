@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,12 +23,15 @@ class User extends Authenticatable
         'first_name',
         'middle_name',
         'last_name',
+        'user_name',
         'crm_code',
-        'title',
-        'line',
         'email',
         'phone_number',
         'password',
+        'profile_image',
+        'title',
+        'line_id',
+        'sector_id',
     ];
 
     /**
@@ -50,8 +54,23 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function file(): hasMany
+    public function file(): HasMany
     {
         return $this->HasMany(File::class);
+    }
+
+    public function comment() : HasMany
+    {
+        return $this->HasMany(Comment::class);
+    }
+
+    public function favorite() : BelongsToMany
+    {
+        return $this->belongsToMany(File::class)->using(Favorite::class);
+    }
+
+    public function notification() : BelongsToMany
+    {
+        return $this->belongsToMany(Notification::class)->using(UserNotification::class);
     }
 }
