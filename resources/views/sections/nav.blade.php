@@ -1,3 +1,4 @@
+
 <div class="header">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
@@ -100,12 +101,13 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            <div class="page-title">Line 1 - HR</div>
+            <div class="page-title">
+                {{ $user_details->line_name . ' - ' . $user_details->sector_name}}
+            </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <!-- <li class="nav-item"><a class="nav-link" href="#">Home</a></li> -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="{{ route('brain_box') }}" role="button" aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="23.511" height="24" viewBox="0 0 23.511 24">
                                 <g id="Group_89" data-name="Group 89" transform="translate(915.505 830.186)">
                                     <path id="Path_103" data-name="Path 103" d="M-899.754-658.289c-.082.035-.108.117-.151.18-.432.633-.865,1.265-1.291,1.9a.654.654,0,0,1-.591.317q-4.05-.006-8.1,0a.591.591,0,0,1-.574-.3.587.587,0,0,1,.07-.663c.546-.8,1.085-1.608,1.637-2.405a.3.3,0,0,0,0-.406c-.548-.79-1.079-1.592-1.623-2.385a.608.608,0,0,1-.091-.682.623.623,0,0,1,.619-.308c.848,0,1.7,0,2.545,0,.292,0,.454.117.458.325s-.161.338-.471.338q-1.089,0-2.178,0h-.257a.22.22,0,0,0,.066.177c.507.749,1.017,1.5,1.521,2.248a.319.319,0,0,0,.3.162q3.818-.006,7.635,0c.055,0,.109-.01.2-.018-.122-.183-.232-.34-.335-.5a.335.335,0,0,1,.066-.495.338.338,0,0,1,.48.137c.14.2.275.4.428.625l1.37-2.02c.151-.223.3-.444.452-.668a.647.647,0,0,1,.578-.3q4.05,0,8.1,0a.6.6,0,0,1,.572.307.585.585,0,0,1-.075.662c-.551.808-1.095,1.621-1.651,2.426a.266.266,0,0,0,0,.362c.553.8,1.093,1.6,1.642,2.4a.613.613,0,0,1,.1.683.608.608,0,0,1-.619.3c-.359-.009-.718.009-1.076-.007-.191-.008-.23.06-.229.236.006,1.55,0,3.1,0,4.65a2.691,2.691,0,0,1-.017.366.805.805,0,0,1-.709.671c-.049,0-.1,0-.147,0h-16.568a.809.809,0,0,1-.853-.621,1.064,1.064,0,0,1-.027-.266q0-2.043,0-4.087a.961.961,0,0,1,0-.147.311.311,0,0,1,.312-.289.3.3,0,0,1,.324.269,1.751,1.751,0,0,1,.014.268q0,1.933,0,3.867c0,.333.034.366.362.366h7.464c.312,0,.347-.031.347-.327q0-3.585,0-7.17C-899.72-658.163-899.7-658.232-899.754-658.289Zm.7,3.427c0,1.346,0,2.691,0,4.037,0,.169.04.22.214.22q3.829-.008,7.658,0c.229,0,.318-.079.317-.315q-.008-3.988,0-7.976c0-.18-.042-.232-.228-.232q-3.866.01-7.732,0c-.183,0-.231.047-.23.23C-899.054-657.554-899.058-656.208-899.058-654.862Zm-10.7-1.681a.453.453,0,0,0,.06.009q3.888,0,7.777.006a.292.292,0,0,0,.267-.167q.759-1.124,1.519-2.246c.034-.05.093-.093.074-.168a.192.192,0,0,0-.047-.013q-3.9,0-7.8-.005a.273.273,0,0,0-.25.152c-.505.75-1.015,1.5-1.52,2.246C-909.71-656.68-909.768-656.636-909.754-656.543Zm11-3.265c.1.008.155.016.21.016q3.817,0,7.633,0a.336.336,0,0,0,.312-.179c.494-.738.994-1.472,1.491-2.208.034-.051.1-.093.073-.178a.527.527,0,0,0-.089-.015l-7.755,0a.217.217,0,0,0-.207.1C-897.633-661.463-898.181-660.655-898.755-659.808Zm9.791,3.275-1.2-1.777c-.056.565-.056,1.113-.056,1.661,0,.121.086.115.169.115Z" transform="translate(-4.646 -156.221)" fill="#fff"/>
@@ -120,10 +122,6 @@
                                 </g>
                             </svg>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                        </ul>
                     </li>
                     <li class="nav-item dropdown notifications with-notification">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -137,29 +135,31 @@
                             <li><a class="dropdown-item" href="#">Another action</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle" href="{{ route('favorites') }}" role="button" aria-expanded="false">
                             <svg id="icon_toggle_star_24px" data-name="icon/toggle/star_24px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <rect id="Boundary" width="24" height="24" fill="none"/>
                                 <path id="_Color" data-name=" ↳Color" d="M10,15.27,16.18,19l-1.64-7.03L20,7.24l-7.19-.61L10,0,7.19,6.63,0,7.24l5.46,4.73L3.82,19Z" transform="translate(2 2)" fill="#ffd500"/>
                             </svg>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                        </ul>
                     </li>
-                    <div class="profile-pic bg-styles" style="background-image:url({{ asset('images/profile-pic.jpg') }});"></div>
+                    <div class="profile-pic bg-styles"
+                         style="background-image:url({{
+                            $user_details->profile_image == null ?
+                            asset('images/profile_images/default_profile_image.jpg') :
+                            asset('images/profile_images/'.$user_details->profile_image)
+                         }});">
+                    </div>
                     <li class="nav-item dropdown ellipsis-item">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                            <img src="{{ asset('images/icons/menu.svg') }}" style="max-width: 18px">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
                             @guest
                                 <li><a class="dropdown-item" href="{{ route('sign_up') }}">Sign Up</a></li>
                                 <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
                             @else
-                                <li class="dropdown-item">{{ auth()->user()->first_name }}</li>
+                                <li class="dropdown-item">{{ auth()->user()->user_name }}</li>
                                 <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                             @endguest
 

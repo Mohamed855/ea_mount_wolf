@@ -18,9 +18,9 @@ class Line extends Model
         'views_number',
     ];
 
-    public function brainBox(): HasMany
+    public function user(): HasMany
     {
-        return $this->HasMany(BrainBox::class);
+        return $this->HasMany(User::class);
     }
 
     public function file(): HasMany

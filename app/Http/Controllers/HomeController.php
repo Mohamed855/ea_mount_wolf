@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Traits\GeneralTrait;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function __construct()
-    {
-    }
+    use GeneralTrait;
 
     public function index() {
-        if(Auth::check())
-            return view('site.home');
-        return redirect()->route('login');
+        $sectors = DB::table('sectors')->get();
+        $announcements= DB::table('announcements')->get();
+
+        return $this->ifAuthenticated('site.home')->with([
+            'sectors' => $sectors,
+            'announcements' => $announcements,
+        ]);
     }
 }

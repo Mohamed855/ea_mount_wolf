@@ -15,9 +15,6 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
-ini_set('upload_max_filesize', '2048M');
-ini_set('post_max_size', '2048M');
-
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces

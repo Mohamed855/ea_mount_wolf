@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class File extends Model
 {
@@ -19,6 +18,8 @@ class File extends Model
         'user_id',
         'line_id',
         'sector_id',
+        'status',
+        'stored_name',
         'viewed',
         'downloaded',
     ];
@@ -33,8 +34,8 @@ class File extends Model
         return $this->BelongsTo(Line::class);
     }
 
-    public function favorite() : BelongsToMany
+    public function favorites() : BelongsToMany
     {
-        return $this->belongsToMany(User::class)->using(Favorite::class);
+        return $this->belongsToMany(User::class,'favorites');
     }
 }

@@ -13,14 +13,11 @@ class Topic extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'image',
-        'brain_box_id',
+        'user_id',
+        'status',
     ];
-
-    public function brainBox(): BelongsTo
-    {
-        return $this->BelongsTo(BrainBox::class);
-    }
 
     public function comments() : HasMany
     {

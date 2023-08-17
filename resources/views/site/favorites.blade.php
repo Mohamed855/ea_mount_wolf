@@ -40,9 +40,52 @@
                         <hr>
                         <div class="content mCustomScrollbar">
                             <div class="incentives-section">
-                                @for($i = 1; $i <= 18; $i++)
-                                    @include('sections.widgets.incentive-box')
-                                @endfor
+                                @foreach($favorites as $file)
+                                    <a href="{{ route('file', $file->id) }}">
+                                        <div class="incentive-box favorite">
+                                                <span>
+                                                    <img src="{{ asset('images/icons/star.png')}}" style="max-width: 16px">
+                                                </span>
+                                            <div class="incentive-title">{{ $file->name }}</div>
+                                            <div class="incentive-body">
+                                                <div class="incentive-txt">Published<br>{{ $file->created_at }}</div>
+                                                <div class="incentive-info-box">
+                                                    <div class="incentive-info in-views">
+                                                        <img src="{{ asset('images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
+                                                        {{ $file->viewed }}
+                                                    </div>
+                                                    @php($file_icon = "")
+                                                    @if (str_contains($file->type, 'word'))
+                                                        @php($file_icon = "word-icon.svg")
+                                                    @elseif (str_contains($file->type, 'excel'))
+                                                        @php($file_icon = "excel-icon.svg")
+                                                    @elseif (str_contains($file->type, 'pdf'))
+                                                        @php($file_icon = "pdf-icon.svg")
+                                                    @elseif (str_contains($file->type, 'video'))
+                                                        @php($file_icon = "video-icon.svg")
+                                                    @elseif (str_contains($file->type, 'zip'))
+                                                        @php($file_icon = "zip-icon.svg")
+                                                    @elseif (str_contains($file->type, 'jpg'))
+                                                        @php($file_icon = "jpg-icon.svg")
+                                                    @elseif (str_contains($file->type, 'png'))
+                                                        @php($file_icon = "png-icon.svg")
+                                                    @elseif (str_contains($file->type, 'gif'))
+                                                        @php($file_icon = "gif-icon.svg")
+                                                    @else
+                                                        @php($file_icon = "default-icon.svg")
+                                                    @endif
+                                                    <div class="incentive-info in-files">
+                                                        <img src="{{ asset('images/icons/extensions/'.$file_icon) }}" style="max-width: 16px" alt="">
+                                                    </div>
+                                                    <div class="incentive-info in-comments">
+                                                        <img src="{{ asset('images/icons/pen-icon.svg') }}" style="max-width: 16px" alt="">
+                                                        {{ floor($file->size / 1000) < 1000 ?  floor($file->size / 1000) . 'K' :  floor($file->size / 1000 / 1000) . 'Mb' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </div>

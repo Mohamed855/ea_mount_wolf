@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -29,9 +30,11 @@ class User extends Authenticatable
         'phone_number',
         'password',
         'profile_image',
-        'title',
+        'title_id',
         'line_id',
         'sector_id',
+        'role',
+        'activated',
     ];
 
     /**
@@ -54,6 +57,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function title(): HasOne
+    {
+        return $this->HasOne(Title::class);
+    }
+
     public function file(): HasMany
     {
         return $this->HasMany(File::class);
@@ -64,13 +72,24 @@ class User extends Authenticatable
         return $this->HasMany(Comment::class);
     }
 
-    public function favorite() : BelongsToMany
+    public function line() : BelongsTo
     {
-        return $this->belongsToMany(File::class)->using(Favorite::class);
+        return $this->BelongsTo(Line::class);
+    }
+
+    public function sector() : BelongsTo
+    {
+        return $this->BelongsTo(Sector::class);
+    }
+
+    public function favorites() : BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'favorites');
     }
 
     public function notification() : BelongsToMany
     {
         return $this->belongsToMany(Notification::class)->using(UserNotification::class);
     }
+
 }

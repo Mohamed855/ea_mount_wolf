@@ -8,8 +8,17 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xl-5 col-lg-6 col-md-8">
-                        <div class="main-logo"><img src="{{ asset('images/logo.png') }}" class="mw-100" alt=""></div>
+                        <div class="main-logo"><img src="{{ asset('images/logos/logo.png') }}" class="mw-100" alt=""></div>
                         <div class="welcome">Welcome to Averroes Employee Access</div>
+                        @if(session()->has('invalid'))
+                            <div class="m-auto">
+                                <span class="text-danger" role="alert">{{ session()->get('invalid') }}</span>
+                            </div>
+                        @elseif(session()->has('activeRequest'))
+                            <div class="m-auto">
+                                <span class="text-primary" role="alert">{{ session()->get('activeRequest') }}</span>
+                            </div>
+                        @endif
                         <div class="ea-form">
                             <form action="{{ route('check_credentials') }}" method="post">
                                 @csrf
@@ -31,11 +40,6 @@
                                         <span class="text-danger" role="alert">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                @if(session()->has('invalid'))
-                                    <div class="m-auto">
-                                        <span class="text-danger" role="alert">{{ session()->get('invalid') }}</span>
-                                    </div>
-                                @endif
                                 <div class="other-actions"><a href="{{ route('forget_password') }}">Forgot Password</a></div>
                                 <div class="form-btns">
                                     <button type="submit" class="ea-btns light-btn">Log In</button>
