@@ -9,6 +9,8 @@ class LineSector extends Model
 {
     use HasFactory;
 
+    protected $table = 'line_sector';
+
     protected $fillable = [
         'line_id',
         'sector_id',

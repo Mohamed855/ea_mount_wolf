@@ -16,6 +16,21 @@ trait GeneralTrait {
             'titles' => $titles,
         ]);
     }
+    public function ifAdminAuthenticated ($view) {
+        if(Auth::check()) {
+            return $this->successView($view);
+        }
+        return $this->redirect('login');
+    }
+    public function ifAdmin ($return) {
+        if(Auth::check()) {
+            if (auth()->user()->role == 1) {
+                return $return;
+            }
+            return $this->redirect('not_authorized');
+        }
+        return $this->redirect('login');
+    }
     public function ifAuthenticated ($view) {
         if(Auth::check()) {
             $current_user = auth()->user()->id;
@@ -25,6 +40,7 @@ trait GeneralTrait {
                 ->join('sectors', 'users.sector_id', '=', 'sectors.id')
                 ->select('users.user_name',
                     'users.profile_image',
+                    'users.role',
                     'titles.name as title_name',
                     'lines.name as line_name',
                     'sectors.name as sector_name')
@@ -33,15 +49,6 @@ trait GeneralTrait {
             return $this->successViewWithMessage($view, 'user_details', $user_details);
         }
         return $this->redirect('login');
-    }
-    public function ifAuthorized ($return) {
-        if(Auth::check()) {
-            if (auth()->user()->sector_id == 1) {
-                return $return;
-            }
-            return $this->redirect('login');
-        }
-        return $this->redirect('not_authorized');
     }
     public function ifNotAuthenticated ($return) {
         if (!Auth::check())
@@ -68,8 +75,11 @@ trait GeneralTrait {
     }
     public function deleteFromDB ($table, $id, $public_directory, $column_name) {
         $required_file_name = DB::table($table)->where('id', '=', $id)->first();
-        if($public_directory !== null && $column_name !== null)
-            unlink(public_path($public_directory . $required_file_name->$column_name));
+        if($public_directory !== null && $column_name !== null) {
+            if (file_exists(public_path($public_directory . $required_file_name->$column_name))) {
+                unlink(public_path($public_directory . $required_file_name->$column_name));
+            }
+        }
         DB::table($table)->where('id', $id)->delete();
     }
 }

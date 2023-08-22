@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\User;
+use App\Models\Line;
+use App\Models\Sector;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,12 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('announcements', function (Blueprint $table) {
+        Schema::create('line_sector', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->foreignIdFor(User::class);
-            $table->string('image');
-            $table->boolean('status')->default(1);
+            $table->foreignIdFor(Line::class);
+            $table->foreignIdFor(Sector::class);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('announcements');
+        Schema::dropIfExists('line_sector');
     }
 };

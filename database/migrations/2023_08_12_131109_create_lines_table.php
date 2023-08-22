@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('lines', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->mediumInteger('employees_number');
-            $table->mediumInteger('files_number');
-            $table->mediumInteger('views_number');
             $table->timestamps();
         });
     }

@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\FilesController;
-use App\Http\Controllers\Admin\TopicsController;
-use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\Files\FilesController;
+use App\Http\Controllers\Admin\Topics\TopicsController;
+use App\Http\Controllers\Admin\Users\UsersController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;

@@ -13,9 +13,6 @@ class Sector extends Model
 
     protected $fillable = [
         'name',
-        'employees_number',
-        'files_number',
-        'views_number',
     ];
 
     public function user() : HasMany
@@ -25,6 +22,6 @@ class Sector extends Model
 
     public function line() : BelongsToMany
     {
-        return $this->belongsToMany(Line::class)->using(LineSector::class);
+        return $this->belongsToMany(Line::class);
     }
 }

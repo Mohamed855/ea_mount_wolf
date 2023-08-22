@@ -40,12 +40,14 @@
                                     <div class="comment-txt">
                                         <p>{{ $comment_details->comment }}</p>
                                     </div>
-                                    <form action="{{ route('delete_comment', $comment_details->id) }}" method="post" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger btn-rounded">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    @if($comment_details->user_id === auth()->user()->id || auth()->user()->sector_id == 1)
+                                        <form action="{{ route('delete_comment', $comment_details->id) }}" method="post" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger btn-rounded">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             @endforeach
                             <form action="{{ route('post_comment') }}" method="post">

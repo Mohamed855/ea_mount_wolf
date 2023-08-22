@@ -11,8 +11,8 @@ class DashboardController extends Controller
     use GeneralTrait;
     public function dashboard()
     {
-        return $this->ifAuthorized(
-            $this->ifAuthenticated('site.dashboard.index')
+        return $this->ifAdmin(
+            $this->ifAdminAuthenticated('admin.dashboard.index')
         );
     }
 }

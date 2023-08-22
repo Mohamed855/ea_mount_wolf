@@ -73,7 +73,7 @@ class SiteController extends Controller
         $active_topics = DB::table('topics')->where('status', 1)->get();
         $current_topic = DB::table('topics')->where('id', $id)->first();
         $comments_details = DB::table('comments')
-            ->join('users', 'user_id', '=', 'users.id')
+            ->join('users', 'comments.user_id', '=', 'users.id')
             ->join('titles', 'users.title_id', '=', 'titles.id')
             ->join('lines', 'users.line_id', '=', 'lines.id')
             ->join('sectors', 'users.sector_id', '=', 'sectors.id')
@@ -82,6 +82,7 @@ class SiteController extends Controller
                 'users.profile_image',
                 'comments.id',
                 'comments.comment',
+                'comments.user_id',
                 'titles.name as user_title',
                 'lines.name as user_line',
                 'sectors.name as user_sector'

@@ -102,7 +102,11 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
             <div class="page-title">
-                {{ $user_details->line_name . ' - ' . $user_details->sector_name}}
+                @if($user_details->role == 1)
+                    Admin View
+                @else
+                    {{ $user_details->line_name . ' - ' . $user_details->sector_name}}
+                @endif
             </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -139,7 +143,7 @@
                         <a class="nav-link dropdown-toggle" href="{{ route('favorites') }}" role="button" aria-expanded="false">
                             <svg id="icon_toggle_star_24px" data-name="icon/toggle/star_24px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <rect id="Boundary" width="24" height="24" fill="none"/>
-                                <path id="_Color" data-name=" ↳Color" d="M10,15.27,16.18,19l-1.64-7.03L20,7.24l-7.19-.61L10,0,7.19,6.63,0,7.24l5.46,4.73L3.82,19Z" transform="translate(2 2)" fill="#ffd500"/>
+                                <path id="_Color" data-name="↳Color" d="M10,15.27,16.18,19l-1.64-7.03L20,7.24l-7.19-.61L10,0,7.19,6.63,0,7.24l5.46,4.73L3.82,19Z" transform="translate(2 2)" fill="#ffd500"/>
                             </svg>
                         </a>
                     </li>
@@ -159,8 +163,8 @@
                                 <li><a class="dropdown-item" href="{{ route('sign_up') }}">Sign Up</a></li>
                                 <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
                             @else
-                                <li class="dropdown-item">{{ auth()->user()->user_name }}</li>
-                                <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile', auth()->user()->user_name) }}">{{ auth()->user()->user_name }}</a></li>
+                                <li><a class="dropdown-item" href="{{ auth()->user()->role == 1 ? route('admin_logout') : route('logout') }}">Logout</a></li>
                             @endguest
 
                         </ul>

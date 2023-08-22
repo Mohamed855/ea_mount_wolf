@@ -24,17 +24,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="date">
-                                    <div class="form-group">
-                                        <div class="input-group date" id="datepicker">
-                                            <input type="text" class="form-control">
-                                            <span class="input-group-append">
-                      <span class="input-group-text d-block"><i class="fa fa-calendar"></i></span>
-                    </span>
-                                        </div>
-                                    </div>
-                                </div>
+
+                            <div class="col-sm-4 col-lg-3">
+                                <input type="date" class="form-control">
                             </div>
                         </div>
                         <hr>
