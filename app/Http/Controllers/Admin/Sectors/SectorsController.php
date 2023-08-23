@@ -25,6 +25,7 @@ class SectorsController extends Controller
                     'lines' => DB::table('line_sector')
                         ->join('lines', 'line_sector.line_id', '=', 'lines.id')
                         ->select('lines.name', 'line_sector.sector_id')
+                        ->orderBy('lines.name')
                         ->get(),
                     'countOfEmployees' => DB::table('users')->select('sector_id')->get(),
                     'countOfFiles' => DB::table('files')->select('sector_id', 'viewed')->get(),

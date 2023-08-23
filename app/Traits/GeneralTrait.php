@@ -67,9 +67,6 @@ trait GeneralTrait {
     public function redirectWithMessage ($route, $key, $value) {
         return redirect()->route($route)->with($key, $value);
     }
-    public function back () {
-        return redirect()->back();
-    }
     public function backWithMessage ($key, $value) {
         return redirect()->back()->with($key, $value);
     }

@@ -164,7 +164,7 @@
                                 <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
                             @else
                                 <li><a class="dropdown-item" href="{{ route('profile', auth()->user()->user_name) }}">{{ auth()->user()->user_name }}</a></li>
-                                <li><a class="dropdown-item" href="{{ auth()->user()->role == 1 ? route('admin_logout') : route('logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ auth()->user()->role == 1 ? route('admin.logout') : route('logout') }}">Logout</a></li>
                             @endguest
 
                         </ul>

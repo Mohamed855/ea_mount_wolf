@@ -12,7 +12,7 @@ class AdminLoginController extends Controller
 {
     use GeneralTrait;
 
-    public function adminLogin() {
+    public function admin_login() {
         return $this->ifNotAuthenticated(
             $this->successView('admin.login')
         );
@@ -38,6 +38,6 @@ class AdminLoginController extends Controller
             Session::flush();
             Auth::logout();
         }
-        return $this->redirect('adminLogin');
+        return $this->redirect('admin.login');
     }
 }

@@ -82,7 +82,7 @@ class User extends Authenticatable
         return $this->BelongsTo(Sector::class);
     }
 
-    public function favorites() : BelongsToMany
+    public function files() : BelongsToMany
     {
         return $this->belongsToMany(File::class, 'favorites');
     }

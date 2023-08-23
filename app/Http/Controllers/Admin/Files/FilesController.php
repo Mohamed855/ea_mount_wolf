@@ -52,7 +52,6 @@ class FilesController extends Controller
      */
     public function store(Request $request)
     {
-
         $fileName = str_replace(' ', '', $request->name);
         $fileName .= time() . '.' . $request->file->extension();
 

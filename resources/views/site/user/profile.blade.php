@@ -112,6 +112,8 @@
         @include('sections.footer')
     </div>
 
+    @include('sections.scripts')
+
     <script>
         document.getElementById('profile_picture').addEventListener('change', function() {
             document.getElementById('profile_picture_form').submit();

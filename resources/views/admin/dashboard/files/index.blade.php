@@ -66,8 +66,8 @@
                                     <td>{{ $file->downloaded }}</td>
                                     <td>{{ date('d-m-Y, h:m a', strtotime($file->created_at)) }}</td>
                                     <td>
-                                        <a href="{{ route('file', $file->id) }}" class="btn btn-outline-warning btn-sm btn-rounded">
-                                            View
+                                        <a href="{{ route('file.download', $file->id) }}" class="btn btn-outline-primary btn-sm btn-rounded">
+                                            Download
                                         </a>
                                         <form action="{{ route('toggle_show_file', $file->id) }}" method="post" class="d-inline">
                                             @csrf

@@ -15,7 +15,7 @@
                             </div>
                         @endif
                         <div class="ea-form">
-                            <form action="{{ route('admin_check_credentials') }}" method="post">
+                            <form action="{{ route('admin.check_credentials') }}" method="post">
                                 @csrf
                                 <div>
                                     <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Email">

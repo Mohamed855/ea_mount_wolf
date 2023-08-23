@@ -39,15 +39,20 @@
                         <div class="content mCustomScrollbar">
                             <div class="incentives-section">
                                 <div class="incentives-section">
-                                    @foreach($user_files as $file)
-                                        @foreach($user_favorites_files as $favorite_file)
-                                            <a href="{{ route('file', $file->id) }}">
-                                                <div class="incentive-box favorite">
-                                                <span><img src="{{ $file->id == $favorite_file-> id ?
+                                    @if(count($user_files) > 0)
+                                        @foreach($user_files as $file)
+                                            <div class="incentive-box favorite">
+                                            <span>
+                                                <a href="{{ route('favorites.toggle', $file->id) }}">
+                                                    <img src="
+                                                    {{
+                                                        in_array($file->id, $user_favorites_files->pluck('file_id')->toArray())  ?
                                                         asset('images/icons/star.png') :
                                                         asset('images/icons/star_light.png')
                                                     }}" style="max-width: 16px">
-                                                </span>
+                                                </a>
+                                            </span>
+                                                <a href="{{ route('file.download', $file->id) }}">
                                                     <div class="incentive-title">{{ $file->name }}</div>
                                                     <div class="incentive-body">
                                                         <div class="incentive-txt">Published<br>{{ $file->created_at }}</div>
@@ -85,10 +90,14 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </a>
+                                                </a>
+                                            </div>
                                         @endforeach
-                                    @endforeach
+                                    @else
+                                        <div class="m-auto">
+                                            <p class="fs-4 p-5">There is no files uploaded yet</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

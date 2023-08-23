@@ -41,7 +41,7 @@
                                         <p>{{ $comment_details->comment }}</p>
                                     </div>
                                     @if($comment_details->user_id === auth()->user()->id || auth()->user()->sector_id == 1)
-                                        <form action="{{ route('delete_comment', $comment_details->id) }}" method="post" class="d-inline">
+                                        <form action="{{ route('comment.delete', $comment_details->id) }}" method="post" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-danger btn-rounded">
                                                 Delete
@@ -50,7 +50,7 @@
                                     @endif
                                 </div>
                             @endforeach
-                            <form action="{{ route('post_comment') }}" method="post">
+                            <form action="{{ route('comment.post') }}" method="post">
                                 @csrf
                                 <div class="comment-box write-comment">
                                     <div class="comment-info">

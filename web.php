@@ -46,5 +46,5 @@ Route::get('favorites', [SiteController::class, 'favorites']) -> name('favorites
 Route::get('video', [SiteController::class, 'videos']);
 
 Route::get('not_authorized', [SiteController::class, 'not_authorized'])->name('not_authorized');
-Route::post('post_comment', [SiteController::class, 'post_comment'])->name('post_comment');
+Route::post('post_comment', [SiteController::class, 'post_comment'])->name('comment.post');
 

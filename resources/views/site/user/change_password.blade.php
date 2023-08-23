@@ -4,6 +4,8 @@
 
 @section('content')
 
+    @include('sections.nav')
+
     <div class="content-wraper withnav">
         <div class="body-content">
             <div class="container">
@@ -52,5 +54,9 @@
                 </div>
             </div>
         </div>
+        @include('sections.footer')
     </div>
+
+    @include('sections.scripts')
+
 @endsection

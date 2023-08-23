@@ -21,6 +21,7 @@ class SiteController extends Controller
 
         $user_favorites_files= DB::table('files')
             ->join('favorites', 'files.id', '=', 'favorites.file_id')
+            ->select('favorites.file_id as file_id')
             ->where('favorites.user_id', auth()->user()->id)
             ->where('files.status', '=',1)
             ->get();
@@ -35,6 +36,7 @@ class SiteController extends Controller
     {
         $favorites = DB::table('files')
             ->join('favorites', 'files.id', '=', 'favorites.file_id')
+            ->select('files.*', 'favorites.user_id', 'favorites.file_id')
             ->where('favorites.user_id', auth()->user()->id)
             ->get();
 
@@ -44,14 +46,14 @@ class SiteController extends Controller
 
     }
 
-    public function file(string $id)
+    public function video(string $id)
     {
-        $files = DB::table('files')->where('id', $id)->first();
+        $video = DB::table('videos')->where('id', $id)->first();
 
-        if($files) {
-            if ($files->status) {
-                return $this->ifAuthenticated('site.file')->with(
-                    'files', $files,
+        if($video) {
+            if ($video->status) {
+                return $this->ifAuthenticated('site.video')->with(
+                    'video', $video,
                 );
             }
             return abort(404);
