@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Line;
+use App\Models\Sector;
 use App\Models\Topic;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +18,7 @@ class SiteController extends Controller
         $user_files = DB::table('files')
             ->where('files.sector_id', $sector_id)
             ->where('files.line_id', $line_id)
-            ->where('files.status', '=',1)
-            ->get();
+            ->where('files.status', '=',1);
 
         $user_favorites_files= DB::table('files')
             ->join('favorites', 'files.id', '=', 'favorites.file_id')
@@ -26,10 +27,48 @@ class SiteController extends Controller
             ->where('files.status', '=',1)
             ->get();
 
+        $user_videos = DB::table('videos')
+            ->where('videos.sector_id', $sector_id)
+            ->where('videos.line_id', $line_id)
+            ->where('videos.status', '=',1);
+
+        $user_favorites_videos = DB::table('videos')
+            ->join('favorite_videos', 'videos.id', '=', 'favorite_videos.video_id')
+            ->select('favorite_videos.video_id as video_id')
+            ->where('favorite_videos.user_id', auth()->user()->id)
+            ->where('videos.status', '=',1)
+            ->get();
+
+        $downloaded = DB::table('file_downloads')
+            ->join('files', 'file_downloads.file_id', '=', 'files.id')->get();
+
+        $viewed = DB::table('video_views')
+            ->join('videos', 'video_views.video_id', '=', 'videos.id')->get();
+
         return $this->ifAuthenticated('site.drive')->with([
             'user_files' => $user_files,
+            'user_videos' => $user_videos,
             'user_favorites_files' => $user_favorites_files,
+            'user_favorites_videos' => $user_favorites_videos,
+            'downloaded' => $downloaded,
+            'viewed' => $viewed,
         ]);
+    }
+    public function choose_line(string $sector_id)
+    {
+        $selected_sector_lines = DB::table('lines')
+            ->join('line_sector', 'lines.id', '=', 'line_sector.line_id')
+            ->where('sector_id', $sector_id)
+            ->select('lines.id as line_id', 'lines.name', 'line_sector.sector_id')
+            ->orderBy('lines.name')->get();
+
+        $current_sector = DB::table('sectors')->select('id', 'name')
+            ->where('id', $sector_id)->first();
+        return $this->ifAuthenticated('site.chooseLine')
+            ->with([
+                'current_sector' => $current_sector,
+                'selected_sector_lines' => $selected_sector_lines,
+            ]);
     }
 
     public function favorites()
@@ -37,11 +76,24 @@ class SiteController extends Controller
         $favorites = DB::table('files')
             ->join('favorites', 'files.id', '=', 'favorites.file_id')
             ->select('files.*', 'favorites.user_id', 'favorites.file_id')
-            ->where('favorites.user_id', auth()->user()->id)
-            ->get();
+            ->where('favorites.user_id', auth()->user()->id);
+
+        $favorite_videos = DB::table('videos')
+            ->join('favorite_videos', 'videos.id', '=', 'favorite_videos.video_id')
+            ->select('videos.*', 'favorite_videos.user_id', 'favorite_videos.video_id')
+            ->where('favorite_videos.user_id', auth()->user()->id);
+
+        $downloaded = DB::table('file_downloads')
+            ->join('files', 'file_downloads.file_id', '=', 'files.id')->get();
+
+        $viewed = DB::table('video_views')
+            ->join('videos', 'video_views.video_id', '=', 'videos.id')->get();
 
         return $this->ifAuthenticated('site.favorites')->with([
             'favorites' => $favorites,
+            'favorite_videos' => $favorite_videos,
+            'downloaded' => $downloaded,
+            'viewed' => $viewed,
         ]);
 
     }
@@ -50,11 +102,15 @@ class SiteController extends Controller
     {
         $video = DB::table('videos')->where('id', $id)->first();
 
+        $viewed = DB::table('video_views')
+            ->join('videos', 'video_views.video_id', '=', 'videos.id')->get();
+
         if($video) {
             if ($video->status) {
-                return $this->ifAuthenticated('site.video')->with(
-                    'video', $video,
-                );
+                return $this->ifAuthenticated('site.video')->with([
+                    'video' => $video,
+                    'viewed' => $viewed,
+                ]);
             }
             return abort(404);
         }

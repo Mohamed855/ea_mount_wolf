@@ -17,12 +17,16 @@ class LinesController extends Controller
      */
     public function index()
     {
+        $lines = DB::table('lines');
+        $countOfEmployees = DB::table('users')->select('line_id')->get();
+        $countOfFiles = DB::table('files')->select('line_id')->get();
+
         return $this->ifAdmin(
             $this->ifAdminAuthenticated('admin.dashboard.lines.index')
                 ->with([
-                    'lines' => DB::table('lines')->get(),
-                    'countOfEmployees' => DB::table('users')->select('line_id')->get(),
-                    'countOfFiles' => DB::table('files')->select('line_id', 'viewed')->get(),
+                    'lines' => $lines,
+                    'countOfEmployees' => $countOfEmployees,
+                    'countOfFiles' => $countOfFiles,
                 ])
         );
     }
@@ -109,6 +113,7 @@ class LinesController extends Controller
         $this->deleteFromDB('lines', $id, null, null);
         DB::table('line_sector')->where('line_id', $id)->delete();
         DB::table('files')->where('line_id', $id)->delete();
+        DB::table('videos')->where('line_id', $id)->delete();
         return $this->backWithMessage('deletedSuccessfully', 'Line has been deleted');
     }
 }

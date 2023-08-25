@@ -4,6 +4,11 @@
 
 @section('content')
 
+    @php
+        $actionsController = new \App\Http\Controllers\ActionsController();
+        $actionsController->viewed_video($video->id);
+    @endphp
+
     @include('sections.nav')
 
     <div class="content-wraper withnav">
@@ -24,7 +29,7 @@
                             <div class="video-statistics">
                                 <div class="video-views">
                                     <img src="{{ asset('images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
-                                    <span class="views-number">{{ $video->viewed }}</span></div>
+                                    <span class="views-number">{{ $viewed->where('video_id', $video->id)->count() }}</span></div>
                             </div>
                         </div>
                         <hr>

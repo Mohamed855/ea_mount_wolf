@@ -102,7 +102,7 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
             <div class="page-title">
-                @if($user_details->role == 1)
+                @if($user_details->role === 1)
                     Admin View
                 @else
                     {{ $user_details->line_name . ' - ' . $user_details->sector_name}}
@@ -135,8 +135,9 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            @foreach(auth()->user()->notifications as $notification)
+                                <li><a class="dropdown-item" href="#">{{ $notification->id . ' ' . $notification->text }}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li class="nav-item">

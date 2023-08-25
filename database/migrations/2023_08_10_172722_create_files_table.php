@@ -24,8 +24,6 @@ return new class extends Migration
             $table->foreignIdFor(Sector::class);
             $table->boolean('status')->default(1);
             $table->string('stored_name');
-            $table->mediumInteger('viewed')->nullable();
-            $table->mediumInteger('downloaded')->nullable();
             $table->timestamps();
         });
     }

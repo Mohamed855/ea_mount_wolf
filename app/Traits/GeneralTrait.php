@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,7 @@ trait GeneralTrait {
     }
     public function ifAdmin ($return) {
         if(Auth::check()) {
-            if (auth()->user()->role == 1) {
+            if (auth()->user()->role === 1) {
                 return $return;
             }
             return $this->redirect('not_authorized');
@@ -43,7 +44,8 @@ trait GeneralTrait {
                     'users.role',
                     'titles.name as title_name',
                     'lines.name as line_name',
-                    'sectors.name as sector_name')
+                    'sectors.name as sector_name',
+                )
                 ->where('users.id', $current_user)
                 ->first();
             return $this->successViewWithMessage($view, 'user_details', $user_details);

@@ -17,16 +17,16 @@ class TopicsController extends Controller
      */
     public function index()
     {
+        $topics = DB::table('topics')
+            ->join('users', 'topics.user_id', '=', 'users.id')
+            ->select(
+                'topics.*',
+                'users.user_name',
+                DB::raw('(SELECT COUNT(*) FROM comments WHERE topic_id = topics.id) AS comments_count'),
+            );
         return $this->ifAdmin(
             $this->ifAdminAuthenticated('admin.dashboard.topics.index')
-            ->with('topics', DB::table('topics')
-                ->join('users', 'topics.user_id', '=', 'users.id')
-                ->select(
-                    'topics.*',
-                    'users.user_name',
-                    DB::raw('(SELECT COUNT(*) FROM comments WHERE topic_id = topics.id) AS comments_count'),
-                )->get()
-            )
+            ->with('topics', $topics)
         );
     }
 

@@ -14,28 +14,28 @@ class UsersController extends Controller
     use GeneralTrait;
     public function index()
     {
+        $users = DB::table('users')
+            ->join('sectors', 'users.sector_id', '=', 'sectors.id')
+            ->join('lines', 'users.line_id', '=', 'lines.id')
+            ->join('titles', 'users.title_id', '=', 'titles.id')
+            ->select(
+                'users.id',
+                'users.first_name',
+                'users.middle_name',
+                'users.last_name',
+                'users.user_name',
+                'users.email',
+                'users.phone_number',
+                'users.profile_image',
+                'users.activated',
+                'users.created_at',
+                'sectors.name as sector_name',
+                'lines.name as line_name',
+                'titles.name as title_name',
+            );
         return $this->ifAdmin(
             $this->ifAdminAuthenticated('admin.dashboard.users.index')
-                ->with('users', DB::table('users')
-                    ->join('sectors', 'users.sector_id', '=', 'sectors.id')
-                    ->join('lines', 'users.line_id', '=', 'lines.id')
-                    ->join('titles', 'users.title_id', '=', 'titles.id')
-                    ->select(
-                        'users.id',
-                        'users.first_name',
-                        'users.middle_name',
-                        'users.last_name',
-                        'users.user_name',
-                        'users.email',
-                        'users.phone_number',
-                        'users.profile_image',
-                        'users.activated',
-                        'users.created_at',
-                        'sectors.name as sector_name',
-                        'lines.name as line_name',
-                        'titles.name as title_name',
-                    )->get()
-                )
+                ->with('users', $users)
         );
     }
 

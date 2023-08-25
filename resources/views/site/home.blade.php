@@ -29,38 +29,41 @@
                         </div>
                         <div class="date py-5">
                             <form>
-                                <div class="row form-group justify-content-around">
-                                    @if(auth()->user()->sector_id == 1)
+                                <div class="row form-group justify-content-evenly">
+                                    @if(auth()->user()->role == 1)
                                         <div class="col-sm-4 col-lg-3">
                                             <a href="{{ route('dashboard') }}" class="btn mb-2 mb-lg-0 w-100 control-btn">Dashboard</a>
                                         </div>
-                                    @endif
-
-                                    @if(auth()->user()->role == 2)
+                                    @elseif(auth()->user()->role == 2)
                                         <div class="col-sm-4 col-lg-3">
                                             <a href="{{ route('ea_files.create') }}" class="btn mb-2 mb-lg-0 w-100 control-btn">Add Files</a>
                                         </div>
+                                        <div class="col-sm-4 col-lg-3">
+                                            <a href="{{ route('videos.create') }}" class="btn mb-2 mb-lg-0 w-100 control-btn">Add Video</a>
+                                        </div>
                                     @endif
-
-                                    <div class="col-sm-4 col-lg-3">
-                                        <input type="date" class="form-control">
-                                    </div>
                                 </div>
                             </form>
                         </div>
                         <div class="departments-section">
+                            @php($current_user_sector_id = auth()->user()->sector_id)
+                            @php(auth()->user()->role != 1 ? $isNotAdmin = true : $isNotAdmin = false)
                             @foreach($sectors as $sector)
-                                <div class="department-box {{ $sector->id == auth()->user()->sector_id ? 'active' : '' }} ">
-                                    <a href="{{ auth()->user()->sector_id !== $sector->id &&
-                                        auth()->user()->sector_id !== 1  &&
-                                        auth()->user()->role !== 1 ?
-                                            route('not_authorized') :
-                                            route('drive', ['sector_id' => $sector->id, 'line_id' => auth()->user()->line_id]) }} "
-                                       class="text-decoration-none sector_text {{ $sector->id == auth()->user()->sector_id ?  'sector_active' : ''}}">
+                                <div class="department-box {{ $sector->id == $current_user_sector_id && $isNotAdmin ? 'active' : '' }} ">
+                                    <a href="
+                                    @if ($current_user_sector_id !== $sector->id && $current_user_sector_id !== 1 && auth()->user()->role !== 1)
+                                        {{ route('not_authorized') }}
+                                    @elseif ($current_user_sector_id === $sector->id && $current_user_sector_id !== 1 && auth()->user()->role !== 1)
+                                        {{ route('drive', ['sector_id' => $sector->id, 'line_id' => auth()->user()->line_id]) }}
+                                    @else
+                                        {{ route('sector_line.choose', $sector->id) }}
+                                    @endif
+                                    "
+                                       class="text-decoration-none sector_text {{ $sector->id == $current_user_sector_id && $isNotAdmin ?  'sector_active' : ''}}">
                                         <div class="department-title">{{ $sector->name }}</div>
                                         <div class="department-views">
-                                            Views <img src="{{ asset($sector->id == auth()->user()->sector_id ?  'images/icons/eye_light.svg' : 'images/icons/eye.svg') }}" style="max-width: 20px;" />
-                                            <span class="views-number">{{ $views->where('sector_id', '=', $sector->id)->sum('viewed') }}</span>
+                                            Views <img src="{{ asset($sector->id == $current_user_sector_id && $isNotAdmin ?  'images/icons/eye_light.svg' : 'images/icons/eye.svg') }}" style="max-width: 20px;" />
+                                            <span class="views-number">{{ $views->where('sector_id', '=', $sector->id)->count() + $downloads->where('sector_id', '=', $sector->id)->count() }}</span>
                                         </div>
                                     </a>
                                 </div>

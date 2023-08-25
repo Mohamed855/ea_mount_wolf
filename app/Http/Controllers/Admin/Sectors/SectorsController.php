@@ -18,17 +18,21 @@ class SectorsController extends Controller
      */
     public function index()
     {
+        $sectors = DB::table('sectors');
+        $sector_lines = DB::table('line_sector')
+            ->join('lines', 'line_sector.line_id', '=', 'lines.id')
+            ->select('lines.name', 'line_sector.sector_id')
+            ->orderBy('lines.name')
+            ->get();
+        $countOfEmployees = DB::table('users')->select('sector_id')->get();
+        $countOfFiles = DB::table('files')->select('sector_id')->get();
         return $this->ifAdmin(
             $this->ifAdminAuthenticated('admin.dashboard.sectors.index')
                 ->with([
-                    'sectors' => DB::table('sectors')->get(),
-                    'lines' => DB::table('line_sector')
-                        ->join('lines', 'line_sector.line_id', '=', 'lines.id')
-                        ->select('lines.name', 'line_sector.sector_id')
-                        ->orderBy('lines.name')
-                        ->get(),
-                    'countOfEmployees' => DB::table('users')->select('sector_id')->get(),
-                    'countOfFiles' => DB::table('files')->select('sector_id', 'viewed')->get(),
+                    'sectors' => $sectors,
+                    'sector_lines' => $sector_lines,
+                    'countOfEmployees' => $countOfEmployees,
+                    'countOfFiles' => $countOfFiles,
                     ])
         );
     }
@@ -114,6 +118,7 @@ class SectorsController extends Controller
         $this->deleteFromDB('sectors', $id, null, null);
         DB::table('line_sector')->where('sector_id', $id)->delete();
         DB::table('files')->where('sector_id', $id)->delete();
+        DB::table('videos')->where('sector_id', $id)->delete();
         return $this->backWithMessage('deletedSuccessfully', 'Sector has been deleted');
     }
 }

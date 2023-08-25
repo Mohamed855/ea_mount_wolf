@@ -29,11 +29,22 @@ div.scrollmenu{overflow:auto;white-space:nowrap;}
 div.scrollmenu a{display:inline-block;text-align:center;padding:10px;margin-bottom:10px;text-decoration:none;font-size:20px;font-weight:bold;color:#dddddd}
 div.scrollmenu a:hover{color:var(--pc);}
 .topic-box{min-width:200px;padding:15px;}
+.element-bg{background-size: cover;background-repeat:no-repeat;background-position:center center}
 
 .image-bar{width:100%;height:200px;position:relative;overflow:hidden;}
 .image-bar div{width:100%;height:100%;position:absolute;left:0;top:0;opacity:0;transition:opacity 1s;background-size:cover;}
 .image-bar div.active{opacity:1;}
+.dashboard_info{background-color:#fff;box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);}
+.dashboard_info h4{color:rgba(0,0,0,0.7)}
+.dashboard_info span{color:var(--pc);)}
+.dashboard_info:hover{box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);}
 #profile_picture{display:none;}
+
+.side_bar{position:absolute;top:0;bottom:0;right:0;background-color:var(--pc);color:#dddddd;padding:10px;}
+.side_bar a{max-width:50px;color:#dddddd;text-decoration:none;}
+.dashboard_btn:hover{background-color:#dddddd;color:var(--pc);}
+.active_dashboard_btn{background-color:#dddddd;color:var(--pc);}
+.dashboard_logout_btn{background-color:var(--sc);color:#dddddd;}
 
 .content-wraper{display:flex;flex-direction:column;height:100vh;flex-grow: 1;}
 .body-content{display:flex;/* height:calc(100vh - 60px); */align-items:center;text-align:center;/* margin-bottom:60px; */flex-grow: 1;}
@@ -121,7 +132,6 @@ div.scrollmenu a:hover{color:var(--pc);}
 .incentives-section{display:grid;grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));gap: 20px;margin:10px 10px 0 0;}
 .incentive-box{border-radius: 8px;position:relative;border-top:none;}
 .incentive-box>span{position:absolute;top:-10px;right:-10px;background:#FFF;border-radius:50%;width:30px;height:30px;color:#C1E3E6;}
-.incentive-box.favorite>span{color:#F2CC0D;}
 .incentive-title{background-color:var(--pc);color:#FFF;font-size:24px;line-height: 42px;border-radius:8px;}
 .incentive-body{border-top:none;padding:2px;}
 .incentive-txt{font-size:14px;text-align:center;line-height:18px;padding:8px 0;}

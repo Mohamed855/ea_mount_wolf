@@ -87,9 +87,14 @@ class User extends Authenticatable
         return $this->belongsToMany(File::class, 'favorites');
     }
 
-    public function notification() : BelongsToMany
+    public function videos() : BelongsToMany
     {
-        return $this->belongsToMany(Notification::class)->using(UserNotification::class);
+        return $this->belongsToMany(Video::class, 'favorite_videos');
+    }
+
+    public function notifications() : BelongsToMany
+    {
+        return $this->belongsToMany(Notification::class, 'user_notifications');
     }
 
 }

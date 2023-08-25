@@ -18,11 +18,22 @@ class HomeController extends Controller
             ->where('announcements.status', '=',1)
             ->get();
 
-        $views = DB::table('files')->select('sector_id', 'viewed')->get();
+        $downloads = DB::table('file_downloads')
+            ->join('files', 'file_downloads.file_id', '=', 'files.id')
+            ->select(
+                'files.sector_id as sector_id'
+            )->get();
+
+        $views = DB::table('video_views')
+            ->join('videos', 'video_views.video_id', '=', 'videos.id')
+            ->select(
+                'videos.sector_id as sector_id'
+            )->get();
 
         return $this->ifAuthenticated('site.home')->with([
             'announcements' => $announcements,
             'sectors' => $sectors,
+            'downloads' => $downloads,
             'views' => $views,
         ]);
     }

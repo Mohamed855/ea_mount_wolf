@@ -20,8 +20,6 @@ class File extends Model
         'sector_id',
         'status',
         'stored_name',
-        'viewed',
-        'downloaded',
     ];
 
     public function user(): BelongsTo

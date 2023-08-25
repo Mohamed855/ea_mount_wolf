@@ -16,16 +16,14 @@ class AnnouncementsController extends Controller
      */
     public function index()
     {
+        $announcements = DB::table('announcements')
+            ->join('users', 'announcements.user_id', '=', 'users.id')
+            ->select(
+                'announcements.*',
+                'users.user_name'
+            );
         return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.announcements.index')
-                ->with('announcements', DB::table('announcements')
-                    ->join('users', 'announcements.user_id', '=', 'users.id')
-                    ->select(
-                        'announcements.*',
-                        'users.user_name'
-                    )->get()
-                )
-        );
+            $this->ifAdminAuthenticated('admin.dashboard.announcements.index')->with('announcements', $announcements));
     }
 
     /**

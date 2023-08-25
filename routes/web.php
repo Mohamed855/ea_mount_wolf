@@ -61,8 +61,10 @@ Route::group(['prefix' => 'dashboard'], function (){
     Route::resource('ea_topics', TopicsController::class);
     // Files
     Route::resource('ea_files', FilesController::class);
+    Route::get('downloaded_by/{id}', [FilesController::class, 'downloaded_by'])->name('downloaded_by');
     // Videos
     Route::resource('videos', VideosController::class);
+    Route::get('viewed_by/{id}', [VideosController::class, 'viewed_by'])->name('viewed_by');
     // Actions
     Route::post('toggle_active/{id}', [AdminActionsController::class, 'toggle_active'])->name('toggle_active');
     Route::post('toggle_publish_announcement/{id}', [AdminActionsController::class, 'toggle_publish_announcement'])->name('toggle_publish_announcement');
@@ -78,6 +80,7 @@ Route::put('update_profile_picture', [ProfileController::class, 'update_profile_
 Route::delete('delete_profile_picture', [ProfileController::class, 'delete_profile_picture']) -> name('profile_picture.delete');
 // Site routes
 Route::get('brain_box', [SiteController::class, 'brain_box']) -> name('brain_box');
+Route::get('choose_line/{sector_id}', [SiteController::class, 'choose_line']) -> name('sector_line.choose');
 Route::get('drive/{sector_id}/line/{line_id}', [SiteController::class, 'drive']) -> name('drive');
 Route::get('favorites', [SiteController::class, 'favorites']) -> name('favorites');
 Route::get('video/{id}', [SiteController::class, 'video']) -> name('video');
@@ -86,5 +89,6 @@ Route::get('topic/{id}', [SiteController::class, 'topic']) -> name('topic');
 Route::post('post_comment', [ActionsController::class, 'post_comment'])->name('comment.post');
 Route::post('delete_comment/{id}', [ActionsController::class, 'delete_comment'])->name('comment.delete');
 Route::get('toggle_favorite/{id}', [ActionsController::class, 'toggle_favorite'])->name('favorites.toggle');
+Route::get('toggle_favorite_videos/{id}', [ActionsController::class, 'toggle_favorite_videos'])->name('favorite_videos.toggle');
 Route::get('download_file/{id}', [ActionsController::class, 'download_file'])->name('file.download');
 Route::get('not_authorized', [ActionsController::class, 'not_authorized'])->name('not_authorized');

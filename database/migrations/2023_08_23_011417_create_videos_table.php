@@ -22,7 +22,6 @@ return new class extends Migration
             $table->foreignIdFor(Line::class);
             $table->foreignIdFor(Sector::class);
             $table->boolean('status')->default(1);
-            $table->mediumInteger('viewed')->default(0);
             $table->timestamps();
         });
     }

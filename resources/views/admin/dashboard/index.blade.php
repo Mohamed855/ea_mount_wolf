@@ -1,42 +1,64 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
-@section('title', 'Employee Access - Dashboard')
+@section('title', 'Dashboard')
 
-@section('content')
+@section('dashboard_title')
+    Overview
+@endsection
 
-    <div class="content-wraper withnav">
-        <div class="body-content">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-12">
-                        <div class="brain-box-title pb-5 mb-5">
-                            <p class="d-inline fs-4">
-                                Dashboard
-                                <a href="{{ route('admin.logout') }}" class="btn btn-outline-danger mx-3">Logout</a>
-                            </p>
+@section('dashboard_content')
+    <div class="body-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="row justify-content-between m-auto">
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info" style="max-width: 160px">
+                            <h4 class="rounded text-center fs-6">Announces</h4>
+                            <span class="rounded text-center fs-5">{{ $announcements_count }}</span>
                         </div>
-                        <div class="row buttons justify-content-between m-auto">
-                            <a href="{{ route('announcements.index') }}" class="py-5 px-4 mb-5 control-btn text-decoration-none rounded" style="max-width: 200px;">
-                                <span class="rounded text-center text-white fs-5">Announcements</span>
-                            </a>
-                            <a href="{{ route('sectors.index') }}" class="py-5 px-4 mb-5 control-btn text-decoration-none rounded" style="max-width: 200px;">
-                                <span class="rounded text-center text-white fs-5">Sectors</span>
-                            </a>
-                            <a href="{{ route('lines.index') }}" class="py-5 px-4 mb-5 control-btn text-decoration-none rounded" style="max-width: 200px;">
-                                <span class="rounded text-center text-white fs-5">Lines</span>
-                            </a>
-                            <a href="{{ route('users.index') }}" class="py-5 px-4 mb-5 control-btn text-decoration-none rounded" style="max-width: 200px;">
-                                <span class="rounded text-center text-white fs-5">Users</span>
-                            </a>
-                            <a href="{{ route('ea_topics.index') }}" class="py-5 px-4 mb-5 control-btn text-decoration-none rounded" style="max-width: 200px;">
-                                <span class="rounded text-center text-white fs-5">Topics</span>
-                            </a>
-                            <a href="{{ route('ea_files.index') }}" class="py-5 px-4 mb-5 control-btn text-decoration-none rounded" style="max-width: 200px;">
-                                <span class="rounded text-center text-white fs-5">Files</span>
-                            </a>
-                            <a href="{{ route('videos.index') }}" class="py-5 px-4 mb-5 control-btn text-decoration-none rounded" style="max-width: 200px;">
-                                <span class="rounded text-center text-white fs-5">Videos</span>
-                            </a>
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info" style="max-width: 160px">
+                            <h4 class="rounded text-center fs-6">Sectors</h4>
+                            <span class="rounded text-center fs-5">{{ $sectors_count }}</span>
+                        </div>
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info" style="max-width: 160px">
+                            <h4 class="rounded text-center fs-6">Lines</h4>
+                            <span class="rounded text-center fs-5">{{ $lines_count }}</span>
+                        </div>
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info" style="max-width: 160px">
+                            <h4 class="rounded text-center fs-6">Users</h4>
+                            <span class="rounded text-center fs-5">{{ $users_count }}</span>
+                        </div>
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info" style="max-width: 160px">
+                            <h4 class="rounded text-center fs-6">Topics</h4>
+                            <span class="rounded text-center fs-5">{{ $topics_count }}</span>
+                        </div>
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info" style="max-width: 160px">
+                            <h4 class="rounded text-center fs-6">Files</h4>
+                            <span class="rounded text-center fs-5">{{ $files_count }}</span>
+                        </div>
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info" style="max-width: 160px">
+                            <h4 class="rounded text-center fs-6">Videos</h4>
+                            <span class="rounded text-center fs-5">{{ $videos_count }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between m-auto">
+                        @foreach($sectors as $sector)
+                            <div class="py-4 px-4 mb-5 rounded dashboard_info" style="max-width: 160px">
+                                <h4 class="rounded text-center fs-6">{{ $sector->name }}</h4>
+                                <span class="rounded text-center fs-6">{{ 'Files: ' . $files->where('sector_id', $sector->id)->count() }}</span>
+                                <br>
+                                <span class="rounded text-center fs-6">{{ 'Videos: ' . $videos->where('sector_id', $sector->id)->count() }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="row justify-content-between m-auto">
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info col-5">
+                            <h4 class="rounded text-center fs-6">Files Downloads</h4>
+                            <span class="rounded text-center fs-5">{{ $file_downloads_count }}</span>
+                        </div>
+                        <div class="py-4 px-4 mb-5 rounded dashboard_info col-5">
+                            <h4 class="rounded text-center fs-6">Videos Views</h4>
+                            <span class="rounded text-center fs-5">{{ $video_views_count }}</span>
                         </div>
                     </div>
                 </div>

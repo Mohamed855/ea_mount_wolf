@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Video;
 use App\Traits\GeneralTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminActionsController extends Controller
 {

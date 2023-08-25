@@ -17,19 +17,24 @@ class FilesController extends Controller
      */
     public function index()
     {
+        $files = DB::table('files')
+            ->join('users', 'files.user_id', '=', 'users.id')
+            ->join('lines', 'files.line_id', '=', 'lines.id')
+            ->join('sectors', 'files.sector_id', '=', 'sectors.id')
+            ->select(
+                'files.*',
+                'users.user_name',
+                'sectors.name as sector_name',
+                'lines.name as line_name',
+            );
+        $downloaded = DB::table('file_downloads')
+            ->join('files', 'file_downloads.file_id', '=', 'files.id')->get();
         return $this->ifAdmin(
             $this->ifAdminAuthenticated('admin.dashboard.files.index')
-                ->with('files', DB::table('files')
-                    ->join('users', 'files.user_id', '=', 'users.id')
-                    ->join('lines', 'files.line_id', '=', 'lines.id')
-                    ->join('sectors', 'files.sector_id', '=', 'sectors.id')
-                    ->select(
-                        'files.*',
-                        'users.user_name',
-                        'sectors.name as sector_name',
-                        'lines.name as line_name',
-                    )->get()
-                )
+                ->with([
+                    'files' => $files,
+                    'downloaded' => $downloaded,
+                ])
         );
     }
 
@@ -73,6 +78,21 @@ class FilesController extends Controller
         return $this->backWithMessage('uploadedSuccessfully', 'File Uploaded Successfully');
     }
 
+    public function downloaded_by($id) {
+        $file_user_downloads = DB::table('file_downloads')
+            ->join('users', 'file_downloads.user_id', '=', 'users.id')
+            ->select(
+                'users.first_name',
+                'users.middle_name',
+                'users.last_name',
+                'users.user_name',
+                'users.created_at',
+            )->where('file_id', $id)->get();
+        return $this->successView('admin.dashboard.files.downloaded_by')->with([
+            'file_user_downloads' => $file_user_downloads,
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -80,6 +100,7 @@ class FilesController extends Controller
     {
         $this->deleteFromDB('files', $id, 'files/', 'stored_name');
         DB::table('favorites')->where('file_id', $id)->delete();
+        DB::table('file_downloads')->where('file_id', $id)->delete();
         return $this->backWithMessage('deletedSuccessfully', 'File has been deleted');
     }
 }

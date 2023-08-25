@@ -14,8 +14,8 @@ class Notification extends Model
         'text',
     ];
 
-    public function user() : BelongsToMany
+    public function users() : BelongsToMany
     {
-        return $this->belongsToMany(User::class)->using(UserNotification::class);
+        return $this->belongsToMany(User::class, 'user_notifications');
     }
 }

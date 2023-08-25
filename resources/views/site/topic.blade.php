@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section($current_topic->title, 'Employee Access - Brain Box')
+@section('title', $current_topic->title)
 
 @section('content')
 
@@ -15,9 +15,8 @@
                             <h2 class="text-center">
                                 {{ $current_topic->title }}
                             </h2>
-
                         </div>
-                        <div class="brain-box ratio ratio-16x9" style="background-image: url({{ asset('images/topics/'.$current_topic->image) }})">
+                        <div class="brain-box ratio ratio-16x9 element-bg" style="background-image: url({{ asset('images/topics/'.$current_topic->image) }})">
                         </div>
 
                         <h5 class="text-center lh-lg pb-5 text-dark">
@@ -79,7 +78,7 @@
                                 @foreach($active_topics as $topic)
                                     @if($topic->id != $current_topic->id)
                                         <a href="{{ route('topic', $topic->id) }}">
-                                            <div class="topic-box" style="background-image: url({{ asset('images/topics/' . $topic->image) }})">
+                                            <div class="topic-box element-bg" style="background-image: url({{ asset('images/topics/' . $topic->image) }})">
                                                 {{ $topic->title }}
                                             </div>
                                         </a>

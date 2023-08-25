@@ -6,7 +6,10 @@ use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use App\Models\Favorite;
 use App\Models\File;
+use App\Models\FileDownload;
 use App\Models\User;
+use App\Models\Video;
+use App\Models\VideoView;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\DB;
 
@@ -37,11 +40,31 @@ class ActionsController extends Controller
         $current_user->files()->toggle($file->id);
         return back();
     }
+    public function toggle_favorite_videos($id) {
+        $current_user = User::find(auth()->user()->id);
+        $video = Video::find($id);
+        $current_user->videos()->toggle($video->id);
+        return back();
+    }
     public function download_file($id) {
+        $file_download = new FileDownload();
+        if (!FileDownload::where('user_id', auth()->user()->id)->where('file_id', $id)->exists()) {
+            $file_download->user_id = auth()->user()->id;
+            $file_download->file_id = $id;
+            $file_download->save();
+        }
         $file = DB::table('files')->where('id', $id)->first();
         $public_file_name ='files/' . $file->stored_name;
         $headers = array('Content-Type: ' . $file->type,);
         return response()->download(public_path($public_file_name), $file->stored_name, $headers);
+    }
+    public function viewed_video($id) {
+        $video_viewed = new VideoView();
+        if (!VideoView::where('user_id', auth()->user()->id)->where('video_id', $id)->exists()) {
+            $video_viewed->user_id = auth()->user()->id;
+            $video_viewed->video_id = $id;
+            $video_viewed->save();
+        }
     }
     public function not_authorized() {
         return $this->redirectWithMessage('home','notAuthorized', '');

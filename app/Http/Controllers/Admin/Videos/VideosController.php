@@ -17,19 +17,24 @@ class VideosController extends Controller
      */
     public function index()
     {
+        $videos = DB::table('videos')
+            ->join('users', 'videos.user_id', '=', 'users.id')
+            ->join('lines', 'videos.line_id', '=', 'lines.id')
+            ->join('sectors', 'videos.sector_id', '=', 'sectors.id')
+            ->select(
+                'videos.*',
+                'users.user_name',
+                'sectors.name as sector_name',
+                'lines.name as line_name',
+            );
+        $viewed = DB::table('video_views')
+            ->join('videos', 'video_views.video_id', '=', 'videos.id')->get();
         return $this->ifAdmin(
             $this->ifAdminAuthenticated('admin.dashboard.videos.index')
-                ->with('videos', DB::table('videos')
-                    ->join('users', 'videos.user_id', '=', 'users.id')
-                    ->join('lines', 'videos.line_id', '=', 'lines.id')
-                    ->join('sectors', 'videos.sector_id', '=', 'sectors.id')
-                    ->select(
-                        'videos.*',
-                        'users.user_name',
-                        'sectors.name as sector_name',
-                        'lines.name as line_name',
-                    )->get()
-                )
+                ->with([
+                    'videos' => $videos,
+                    'viewed' => $viewed,
+                ])
         );
     }
 
@@ -70,13 +75,29 @@ class VideosController extends Controller
         return $this->backWithMessage('uploadedSuccessfully', 'Video Added Successfully');
     }
 
+    public function viewed_by($id) {
+        $video_user_views = DB::table('video_views')
+            ->join('users', 'video_views.user_id', '=', 'users.id')
+            ->select(
+                'users.first_name',
+                'users.middle_name',
+                'users.last_name',
+                'users.user_name',
+                'users.created_at',
+            )->where('video_id', $id)->get();
+        return $this->successView('admin.dashboard.videos.viewed_by')->with([
+            'video_user_views' => $video_user_views,
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         $this->deleteFromDB('videos', $id, null, null);
-        //DB::table('favorites')->where('file_id', $id)->delete();
+        DB::table('favorite_videos')->where('video_id', $id)->delete();
+        DB::table('video_views')->where('video_id', $id)->delete();
         return $this->backWithMessage('deletedSuccessfully', 'Video has been deleted');
     }
 }
