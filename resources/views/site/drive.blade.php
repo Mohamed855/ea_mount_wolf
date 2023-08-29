@@ -19,7 +19,7 @@
                         </div>
                         <hr>
                         <div class="content">
-                            <div class="row">
+                            <div class="row scroll-bar">
                                 @if(count($user_files->get()) > 0)
                                     @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
                                         @php($user_files = $user_files->whereDate('created_at', $_GET['date']))
@@ -106,7 +106,7 @@
                         </div>
                         <hr>
                         <div class="content">
-                            <div class="row ">
+                            <div class="row scroll-bar">
                                 @if(count($user_videos->get()) > 0)
                                     @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
                                         @php($user_videos = $user_videos->whereDate('created_at', $_GET['date']))

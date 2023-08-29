@@ -11,41 +11,51 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
-                        <div class="col-6 m-auto">
+                        <div class="col-6 m-auto scroll-bar">
                             @foreach($registration_notifications as $registration_notification)
-                                <div class="">
-                                    <div class="">
-                                        <p>{{ $registration_notification->text . ' ' . $registration_notification->sector_id . ' ' . $registration_notification->line_id }}</p>
+                                <a class="notification_item" href="{{ route('users.index') }}">
+                                    <div class="comment-box">
+                                        <div class="comment-txt">
+                                            <p>{{ $registration_notification->text }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
-                            @foreach($video_notifications as $video_notification)
-                                <div class="comment-box">
-                                    <div class="comment-txt">
-                                        <p>{{ $video_notification->text . ' ' . $video_notification->sector_id . ' ' . $video_notification->line_id . ' ' . $video_notification->video_id }}</p>
-                                    </div>
-                                </div>
-                            @endforeach
-                            @foreach($file_notifications as $file_notification)
-                                <div class="comment-box">
-                                    <div class="comment-txt">
-                                        <p>{{ $file_notification->text . ' ' . $file_notification->sector_id . ' ' . $file_notification->line_id . ' ' . $file_notification->file_id }}</p>
-                                    </div>
-                                </div>
+                                </a>
                             @endforeach
                             @foreach($comment_notifications as $comment_notification)
-                                <div class="comment-box">
-                                    <div class="comment-txt">
-                                        <p>{{ $comment_notification->text . ' ' . $comment_notification->sector_id . ' ' . $comment_notification->line_id . ' ' . $comment_notification->topic_id }}</p>
+                                <a class="notification_item" href="{{ route('topic', $comment_notification->topic_id) }}">
+                                    <div class="comment-box">
+                                        <div class="comment-txt">
+                                            <p>{{ $comment_notification->text }}</p>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
+                            @endforeach
+                            @foreach($video_notifications as $video_notification)
+                                <a class="notification_item" href="{{ route('video', $video_notification->video_id) }}">
+                                    <div class="comment-box">
+                                        <div class="comment-txt">
+                                            <p>{{ $video_notification->text }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                            @foreach($file_notifications as $file_notification)
+                                <a class="notification_item" href="{{ route('file.download', $file_notification->file_id) }}">
+                                    <div class="comment-box">
+                                        <div class="comment-txt">
+                                            <p>{{ $file_notification->text }}</p>
+                                        </div>
+                                    </div>
+                                </a>
                             @endforeach
                             @foreach($topic_notifications as $topic_notification)
-                                <div class="comment-box">
-                                    <div class="comment-txt">
-                                        <p>{{ $topic_notification->text . ' ' . $topic_notification->topic_id }}</p>
+                                <a class="notification_item" href="{{ route('topic', $topic_notification->topic_id) }}">
+                                    <div class="comment-box">
+                                        <div class="comment-txt">
+                                            <p>{{ $topic_notification->text }}</p>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             @endforeach
                         </div>
                     </div>

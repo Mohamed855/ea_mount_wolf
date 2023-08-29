@@ -9,7 +9,8 @@
 
 @section('dashboard_content')
     @include('sections.dashboard_filter')
-        <table class="table mb-5 bg-white">
+    <div class="scroll-bar">
+        <table class="table bg-white">
             <thead class="bg-light">
             <tr>
                 <th>Image</th>
@@ -70,4 +71,5 @@
             @endif
             </tbody>
         </table>
+    </div>
 @endsection

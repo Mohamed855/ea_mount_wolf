@@ -36,10 +36,10 @@ trait AuthTrait {
                     ->where('users.id', $current_user_id)
                     ->first();
 
-                $registration_notifications = '';
-                $video_notifications = '';
-                $file_notifications = '';
-                $comment_notifications = '';
+                $registration_notifications = [];
+                $video_notifications = [];
+                $file_notifications = [];
+                $comment_notifications = [];
                 $topic_notifications = DB::table('topic_notifications')->get();
 
                 if (auth()->user()->role == 1) {

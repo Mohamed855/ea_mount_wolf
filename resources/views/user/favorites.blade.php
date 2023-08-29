@@ -13,7 +13,7 @@
                         @include('sections.filter')
                         <h2 class="text-center">Favorite Files</h2>
                         <hr>
-                            <div class="row ">
+                        <div class="row scroll-bar">
                                 @if(count($favorites->get()) > 0)
                                     @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
                                         @php($favorites = $favorites->whereDate('created_at', $_GET['date']))
@@ -85,67 +85,66 @@
                                     </div>
                                 @endif
                             </div>
-                        </div>
                         <div class="col-lg-12 py-3">
-                            <div class="brain-box-title">
-                                <h2 class="text-center">
-                                    Favorite Videos
-                                </h2>
-                            </div>
-                            <hr>
-                            <div class="content">
-                                <div class="row ">
-                                    @if(count($favorite_videos->get()) > 0)
-                                        @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                                            @php($favorite_videos = $favorite_videos->whereDate('created_at', $_GET['date']))
-                                        @endif
-                                        @if(isset($_GET['filter']))
-                                            @if($_GET['filter'] === 'name')
-                                                @php($favorite_videos = $favorite_videos->orderBy('videos.name', 'asc')->get())
-                                            @elseif($_GET['filter'] === 'date')
-                                                @php($favorite_videos = $favorite_videos->orderBy('videos.created_at', 'asc')->get())
-                                            @else
-                                                @php($favorite_videos = $favorite_videos->get())
-                                            @endif
+                        <div class="brain-box-title">
+                            <h2 class="text-center">
+                                Favorite Videos
+                            </h2>
+                        </div>
+                        <hr>
+                        <div class="content">
+                            <div class="row scroll-bar">
+                                @if(count($favorite_videos->get()) > 0)
+                                    @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
+                                        @php($favorite_videos = $favorite_videos->whereDate('created_at', $_GET['date']))
+                                    @endif
+                                    @if(isset($_GET['filter']))
+                                        @if($_GET['filter'] === 'name')
+                                            @php($favorite_videos = $favorite_videos->orderBy('videos.name', 'asc')->get())
+                                        @elseif($_GET['filter'] === 'date')
+                                            @php($favorite_videos = $favorite_videos->orderBy('videos.created_at', 'asc')->get())
                                         @else
                                             @php($favorite_videos = $favorite_videos->get())
                                         @endif
-                                        @foreach($favorite_videos as $video)
-                                            <div class="col-6 col-md-4 col-lg-3">
-                                                <div class="incentive-box favorite border pb-3 mb-3">
+                                    @else
+                                        @php($favorite_videos = $favorite_videos->get())
+                                    @endif
+                                    @foreach($favorite_videos as $video)
+                                        <div class="col-6 col-md-4 col-lg-3">
+                                            <div class="incentive-box favorite border pb-3 mb-3">
                                             <span>
                                                 <a href="{{ route('favorite_videos.toggle', $video->video_id) }}">
                                                     <img src="{{ asset('images/icons/star.png') }}" style="max-width: 16px">
                                                 </a>
                                             </span>
-                                                    <a href="{{ route('video', $video->id) }}">
-                                                        <div class="incentive-title">{{ $video->name }}</div>
-                                                        <div class="incentive-body">
-                                                            <div class="incentive-txt">Published<br>{{ $video->created_at }}</div>
-                                                            <div class="incentive-info-box">
-                                                                <div class="incentive-info in-views">
-                                                                    <img src="{{ asset('images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
-                                                                    {{ $viewed->where('video_id', $video->id)->count() }}
-                                                                </div>
-                                                                <div class="incentive-info in-files">
-                                                                    <img src="{{ asset('images/icons/extensions/video-icon.svg') }}" style="max-width: 16px" alt="">
-                                                                </div>
+                                                <a href="{{ route('video', $video->id) }}">
+                                                    <div class="incentive-title">{{ $video->name }}</div>
+                                                    <div class="incentive-body">
+                                                        <div class="incentive-txt">Published<br>{{ $video->created_at }}</div>
+                                                        <div class="incentive-info-box">
+                                                            <div class="incentive-info in-views">
+                                                                <img src="{{ asset('images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
+                                                                {{ $viewed->where('video_id', $video->id)->count() }}
+                                                            </div>
+                                                            <div class="incentive-info in-files">
+                                                                <img src="{{ asset('images/icons/extensions/video-icon.svg') }}" style="max-width: 16px" alt="">
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                </div>
+                                                    </div>
+                                                </a>
                                             </div>
-                                        @endforeach
-                                    @else
-                                        <div class="m-auto">
-                                            <p class="fs-4 p-5 text-center">
-                                                Add some videos to favorites
-                                            </p>
                                         </div>
-                                    @endif
-                                </div>
+                                    @endforeach
+                                @else
+                                    <div class="m-auto">
+                                        <p class="fs-4 p-5 text-center">
+                                            Add some videos to favorites
+                                        </p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

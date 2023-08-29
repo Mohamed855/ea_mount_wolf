@@ -134,8 +134,52 @@
                                 <path id="_Color" data-name=" ↳Color" d="M8,19.5a2,2,0,0,1-2-2h4A2,2,0,0,1,8,19.5Zm8-3H0v-1l2-2v-5A7.1,7.1,0,0,1,3.174,4.44,5.522,5.522,0,0,1,6.5,2.18V1.5a1.5,1.5,0,0,1,3,0v.68a5.529,5.529,0,0,1,3.322,2.264A7.085,7.085,0,0,1,14,8.5v5l2,2v1Z" transform="translate(4 2)" fill="#f0f0f0"/>
                             </svg>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ route('notifications') }}">show more</a></li>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end scroll-bar p-2">
+                            @foreach($registration_notifications->take(5) as $registration_notification)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('users.index') }}">
+                                        {{ $registration_notification->text }}
+                                    </a>
+                                    <hr>
+                                </li>
+                            @endforeach
+                            @foreach($comment_notifications->take(5) as $comment_notification)
+                                <li>
+                                    <a class="dropdown-item" style="word-break:break-all;" href="{{ route('topic', $comment_notification->topic_id) }}">
+                                        {{ $comment_notification->text }}
+                                    </a>
+                                    <hr>
+                                </li>
+                            @endforeach
+                            @foreach($video_notifications->take(5) as $video_notification)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('video', $video_notification->video_id) }}">
+                                        {{ $video_notification->text }}
+                                    </a>
+                                    <hr>
+                                </li>
+                            @endforeach
+                            @foreach($file_notifications->take(5) as $file_notification)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('file.download', $file_notification->file_id) }}">
+                                        {{ $file_notification->text }}
+                                    </a>
+                                    <hr>
+                                </li>
+                            @endforeach
+                            @foreach($topic_notifications->take(5) as $topic_notification)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('topic', $topic_notification->topic_id) }}">
+                                        {{ $topic_notification->text }}
+                                    </a>
+                                    <hr>
+                                </li>
+                            @endforeach
+                            <li>
+                                <a class="dropdown-item" href="{{ route('notifications') }}">
+                                    show more
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">

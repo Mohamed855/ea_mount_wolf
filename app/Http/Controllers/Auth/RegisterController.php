@@ -58,8 +58,8 @@ class RegisterController extends Controller
 
         $user->save();
 
-        $getUser = User::find($username);
-        $getUser->notify(new ActivationEmail());
+        /*$getUser = User::find($username);
+        $getUser->notify(new ActivationEmail());*/
 
         $sector_name = DB::table('sectors')->select('name')->where('id', $data['sector'])->first();
         $line_name = DB::table('lines')->select('name')->where('id', $data['line'])->first();
