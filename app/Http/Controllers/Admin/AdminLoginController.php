@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AdminLoginRequest;
 use App\Traits\GeneralTrait;
-use Illuminate\Http\Request;
+use App\Traits\AuthTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class AdminLoginController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
 
     public function admin_login() {
         return $this->ifNotAuthenticated(
@@ -18,7 +20,7 @@ class AdminLoginController extends Controller
         );
     }
 
-    public function admin_check_credentials(Request $request) {
+    public function admin_check_credentials(AdminLoginRequest $request) {
         $email = $request->input('email');
         $password = $request->input('password');
         $credentials = ['email' => $email, 'password' => $password];

@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserNotification extends Model
+class TopicNotification extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'notification_id',
-        'read',
+        'text',
+        'topic_id'
     ];
 }

@@ -26,15 +26,15 @@ class LoginRequest extends FormRequest
         return [
             'user_name' => 'required',
             'crm_code' => 'required',
-            'password'  => 'required|min:8|string',
+            'password' => 'required'
         ];
     }
     public function messages()
     {
         return [
-            'user_name.required' => 'ادخل اسم المستخدم او البريد الألكترونى ',
-            'crm_code.required' => 'كود CRM مطلوب',
-            'password.required' => 'يرجي كتابة كلمة المرور و يجب ان تكون اكبر من 8 حروف',
+            'user_name.required' => 'Enter email or username ',
+            'crm_code.required' => 'CRM code is required',
+            'password.required' => 'Enter your password',
         ];
     }
 }

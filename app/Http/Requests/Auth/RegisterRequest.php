@@ -32,44 +32,44 @@ class RegisterRequest extends FormRequest
             'title' => 'not_in:0',
             'line' => 'not_in:0',
             'email' => 'required|email|unique:users',
-            'phone_number' => 'required|min:11|max:11|unique:users',
-            'password'  => 'required|min:8|string|confirmed',
+            'phone_number' => 'required|regex:/(01)[0-9]{9}/|unique:users',
+            'password'  => 'required|min:8|max:20|string|confirmed',
         ];
     }
     public function messages()
     {
         return [
-            'first_name.required' => 'الاسم الاول مطلوب ',
-            'first_name.min' => 'يجب ان يكون الاسم الاول اكثر من 2 حروف ',
-            'first_name.max' => 'يجب ان يكون الاسم الاول اقل من 20 حرف ',
+            'first_name.required' => 'First name is required',
+            'first_name.min' => 'First name must be between 2 and 20 characters',
+            'first_name.max' => 'First name must be between 2 and 20 characters',
 
-            'middle_name.required' => 'الاسم الاوسط مطلوب ',
-            'middle_name.min' => 'يجب ان يكون الاسم الاوسط اكثر من 2 حروف ',
-            'middle_name.max' => 'يجب ان يكون الاسم الاوسط اقل من 20 حرف ',
+            'middle_name.required' => 'Middle name is required',
+            'middle_name.min' => 'Middle name must be between 2 and 20 characters',
+            'middle_name.max' => 'Middle name must be between 2 and 20 characters',
 
-            'last_name.required' => 'اسم الاخير  مطلوب ',
-            'last_name.min' => 'يجب ان يكون الاسم الاخير اكثر من 3 حروف ',
-            'last_name.max' => 'يجب ان يكون الاسم الاخير اقل من 20 حرف ',
+            'last_name.required' => 'Last name is required',
+            'last_name.min' => 'Last name must be between 2 and 20 characters',
+            'last_name.max' => 'Last name must be between 2 and 20 characters',
 
-            'crm_code.required' => 'يرجي ادخال كود CRM',
-            'crm_code.unique' => 'كود CRM مسجل من قبل',
+            'crm_code.required' => 'CRM code is required',
+            'crm_code.unique' => 'CRM code is already exist',
 
-            'sector.not_in' => 'يرجي ادخال القسم',
-            'title.not_in' => ' يرجي ادخال الوظيفة',
-            'line.not_in' => 'يرجي ادخال خط الانتاج',
+            'sector.not_in' => 'Sector is required',
+            'title.not_in' => 'Title is required',
+            'line.not_in' => 'Line is required',
 
-            'email.required' => 'يرجي ادخال البريد الإلكتروني',
-            'email.email' => 'رجاء إدخال عنوان بريد إلكتروني صحيح',
-            'email.unique' => 'البريد الإلكتروني مسجل من قبل',
+            'email.required' => 'Email is required',
+            'email.email' => 'Enter a valid email',
+            'email.unique' => 'This email is already exist',
 
-            'phone_number.required' => 'يرجي كتابة رقم الموبايل',
-            'phone_number.unique' => 'رقم الهاتف مسجل من قبل',
-            'phone_number.min' => 'يجب ان يتكون رقم الموبايل من 11 رقم',
-            'phone_number.max' => 'يجب ان يتكون رقم الموبايل من 11 رقم',
+            'phone_number.required' => 'Phone number is required',
+            'phone_number.unique' => 'This number is already exist',
+            'phone_number.regex' => 'Enter a valid number',
 
-            'password.required' => 'يرجي كتابة كلمة المرور و يجب ان تكون اكبر من 8 حروف',
-            'password.min' => 'يجب ان تكون كلمة المرور اكبر من 8 حروف',
-            'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must between 8 and 20',
+            'password.max' => 'Password must between 8 and 20',
+            'password.confirmed' => 'The password confirmation does not match',
 
         ];
     }

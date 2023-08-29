@@ -135,9 +135,7 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                            @foreach(auth()->user()->notifications as $notification)
-                                <li><a class="dropdown-item" href="#">{{ $notification->id . ' ' . $notification->text }}</a></li>
-                            @endforeach
+                            <li><a class="dropdown-item" href="{{ route('notifications') }}">show more</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

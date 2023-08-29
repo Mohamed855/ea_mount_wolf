@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Users\ProfilePictureRequest;
+use App\Http\Requests\Users\UpdatePasswordRequest;
+use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,19 +12,49 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 
-class ProfileController extends Controller
+class UserController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
+
+    public function favorites()
+    {
+        if (Auth::check()) {
+            return $this->ifAuthenticated('user.favorites', [
+                'favorites' => DB::table('files')
+                    ->join('favorites', 'files.id', '=', 'favorites.file_id')
+                    ->select('files.*', 'favorites.user_id', 'favorites.file_id')
+                    ->where('favorites.user_id', auth()->user()->id),
+                'favorite_videos' => DB::table('videos')
+                    ->join('favorite_videos', 'videos.id', '=', 'favorite_videos.video_id')
+                    ->select('videos.*', 'favorite_videos.user_id', 'favorite_videos.video_id')
+                    ->where('favorite_videos.user_id', auth()->user()->id),
+                'downloaded' => DB::table('file_downloads')
+                    ->join('files', 'file_downloads.file_id', '=', 'files.id')->get(),
+                'viewed' => DB::table('video_views')
+                    ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
+            ]);
+        }
+        return $this->redirect('login');
+    }
+
+    public function notifications()
+    {
+        if (Auth::check()) {
+            return $this->ifAuthenticated('user.notifications', null);
+        }
+        return $this->redirect('login');
+    }
 
     public function profile($user_name) {
         $me = DB::table('users')->where('user_name', '=', $user_name)->first();
-        return $this->ifAuthenticated('site.user.profile')->with('me', $me);
+        return $this->ifAuthenticated('user.profile', ['me' => $me]);
     }
     public function change_password()
     {
-        return $this->ifAuthenticated('site.user.change_password');
+        return $this->ifAuthenticated('user.change_password', null);
     }
-    public function update_password(Request $request)
+    public function update_password(UpdatePasswordRequest $request)
     {
         $user = Auth::user();
 
@@ -34,7 +67,7 @@ class ProfileController extends Controller
             return $this->backWithMessage('incorrect', 'Incorrect Password');
         }
     }
-    public function update_profile_picture(Request $request)
+    public function update_profile_picture(ProfilePictureRequest $request)
     {
         if ($request->hasFile('profile_picture')) {
             $profile_picture = $request->file('profile_picture');

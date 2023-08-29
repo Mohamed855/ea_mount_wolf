@@ -85,7 +85,7 @@
                                     </div>
                                     <div class="pb-2 px-1">
                                         <select name="line" class="form-control @error('line') is-invalid @enderror">
-                                            <option value="0">Select Line *</option>
+                                            <option value="0">Line *</option>
                                             @foreach($lines as $line)
                                                 <option value="{{ $line->id }}" {{ $line->id == $selected_user->line_id ? 'selected' : '' }}>{{ $line->name }}</option>
                                             @endforeach

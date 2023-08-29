@@ -3,27 +3,30 @@
 namespace App\Http\Controllers\Admin\Announcements;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AnnouncementsRequest;
 use App\Models\Announcement;
+use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AnnouncementsController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $announcements = DB::table('announcements')
-            ->join('users', 'announcements.user_id', '=', 'users.id')
-            ->select(
-                'announcements.*',
-                'users.user_name'
-            );
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.announcements.index')->with('announcements', $announcements));
+        return $this->ifAdmin('admin.dashboard.announcements.index',[
+            'announcements' => DB::table('announcements')
+                ->join('users', 'announcements.user_id', '=', 'users.id')
+                ->select(
+                    'announcements.*',
+                    'users.user_name'
+                )
+        ]);
     }
 
     /**
@@ -31,15 +34,13 @@ class AnnouncementsController extends Controller
      */
     public function create()
     {
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.announcements.create')
-        );
+        return $this->ifAdmin('admin.dashboard.announcements.create', null);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AnnouncementsRequest $request)
     {
         $announcement_title = str_replace(' ', '', $request->title);
         $announcement_image = $announcement_title . time() . '.' . $request->image->extension();

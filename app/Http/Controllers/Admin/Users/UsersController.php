@@ -3,40 +3,41 @@
 namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Http\Requests\Admin\UserRequest;
 use App\Models\User;
+use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
+
     public function index()
     {
-        $users = DB::table('users')
-            ->join('sectors', 'users.sector_id', '=', 'sectors.id')
-            ->join('lines', 'users.line_id', '=', 'lines.id')
-            ->join('titles', 'users.title_id', '=', 'titles.id')
-            ->select(
-                'users.id',
-                'users.first_name',
-                'users.middle_name',
-                'users.last_name',
-                'users.user_name',
-                'users.email',
-                'users.phone_number',
-                'users.profile_image',
-                'users.activated',
-                'users.created_at',
-                'sectors.name as sector_name',
-                'lines.name as line_name',
-                'titles.name as title_name',
-            );
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.users.index')
-                ->with('users', $users)
-        );
+        return $this->ifAdmin('admin.dashboard.users.index', [
+                    'users' => DB::table('users')
+                    ->join('sectors', 'users.sector_id', '=', 'sectors.id')
+                    ->join('lines', 'users.line_id', '=', 'lines.id')
+                    ->join('titles', 'users.title_id', '=', 'titles.id')
+                    ->select(
+                        'users.id',
+                        'users.first_name',
+                        'users.middle_name',
+                        'users.last_name',
+                        'users.user_name',
+                        'users.email',
+                        'users.phone_number',
+                        'users.profile_image',
+                        'users.activated',
+                        'users.created_at',
+                        'sectors.name as sector_name',
+                        'lines.name as line_name',
+                        'titles.name as title_name',
+                    )
+        ]);
     }
 
     /**
@@ -44,30 +45,24 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $sectors = DB::table('sectors')->select(['id', 'name'])->get();
-        $lines = DB::table('lines')->select(['id', 'name'])->get();
-        $titles = DB::table('titles')->select(['id', 'name'])->get();
-
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.users.create')->with([
-                'sectors' => $sectors,
-                'lines' => $lines,
-                'titles' => $titles,
-            ]),
-        );
+        return $this->ifAdmin('admin.dashboard.users.create', [
+                'sectors' => DB::table('sectors')->select(['id', 'name'])->get(),
+                'lines' => DB::table('lines')->select(['id', 'name'])->get(),
+                'titles' => DB::table('titles')->select(['id', 'name'])->get(),
+            ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         $user = new User();
         $data = $request->all();
 
         $firstName = strtolower($data['first_name']);
-        $lastName = strtolower($data['middle_name']);
-        $username = $firstName . $lastName . rand(1, 9);
+        $middleName = strtolower($data['middle_name']);
+        $username = $firstName . $middleName . rand(1, 9);
 
         $i = 0;
         while (User::whereuser_name($username)->exists()) {
@@ -98,25 +93,18 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        $selected_user = DB::table('users')->where('id', '=', $id)->first();
-        $sectors = DB::table('sectors')->select(['id', 'name'])->get();
-        $lines = DB::table('lines')->select(['id', 'name'])->get();
-        $titles = DB::table('titles')->select(['id', 'name'])->get();
-
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.users.edit')->with([
-                'selected_user' => $selected_user,
-                'sectors' => $sectors,
-                'lines' => $lines,
-                'titles' => $titles,
-            ])
-        );
+        return $this->ifAdmin('admin.dashboard.users.edit', [
+                'selected_user' => DB::table('users')->where('id', '=', $id)->first(),
+                'sectors' => DB::table('sectors')->select(['id', 'name'])->get(),
+                'lines' => DB::table('lines')->select(['id', 'name'])->get(),
+                'titles' => DB::table('titles')->select(['id', 'name'])->get(),
+            ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
         DB::table('users')
             ->where('id', '=', $id)
@@ -131,6 +119,8 @@ class UsersController extends Controller
                 'title_id' => $request->title,
                 'line_id' => $request->line,
                 'sector_id' => $request->sector,
+                'role'=> 2,
+                'activated' => 1,
             ]);
 
         return $this->backWithMessage('savedSuccessfully', 'User Details saved successfully');

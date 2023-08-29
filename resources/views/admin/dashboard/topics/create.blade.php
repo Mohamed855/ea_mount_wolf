@@ -29,7 +29,8 @@
                                 </div>
 
                                 <div class="col-lg-6 m-auto py-2">
-                                    <input type="file" name="image" id="file" class="btn btn-outline-primary @error('image') is-invalid @enderror" accept="*/*" required>
+                                    <input type="file" name="image" id="file" class="btn btn-outline-primary @error('image') is-invalid @enderror" accept="image/png, image/gif, image/jpeg">
+                                    <br>
                                     @error('image')
                                     <span class="text-danger" role="alert">{{ $message }}</span>
                                     @enderror

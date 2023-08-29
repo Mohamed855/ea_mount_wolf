@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Notification::class);
             $table->boolean('read')->default(0);
             $table->timestamps();
         });

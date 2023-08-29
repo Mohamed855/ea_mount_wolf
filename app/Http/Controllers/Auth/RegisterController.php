@@ -4,17 +4,29 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\RegistrationNotification;
 use App\Models\User;
+use App\Notifications\ActivationEmail;
 use App\Traits\GeneralTrait;
+use App\Traits\AuthTrait;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
 
     public function sign_up()
     {
+        $sectors = DB::table('sectors')->select(['id', 'name'])->get();
+        $lines = DB::table('lines')->select(['id', 'name'])->get();
+        $titles = DB::table('titles')->select(['id', 'name'])->get();
         return $this->ifNotAuthenticated(
-            $this->selectorData('auth.sign_up')
+            view('auth.sign_up')->with([
+            'sectors' => $sectors,
+            'lines' => $lines,
+            'titles' => $titles,
+            ])
         );
     }
 
@@ -23,8 +35,8 @@ class RegisterController extends Controller
         $data = $request->all();
 
         $firstName = strtolower($data['first_name']);
-        $lastName = strtolower($data['last_name']);
-        $username = $firstName . $lastName . rand(1, 9);
+        $middleName = strtolower($data['middle_name']);
+        $username = $firstName . $middleName . rand(1, 9);
 
         $i = 0;
         while (User::whereuser_name($username)->exists()) {
@@ -46,10 +58,20 @@ class RegisterController extends Controller
 
         $user->save();
 
-        return  $this->redirectWithMessage(
-            'login',
-            'activeRequest',
-            'Your activation request has been sent, check your email for approval'
-        );
+        $getUser = User::find($username);
+        $getUser->notify(new ActivationEmail());
+
+        $sector_name = DB::table('sectors')->select('name')->where('id', $data['sector'])->first();
+        $line_name = DB::table('lines')->select('name')->where('id', $data['line'])->first();
+
+        $notification = new RegistrationNotification;
+
+        $notification->text = 'There is a registration request in sector (' . $sector_name->name . ') - line (' . $line_name->name . ')';
+        $notification->sector_id = $data['sector'];
+        $notification->line_id = $data['line'];
+
+        $notification->save();
+
+        return  $this->redirect('login')->with('activeRequest', 'Your activation request has been sent, check your email for approval');
     }
 }

@@ -29,7 +29,7 @@
                                                 <option value="{{ $sector->id }}">{{ $sector->name }}</option>
                                             @endforeach
                                         @else
-                                            <option value="{{ $user_sector->id }}">{{ $user_sector->name }}</option>
+                                            <option value="{{ $user_sector->id }} {{ $user_sector->id == old('sector') ? 'selected' : '' }}">{{ $user_sector->name }}</option>
                                         @endif
                                     </select>
                                     @error('sector')
@@ -38,9 +38,9 @@
                                 </div>
                                 <div class="col-lg-6 m-auto py-2">
                                     <select name="line" class="form-control @error('line') is-invalid @enderror">
-                                        <option value="0">Select Line *</option>
+                                        <option value="0">Line *</option>
                                         @foreach($lines as $line)
-                                            <option value="{{ $line->id }}">{{ $line->name }}</option>
+                                            <option value="{{ $line->id }} {{ $line->id == old('line') ? 'selected' : '' }}">{{ $line->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('line')
@@ -48,7 +48,8 @@
                                     @enderror
                                 </div>
                                 <div class="col-lg-6 m-auto py-2">
-                                    <input type="file" name="file" id="file" class="btn btn-outline-primary @error('file') is-invalid @enderror" accept="*/*" required>
+                                    <input type="file" name="file" id="file" value="{{ old('file') }}" class="btn btn-outline-primary @error('file') is-invalid @enderror" accept="*/*">
+                                    <br>
                                     @error('file')
                                     <span class="text-danger" role="alert">{{ $message }}</span>
                                     @enderror
@@ -59,7 +60,7 @@
                                     </div>
                                 @endif
                                 <button type="submit" class="btn btn-outline-primary p-2 my-2 mx-lg-2">Add file</button>
-                                <span class="text-dark">Max size is 2048 MB</span>
+                                <span class="text-dark">Max size is 10 MB</span>
                             </form>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Traits\GeneralTrait;
+use App\Traits\AuthTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 class LoginController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
 
     public function login() {
         return $this->ifNotAuthenticated(

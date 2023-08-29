@@ -3,39 +3,38 @@
 namespace App\Http\Controllers\Admin\Files;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\FilesRequest;
 use App\Models\File;
+use App\Models\FileNotification;
+use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FilesController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $files = DB::table('files')
-            ->join('users', 'files.user_id', '=', 'users.id')
-            ->join('lines', 'files.line_id', '=', 'lines.id')
-            ->join('sectors', 'files.sector_id', '=', 'sectors.id')
-            ->select(
-                'files.*',
-                'users.user_name',
-                'sectors.name as sector_name',
-                'lines.name as line_name',
-            );
-        $downloaded = DB::table('file_downloads')
-            ->join('files', 'file_downloads.file_id', '=', 'files.id')->get();
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.files.index')
-                ->with([
-                    'files' => $files,
-                    'downloaded' => $downloaded,
-                ])
-        );
+        return $this->ifAdmin('admin.dashboard.files.index', [
+                    'files' => DB::table('files')
+                        ->join('users', 'files.user_id', '=', 'users.id')
+                        ->join('lines', 'files.line_id', '=', 'lines.id')
+                        ->join('sectors', 'files.sector_id', '=', 'sectors.id')
+                        ->select(
+                            'files.*',
+                            'users.user_name',
+                            'sectors.name as sector_name',
+                            'lines.name as line_name',
+                        ),
+                    'downloaded' => DB::table('file_downloads')
+                        ->join('files', 'file_downloads.file_id', '=', 'files.id')->get(),
+                ]);
     }
 
     /**
@@ -43,19 +42,23 @@ class FilesController extends Controller
      */
     public function create()
     {
-        if(auth()->user()->role == 1 || auth()->user()->role == 2)
-            return $this->successView('admin.dashboard.files.create')->with([
-                'sectors' => DB::table('sectors')->get(),
-                'lines' => DB::table('lines')->get(),
-                'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
-            ]);
-        return $this->redirect('not_authorized');
+        if(Auth::check()) {
+            if (auth()->user()->role == 1 || auth()->user()->role == 2)
+                return $this->successView('admin.dashboard.files.create')->with([
+                    'sectors' => DB::table('sectors')->get(),
+                    'lines' => DB::table('lines')->get(),
+                    'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
+                ]);
+            return $this->redirect('not_authorized');
+        } else {
+            return $this->redirect('login');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(FilesRequest $request)
     {
         $fileName = str_replace(' ', '', $request->name);
         $fileName .= time() . '.' . $request->file->extension();
@@ -74,6 +77,15 @@ class FilesController extends Controller
         $file->save();
 
         $request->file->move(public_path('files'), $fileName);
+
+        $notification = new FileNotification;
+
+        $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new file - ' . $request->name;
+        $notification->sector_id = $request->sector;
+        $notification->line_id = $request->line;
+        $notification->file_id = DB::table('files')->latest('id')->first()->id;
+
+        $notification->save();
 
         return $this->backWithMessage('uploadedSuccessfully', 'File Uploaded Successfully');
     }

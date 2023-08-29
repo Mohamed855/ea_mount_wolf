@@ -10,11 +10,12 @@ use App\Http\Controllers\Admin\Sectors\SectorsController;
 use App\Http\Controllers\Admin\Topics\TopicsController;
 use App\Http\Controllers\Admin\Users\UsersController;
 use App\Http\Controllers\Admin\Videos\VideosController;
+use App\Http\Controllers\Auth\ConfirmController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ActionsController;
 
@@ -40,6 +41,8 @@ Route::post('sign_up', [RegisterController::class, 'register']) -> name('registe
 Route::get('login', [LoginController::class, 'login']) -> name('login');
 Route::post('login', [LoginController::class, 'check_credentials']) -> name('check_credentials');
 Route::get('forget_password', [ForgetPasswordController::class, 'forget_password']) -> name('forget_password');
+Route::post('forget_password', [ForgetPasswordController::class, 'check_credentials']) -> name('reset_password_credentials');
+Route::get('confirm_email', [ConfirmController::class, 'confirm_email']) -> name('email.confirm');
 Route::get('logout', [LoginController::class, 'logout']) ->middleware('auth') -> name('logout');
 // Admin
 Route::get('admin', [AdminLoginController::class, 'admin_login']) -> name('admin.login');
@@ -73,16 +76,19 @@ Route::group(['prefix' => 'dashboard'], function (){
     Route::post('toggle_show_video/{id}', [AdminActionsController::class, 'toggle_show_video'])->name('toggle_show_video');
 });
 // Profile
-Route::get('profile/{user_name}', [ProfileController::class, 'profile']) -> name('profile');
-Route::get('change_password', [ProfileController::class, 'change_password']) -> name('password.change');
-Route::put('change_password', [ProfileController::class, 'update_password']) -> name('password.update');
-Route::put('update_profile_picture', [ProfileController::class, 'update_profile_picture']) -> name('profile_picture.update');
-Route::delete('delete_profile_picture', [ProfileController::class, 'delete_profile_picture']) -> name('profile_picture.delete');
+Route::group(['prefix' => 'me'], function (){
+    Route::get('profile/{user_name}', [UserController::class, 'profile']) -> name('profile');
+    Route::get('favorites', [UserController::class, 'favorites']) -> name('favorites');
+    Route::get('notifications', [UserController::class, 'notifications']) -> name('notifications');
+    Route::get('change_password', [UserController::class, 'change_password']) -> name('password.change');
+    Route::put('change_password', [UserController::class, 'update_password']) -> name('password.update');
+    Route::put('update_profile_picture', [UserController::class, 'update_profile_picture']) -> name('profile_picture.update');
+    Route::delete('delete_profile_picture', [UserController::class, 'delete_profile_picture']) -> name('profile_picture.delete');
+});
 // Site routes
 Route::get('brain_box', [SiteController::class, 'brain_box']) -> name('brain_box');
 Route::get('choose_line/{sector_id}', [SiteController::class, 'choose_line']) -> name('sector_line.choose');
 Route::get('drive/{sector_id}/line/{line_id}', [SiteController::class, 'drive']) -> name('drive');
-Route::get('favorites', [SiteController::class, 'favorites']) -> name('favorites');
 Route::get('video/{id}', [SiteController::class, 'video']) -> name('video');
 Route::get('topic/{id}', [SiteController::class, 'topic']) -> name('topic');
 // Actions

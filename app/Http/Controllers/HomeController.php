@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
 
     public function index() {
 
@@ -30,7 +32,7 @@ class HomeController extends Controller
                 'videos.sector_id as sector_id'
             )->get();
 
-        return $this->ifAuthenticated('site.home')->with([
+        return $this->ifAuthenticated('site.home', [
             'announcements' => $announcements,
             'sectors' => $sectors,
             'downloads' => $downloads,

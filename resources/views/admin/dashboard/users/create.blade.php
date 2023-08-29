@@ -64,7 +64,7 @@
                                         <select name="sector" class="form-control @error('sector') is-invalid @enderror">
                                             <option value="0">Sector *</option>
                                             @foreach($sectors as $sector)
-                                                <option value="{{ $sector->id }}">{{ $sector->name }}</option>
+                                                <option value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'selected' : '' }}>{{ $sector->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('sector')
@@ -75,7 +75,7 @@
                                         <select name="title" class="form-control @error('title') is-invalid @enderror">
                                             <option value="0">Title *</option>
                                             @foreach($titles as $title)
-                                                <option value="{{ $title->id }}">{{ $title->name }}</option>
+                                                <option value="{{ $title->id }}" {{ $title->id == old('title') ? 'selected' : '' }}>{{ $title->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('title')
@@ -84,9 +84,9 @@
                                     </div>
                                     <div class="pb-2 px-1">
                                         <select name="line" class="form-control @error('line') is-invalid @enderror">
-                                            <option value="0">Select Line *</option>
+                                            <option value="0">Line *</option>
                                             @foreach($lines as $line)
-                                                <option value="{{ $line->id }}">{{ $line->name }}</option>
+                                                <option value="{{ $line->id }}" {{ $line->id == old('line') ? 'selected' : '' }}>{{ $line->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('line')

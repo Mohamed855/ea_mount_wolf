@@ -3,38 +3,33 @@
 namespace App\Http\Controllers\Admin\Sectors;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SectorsRequest;
 use App\Models\LineSector;
 use App\Models\Sector;
 use App\Traits\GeneralTrait;
-use Illuminate\Http\Request;
+use App\Traits\AuthTrait;
 use Illuminate\Support\Facades\DB;
 
 class SectorsController extends Controller
 {
     use GeneralTrait;
+    use AuthTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $sectors = DB::table('sectors');
-        $sector_lines = DB::table('line_sector')
-            ->join('lines', 'line_sector.line_id', '=', 'lines.id')
-            ->select('lines.name', 'line_sector.sector_id')
-            ->orderBy('lines.name')
-            ->get();
-        $countOfEmployees = DB::table('users')->select('sector_id')->get();
-        $countOfFiles = DB::table('files')->select('sector_id')->get();
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.sectors.index')
-                ->with([
-                    'sectors' => $sectors,
-                    'sector_lines' => $sector_lines,
-                    'countOfEmployees' => $countOfEmployees,
-                    'countOfFiles' => $countOfFiles,
-                    ])
-        );
+        return $this->ifAdmin('admin.dashboard.sectors.index', [
+            'sectors' => DB::table('sectors'),
+            'sector_lines' => DB::table('line_sector')
+                ->join('lines', 'line_sector.line_id', '=', 'lines.id')
+                ->select('lines.name', 'line_sector.sector_id')
+                ->orderBy('lines.name')
+                ->get(),
+            'countOfEmployees' => DB::table('users')->select('sector_id')->get(),
+            'countOfFiles' => DB::table('files')->select('sector_id')->get(),
+        ]);
     }
 
     /**
@@ -42,17 +37,15 @@ class SectorsController extends Controller
      */
     public function create()
     {
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.sectors.create')->with([
-                'lines' => DB::table('lines')->get(),
-            ])
-        );
+        return $this->ifAdmin('admin.dashboard.sectors.create', [
+            'lines' => DB::table('lines')->get(),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SectorsRequest $request)
     {
         $sectors = new Sector();
         $sectors->name = $request->name;
@@ -75,22 +68,17 @@ class SectorsController extends Controller
      */
     public function edit(string $id)
     {
-        $selected_sector = DB::table('sectors')->where('id', '=', $id)->first();
-        $lines = DB::table('lines')->get();
-        $selected_lines = DB::table('line_sector')->where('line_sector.sector_id', '=', $id)->get();
-        return $this->ifAdmin(
-            $this->ifAdminAuthenticated('admin.dashboard.sectors.edit')->with([
-                'selected_sector' => $selected_sector,
-                'lines' => $lines,
-                'selected_lines' => $selected_lines,
-            ])
-        );
+        return $this->ifAdmin('admin.dashboard.sectors.edit',[
+            'selected_sector' => DB::table('sectors')->where('id', '=', $id)->first(),
+            'lines' => DB::table('lines')->get(),
+            'selected_lines' => DB::table('line_sector')->where('line_sector.sector_id', '=', $id)->get(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SectorsRequest $request, string $id)
     {
         DB::table('sectors')
             ->where('id', '=', $id)

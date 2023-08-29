@@ -32,7 +32,7 @@
                                         <option value="0">Sector *</option>
                                         @if(auth()->user()->sector_id == 1)
                                             @foreach($sectors as $sector)
-                                                <option value="{{ $sector->id }}">{{ $sector->name }}</option>
+                                                <option value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'selected' : '' }}>{{ $sector->name }}</option>
                                             @endforeach
                                         @else
                                             <option value="{{ $user_sector->id }}">{{ $user_sector->name }}</option>
@@ -44,9 +44,9 @@
                                 </div>
                                 <div class="col-lg-6 m-auto py-2">
                                     <select name="line" class="form-control @error('line') is-invalid @enderror">
-                                        <option value="0">Select Line *</option>
+                                        <option value="0">Line *</option>
                                         @foreach($lines as $line)
-                                            <option value="{{ $line->id }}">{{ $line->name }}</option>
+                                            <option value="{{ $line->id }}" {{ $line->id == old('line') ? 'selected' : '' }}>{{ $line->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('line')

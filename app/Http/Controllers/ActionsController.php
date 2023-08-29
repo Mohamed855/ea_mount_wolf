@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
-use App\Models\Favorite;
+use App\Models\CommentNotification;
 use App\Models\File;
 use App\Models\FileDownload;
 use App\Models\User;
@@ -27,7 +27,19 @@ class ActionsController extends Controller
         $comment->comment =  $data['comment'];
 
         $comment->save();
-        return redirect()->route('topic', $data['topic']);
+
+        $topic_name = DB::table('topics')->select('title')->where('id', $data['topic'])->first();
+
+        $notification = new CommentNotification;
+
+        $notification->text = auth()->user()->user_name . ' commented on a topic (' . $topic_name->title . ')';
+        $notification->sector_id = auth()->user()->sector->id;
+        $notification->line_id = auth()->user()->line->id;
+        $notification->topic_id = $data['topic'];
+
+        $notification->save();
+
+        return $this->backWithMessage('topic', $data['topic']);
     }
     public function delete_comment(string $id)
     {
@@ -67,6 +79,6 @@ class ActionsController extends Controller
         }
     }
     public function not_authorized() {
-        return $this->redirectWithMessage('home','notAuthorized', '');
+        return $this->redirect('home')->with('notAuthorized', '');
     }
 }
