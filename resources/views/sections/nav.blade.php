@@ -135,7 +135,14 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end scroll-bar p-2">
-                            @foreach($registration_notifications->take(5) as $registration_notification)
+                            @php
+                               $registration_notifications = count($registration_notifications) >= 5 ? $registration_notifications->take(5) : $registration_notifications;
+                               $comment_notifications = count($comment_notifications) >= 5 ? $comment_notifications->take(5) : $comment_notifications;
+                               $video_notifications = count($video_notifications) >= 5 ? $video_notifications->take(5) : $video_notifications;
+                               $file_notifications = count($file_notifications) >= 5 ? $file_notifications->take(5) : $file_notifications;
+                               $topic_notifications = count($topic_notifications) >= 5 ? $topic_notifications->take(5) : $topic_notifications;
+                            @endphp
+                            @foreach($registration_notifications as $registration_notification)
                                 <li>
                                     <a class="dropdown-item" href="{{ route('users.index') }}">
                                         {{ $registration_notification->text }}
@@ -143,7 +150,7 @@
                                     <hr>
                                 </li>
                             @endforeach
-                            @foreach($comment_notifications->take(5) as $comment_notification)
+                            @foreach($comment_notifications as $comment_notification)
                                 <li>
                                     <a class="dropdown-item" style="word-break:break-all;" href="{{ route('topic', $comment_notification->topic_id) }}">
                                         {{ $comment_notification->text }}
@@ -151,7 +158,7 @@
                                     <hr>
                                 </li>
                             @endforeach
-                            @foreach($video_notifications->take(5) as $video_notification)
+                            @foreach($video_notifications as $video_notification)
                                 <li>
                                     <a class="dropdown-item" href="{{ route('video', $video_notification->video_id) }}">
                                         {{ $video_notification->text }}
@@ -159,7 +166,7 @@
                                     <hr>
                                 </li>
                             @endforeach
-                            @foreach($file_notifications->take(5) as $file_notification)
+                            @foreach($file_notifications as $file_notification)
                                 <li>
                                     <a class="dropdown-item" href="{{ route('file.download', $file_notification->file_id) }}">
                                         {{ $file_notification->text }}
@@ -167,7 +174,7 @@
                                     <hr>
                                 </li>
                             @endforeach
-                            @foreach($topic_notifications->take(5) as $topic_notification)
+                            @foreach($topic_notifications as $topic_notification)
                                 <li>
                                     <a class="dropdown-item" href="{{ route('topic', $topic_notification->topic_id) }}">
                                         {{ $topic_notification->text }}

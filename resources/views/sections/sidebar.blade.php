@@ -56,7 +56,7 @@
     </div>
     <a href="{{ route('dashboard') }}">
         <div class="dashboard_btn py-3 my-2 rounded {{ request()->is('dashboard') ? 'active_dashboard_btn' : '' }}">
-            Dashboard
+            Overview
         </div>
     </a>
     <a href="{{ route('announcements.index') }}">

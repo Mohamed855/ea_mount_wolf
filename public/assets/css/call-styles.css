@@ -18,6 +18,7 @@ a:hover, a:active, a:focus{text-decoration:none;color:var(--sc);}
 .text-center img{margin:auto;}
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{color:var(--pc);}
 .full-width{width:100%;}
+.dashboard_actions{min-width:280px}
 
 .sector_text{text-decoration:none;color:var(--pc);}
 .sector_text:hover{color:var(--pc);}

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', auth()->user()->first_name . '\'s profile')
+@section('title', auth()->user()->first_name . '\'s notifications')
 
 @section('content')
 

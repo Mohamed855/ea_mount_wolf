@@ -22,7 +22,7 @@ class DashboardController extends Controller
                 'topics_count' => DB::table('topics')->count(),
                 'files_count' => DB::table('files')->count(),
                 'videos_count' => DB::table('videos')->count(),
-                'sectors' => DB::table('Sectors')->get(),
+                'sectors' => DB::table('sectors')->get(),
                 'file_downloads_count' => DB::table('file_downloads')->count(),
                 'video_views_count' => DB::table('video_views')->count(),
                 'files' => DB::table('files'),
