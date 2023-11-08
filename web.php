@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\Files\FilesController;
-use App\Http\Controllers\Admin\Topics\TopicsController;
-use App\Http\Controllers\Admin\Users\UsersController;
-use App\Http\Controllers\Auth\ForgetPasswordController;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\Panel\FilesController;
+use App\Http\Controllers\Admin\Panel\TopicsController;
+use App\Http\Controllers\Admin\Panel\UsersController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SiteController;
+use App\Http\Controllers\Front\Auth\AuthController;
+use App\Http\Controllers\Front\Auth\ForgetPasswordController;
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\SiteController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,10 +28,10 @@ Route::get('/', [HomeController::class, 'index']) -> name('home');
 // Auth routes
 Route::get('sign_up', [RegisterController::class, 'sign_up']) -> name('sign_up');
 Route::post('sign_up', [RegisterController::class, 'register']) -> name('register');
-Route::get('login', [LoginController::class, 'login']) -> name('login');
-Route::post('login', [LoginController::class, 'check_credentials']) -> name('check_credentials');
+Route::get('login', [AuthController::class, 'login']) -> name('login');
+Route::post('login', [AuthController::class, 'check_credentials']) -> name('check_credentials');
 Route::get('forget_password', [ForgetPasswordController::class, 'forget_password']) -> name('forget_password');
-Route::get('logout', [LoginController::class, 'logout']) ->middleware('auth') -> name('logout');
+Route::get('logout', [AuthController::class, 'logout']) ->middleware('auth') -> name('logout');
 
 // User credentials routes
 Route::resource('users', UsersController::class);

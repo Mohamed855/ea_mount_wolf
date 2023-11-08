@@ -16,7 +16,7 @@ trait AuthTrait {
             }
             return $this->redirect('not_authorized');
         }
-        return $this->redirect('login');
+        return $this->redirect('choose-login');
     }
     public function ifAuthenticated ($view, $data) {
          if(Auth::check()) {
@@ -71,10 +71,10 @@ trait AuthTrait {
             } else {
                 Session::flush();
                 Auth::logout();
-                return $this->redirect('login')->with('activeRequest', 'Your account is not activated yet');
+                return $this->redirect('login')->with('activeRequest', 'Your account is not activated');
             }
         }
-        return $this->redirect('login');
+        return $this->redirect('choose-login');
     }
     public function ifNotAuthenticated ($return) {
         if (!Auth::check())
