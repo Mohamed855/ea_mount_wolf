@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @include('includes.front.nav')
+    @include('includes.front.navbar')
 
     <div class="content-wraper withnav">
         <div class="body-content">
@@ -16,7 +16,8 @@
                                 {{ $current_topic->title }}
                             </h2>
                         </div>
-                        <div class="brain-box ratio ratio-16x9 element-bg" style="background-image: url({{ asset('images/topics/'.$current_topic->image) }})">
+                        <div class="brain-box ratio ratio-16x9 element-bg"
+                             style="background-image: url({{ asset('images/topics/'.$current_topic->image) }})">
                         </div>
 
                         <h5 class="text-center lh-lg pb-5 text-dark">
@@ -27,20 +28,22 @@
                             @foreach($comments_details as $comment_details)
                                 <div class="comment-box">
                                     <div class="comment-info">
-                                        <div class="prof-pic bg-styles"  style="background-image:url({{
+                                        <div class="prof-pic bg-styles" style="background-image:url({{
                                     $comment_details->profile_image == null ?
                                     asset('images/profile_images/default_profile_image.jpg') :
                                     asset('images/profile_images/'.$comment_details->profile_image)
                                  }}); max-width: 50px; max-height: 50px">
                                         </div>
                                         <div class="comment-name">{{ ucfirst($comment_details->user_name) }}</div>
-                                        <div class="comment-title">{{ $comment_details->user_title . ' - ' . $comment_details->user_sector .  ' - ' . $comment_details->user_line }}</div>
+                                        <div
+                                            class="comment-title">{{ $comment_details->user_title . ' - ' . $comment_details->user_sector .  ' - ' . $comment_details->user_line }}</div>
                                     </div>
                                     <div class="comment-txt">
                                         <p>{{ $comment_details->comment }}</p>
                                     </div>
                                     @if($comment_details->user_id === auth()->user()->id || auth()->user()->sector_id == 1)
-                                        <form action="{{ route('comment.delete', $comment_details->id) }}" method="post" class="d-inline">
+                                        <form action="{{ route('comment.delete', $comment_details->id) }}" method="post"
+                                              class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-danger btn-rounded">
                                                 Delete
@@ -65,8 +68,12 @@
                                     <div class="comment-txt">
                                         <div class="input-group mb-3">
                                             <input type="hidden" name="topic" value="{{ $current_topic->id }}">
-                                            <textarea type="text" class="form-control" placeholder="Write a comment.." aria-label="Write a comment.." aria-describedby="button-addon2"  style="min-height: 100px" name="comment"></textarea>
-                                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><img src="{{ asset('images/icons/send.png') }}" style="max-width: 20px"></button>
+                                            <textarea type="text" class="form-control" placeholder="Write a comment.."
+                                                      aria-label="Write a comment.." aria-describedby="button-addon2"
+                                                      style="min-height: 100px" name="comment"></textarea>
+                                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                                                <img src="{{ asset('images/icons/send.png') }}" style="max-width: 20px">
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -78,7 +85,8 @@
                                 @foreach($active_topics as $topic)
                                     @if($topic->id != $current_topic->id)
                                         <a href="{{ route('topic', $topic->id) }}">
-                                            <div class="topic-box element-bg" style="background-image: url({{ asset('images/topics/' . $topic->image) }})">
+                                            <div class="topic-box element-bg"
+                                                 style="background-image: url({{ asset('images/topics/' . $topic->image) }})">
                                                 {{ $topic->title }}
                                             </div>
                                         </a>
@@ -97,13 +105,13 @@
 
     <script src="{{ asset('assets/js/owl.carousel.js') }}"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $("#topics-carousel").owlCarousel({
-                margin:30,
-                autoplay:true,
-                loop:true,
-                autoplayHoverPause:true,
-                responsive:{ 0:{items:2,}, 600:{items:3,}, 1000:{items:4,} }
+                margin: 30,
+                autoplay: true,
+                loop: true,
+                autoplayHoverPause: true,
+                responsive: {0: {items: 2,}, 600: {items: 3,}, 1000: {items: 4,}}
             });
         });
     </script>

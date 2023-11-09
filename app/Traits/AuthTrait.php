@@ -36,14 +36,12 @@ trait AuthTrait {
                     ->where('users.id', $current_user_id)
                     ->first();
 
-                $registration_notifications = [];
                 $video_notifications = [];
                 $file_notifications = [];
                 $comment_notifications = [];
                 $topic_notifications = DB::table('topic_notifications')->get();
 
                 if (auth()->user()->role == 1) {
-                    $registration_notifications = DB::table('registration_notifications')->get();
                     $video_notifications = DB::table('video_notifications')->get();
                     $file_notifications = DB::table('file_notifications')->get();
                     $comment_notifications = DB::table('comment_notifications')->get();
@@ -61,7 +59,6 @@ trait AuthTrait {
                 return $this->successView($view)
                     ->with([
                         'user_details' => $current_user_details,
-                        'registration_notifications' => $registration_notifications,
                         'video_notifications' => $video_notifications,
                         'file_notifications' => $file_notifications,
                         'comment_notifications' => $comment_notifications,

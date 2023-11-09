@@ -27,7 +27,7 @@
     <script>new WOW().init();</script>
 </head>
 
-<body class="antialiased">
+<body class="antialiased text-center">
     @yield('content')
 </body>
 

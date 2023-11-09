@@ -99,9 +99,9 @@
                 </a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa-solid fa-bars"></i>
+                <img src="{{ asset('images/icons/burgerMenu.png') }}" style="max-width: 20px">
             </button>
-            <div class="page-title">
+            <div class="page-title fs-4">
                 @if($user_details->role === 1)
                     Admin View
                 @else
@@ -136,20 +136,11 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end scroll-bar p-2">
                             @php
-                               $registration_notifications = count($registration_notifications) >= 5 ? $registration_notifications->take(5) : $registration_notifications;
                                $comment_notifications = count($comment_notifications) >= 5 ? $comment_notifications->take(5) : $comment_notifications;
                                $video_notifications = count($video_notifications) >= 5 ? $video_notifications->take(5) : $video_notifications;
                                $file_notifications = count($file_notifications) >= 5 ? $file_notifications->take(5) : $file_notifications;
                                $topic_notifications = count($topic_notifications) >= 5 ? $topic_notifications->take(5) : $topic_notifications;
                             @endphp
-                            @foreach($registration_notifications as $registration_notification)
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('users.index') }}">
-                                        {{ $registration_notification->text }}
-                                    </a>
-                                    <hr>
-                                </li>
-                            @endforeach
                             @foreach($comment_notifications as $comment_notification)
                                 <li>
                                     <a class="dropdown-item" style="word-break:break-all;" href="{{ route('topic', $comment_notification->topic_id) }}">
@@ -213,10 +204,9 @@
                                 <li><a class="dropdown-item" href="{{ route('sign_up') }}">Sign Up</a></li>
                                 <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
                             @else
-                                <li><a class="dropdown-item" href="{{ route('profile', auth()->user()->user_name) }}">{{ auth()->user()->user_name }}</a></li>
-                                <li><a class="dropdown-item" href="{{ auth()->user()->role == 1 ? route('admin.logout') : route('logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile', auth()->user()->user_name) }}">{{ ucfirst(auth()->user()->user_name) }}</a></li>
+                                <li><a class="dropdown-item" href="{{ auth()->user()->role == 1 ? route('logout') : route('logout') }}">Logout</a></li>
                             @endguest
-
                         </ul>
                     </li>
                 </ul>

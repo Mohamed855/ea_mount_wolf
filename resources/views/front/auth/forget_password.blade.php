@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="content-wraper">
-        <div class="body-content">
+        <div class="body-content" style="align-items:center;">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xl-5 col-lg-6 col-md-8">

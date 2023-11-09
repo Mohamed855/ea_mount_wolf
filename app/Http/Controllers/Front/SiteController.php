@@ -123,4 +123,28 @@ class SiteController extends Controller
         }
         return abort(404);
     }
+    public function createVideo()
+    {
+        if (Auth::user()->role == 2) {
+            return $this->ifAuthenticated('front.manager.createVideo',[
+                'sectors' => DB::table('sectors')->get(),
+                'lines' => DB::table('lines')->get(),
+                'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
+            ]);
+        } else {
+            abort(404);
+        }
+    }
+    public function createFile()
+    {
+        if (Auth::user()->role == 2) {
+            return $this->ifAuthenticated('front.manager.createFile',[
+                'sectors' => DB::table('sectors')->get(),
+                'lines' => DB::table('lines')->get(),
+                'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
+            ]);
+        } else {
+            abort(404);
+        }
+    }
 }

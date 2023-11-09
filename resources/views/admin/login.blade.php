@@ -30,7 +30,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-btns">
-                                    <button type="submit" class="ea-btns light-btn">Log In</button>
+                                    <button type="submit" class="ea-btns dark-btn">Log In</button>
                                 </div>
                             </form>
                         </div>

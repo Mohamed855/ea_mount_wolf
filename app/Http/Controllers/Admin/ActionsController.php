@@ -20,7 +20,7 @@ class ActionsController extends Controller
             $user->activated ? $user->activated = 0 : $user->activated = 1;
             $user->save();
         }
-        return $this->redirect('users.index');
+        return redirect()->back();
     }
 
     public function toggle_publish_announcement($id) {

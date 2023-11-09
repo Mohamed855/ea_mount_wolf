@@ -21,12 +21,7 @@ class SectorsController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.sectors.index', [
-            'sectors' => DB::table('sectors'),
-            'sector_lines' => DB::table('line_sector')
-                ->join('lines', 'line_sector.line_id', '=', 'lines.id')
-                ->select('lines.name', 'line_sector.sector_id')
-                ->orderBy('lines.name')
-                ->get(),
+            'sectors' => Sector::query()->with('line'),
             'countOfEmployees' => DB::table('users')->select('sector_id')->get(),
             'countOfFiles' => DB::table('files')->select('sector_id')->get(),
         ]);

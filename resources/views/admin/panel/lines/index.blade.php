@@ -23,6 +23,7 @@
             <thead class="bg-light">
             <tr>
                 <th>Name</th>
+                <th>Sectors</th>
                 <th>No. Employees</th>
                 <th>No. Files</th>
                 <th>No. Views</th>
@@ -43,6 +44,18 @@
                 @foreach($lines as $line)
                     <tr>
                         <td>{{ $line->name }}</td>
+                        <td>
+                            @if(count($line->sector) > 0)
+                                <div class="text-start" style="max-height:100px; overflow-y:auto;">
+                                    @for($i = 0; $i < count($line->sector); $i++)
+                                        {{ $i + 1 }} - {{ $line->sector[$i]->name }}
+                                        <br>
+                                    @endfor
+                                </div>
+                            @else
+                                No sectors
+                            @endif
+                        </td>
                         <td>{{ $countOfEmployees->where('line_id', '=', $line->id)->count() }}</td>
                         <td>{{ $countOfFiles->where('line_id', '=', $line->id)->count() }}</td>
                         <td>{{ $countOfFiles->where('line_id', '=', $line->id)->sum('viewed') }}</td>

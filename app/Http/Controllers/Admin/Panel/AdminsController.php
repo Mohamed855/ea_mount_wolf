@@ -10,29 +10,30 @@ use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\DB;
 
-class UsersController extends Controller
+class AdminsController extends Controller
 {
     use GeneralTrait;
     use AuthTrait;
 
     public function index()
     {
-        return $this->ifAdmin('admin.panel.users.index', [
-                    'users' => DB::table('users')
-                    ->join('sectors', 'users.sector_id', '=', 'sectors.id')
-                    ->join('lines', 'users.line_id', '=', 'lines.id')
-                    ->join('titles', 'users.title_id', '=', 'titles.id')
+        return $this->ifAdmin('admin.panel.admins.index', [
+                    'admins' => DB::table('users as admins')
+                    ->join('sectors', 'admins.sector_id', '=', 'sectors.id')
+                    ->join('lines', 'admins.line_id', '=', 'lines.id')
+                    ->join('titles', 'admins.title_id', '=', 'titles.id')
+                    ->where('role', 1)
                     ->select(
-                        'users.id',
-                        'users.first_name',
-                        'users.middle_name',
-                        'users.last_name',
-                        'users.user_name',
-                        'users.email',
-                        'users.phone_number',
-                        'users.profile_image',
-                        'users.activated',
-                        'users.created_at',
+                        'admins.id',
+                        'admins.first_name',
+                        'admins.middle_name',
+                        'admins.last_name',
+                        'admins.user_name',
+                        'admins.email',
+                        'admins.phone_number',
+                        'admins.profile_image',
+                        'admins.activated',
+                        'admins.created_at',
                         'sectors.name as sector_name',
                         'lines.name as line_name',
                         'titles.name as title_name',
@@ -45,7 +46,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return $this->ifAdmin('admin.panel.users.create', [
+        return $this->ifAdmin('admin.panel.admins.create', [
                 'sectors' => DB::table('sectors')->select(['id', 'name'])->get(),
                 'lines' => DB::table('lines')->select(['id', 'name'])->get(),
                 'titles' => DB::table('titles')->select(['id', 'name'])->get(),
@@ -57,7 +58,7 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $user = new User();
+        $admin = new User();
         $data = $request->all();
 
         $firstName = strtolower($data['first_name']);
@@ -70,22 +71,23 @@ class UsersController extends Controller
             $username .= $i;
         }
 
-        $user->first_name = $data['first_name'];
-        $user->middle_name = $data['middle_name'];
-        $user->last_name =  $data['last_name'];
-        $user->user_name = $username;
-        $user->crm_code = $data['crm_code'];
-        $user->email = $data['email'];
-        $user->phone_number = $data['phone_number'];
-        $user->password = bcrypt($data['password']);
-        $user->title_id = $data['title'];
-        $user->line_id = $data['line'];
-        $user->sector_id = $data['sector'];
-        $user->activated = 1;
+        $admin->first_name = $data['first_name'];
+        $admin->middle_name = $data['middle_name'];
+        $admin->last_name =  $data['last_name'];
+        $admin->user_name = $username;
+        $admin->crm_code = $data['crm_code'];
+        $admin->email = $data['email'];
+        $admin->phone_number = $data['phone_number'];
+        $admin->password = bcrypt($data['password']);
+        $admin->title_id = $data['title'];
+        $admin->line_id = $data['line'];
+        $admin->sector_id = $data['sector'];
+        $admin->role = 1;
+        $admin->activated = 1;
 
-        $user->save();
+        $admin->save();
 
-        return $this->backWithMessage('uploadedSuccessfully', 'User Added Successfully');
+        return $this->backWithMessage('uploadedSuccessfully', 'Admin Added Successfully');
     }
 
     /**
@@ -93,8 +95,8 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        return $this->ifAdmin('admin.panel.users.edit', [
-                'selected_user' => DB::table('users')->where('id', '=', $id)->first(),
+        return $this->ifAdmin('admin.panel.admins.edit', [
+                'selected_admin' => DB::table('users')->where('id', '=', $id)->first(),
                 'sectors' => DB::table('sectors')->select(['id', 'name'])->get(),
                 'lines' => DB::table('lines')->select(['id', 'name'])->get(),
                 'titles' => DB::table('titles')->select(['id', 'name'])->get(),
@@ -119,11 +121,11 @@ class UsersController extends Controller
                 'title_id' => $request->title,
                 'line_id' => $request->line,
                 'sector_id' => $request->sector,
-                'role'=> 2,
+                'role'=> 1,
                 'activated' => 1,
             ]);
 
-        return $this->backWithMessage('savedSuccessfully', 'User Details saved successfully');
+        return $this->backWithMessage('savedSuccessfully', 'Admin Details saved successfully');
     }
 
     /**
@@ -132,6 +134,6 @@ class UsersController extends Controller
     public function destroy(string $id)
     {
         $this->deleteFromDB('users', $id, 'images/profile_images/', 'profile_image');
-        return $this->backWithMessage('deletedSuccessfully', 'User has been deleted');
+        return $this->backWithMessage('deletedSuccessfully', 'Admin has been deleted');
     }
 }

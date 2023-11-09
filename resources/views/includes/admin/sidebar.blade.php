@@ -65,6 +65,7 @@
             Overview
         </div>
     </a>
+    <div class="sidebar-title py-1">Main</div>
     <a href="{{ route('announcements.index') }}">
         <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/announcements') ? 'active_dashboard_btn' : '' }}">
             Announcements
@@ -80,11 +81,23 @@
             Lines
         </div>
     </a>
-    <a href="{{ route('users.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/users') ? 'active_dashboard_btn' : '' }}">
-            Users
+    <div class="sidebar-title py-1">Users</div>
+    <a href="{{ route('admins.index') }}">
+        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/admins') ? 'active_dashboard_btn' : '' }}">
+            Admins
         </div>
     </a>
+    <a href="{{ route('managers.index') }}">
+        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/managers') ? 'active_dashboard_btn' : '' }}">
+            Managers
+        </div>
+    </a>
+    <a href="{{ route('employees.index') }}">
+        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/employees') ? 'active_dashboard_btn' : '' }}">
+            Employees
+        </div>
+    </a>
+    <div class="sidebar-title py-1">Content</div>
     <a href="{{ route('ea_topics.index') }}">
         <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/ea_topics') ? 'active_dashboard_btn' : '' }}">
             Topics
@@ -100,8 +113,8 @@
             Videos
         </div>
     </a>
-    <a href="{{ route('admin.logout') }}">
-        <div class="panel_btn py-3 my-2 dashboard_logout_btn">
+    <a href="{{ route('logout') }}">
+        <div class="py-3 my-2 dashboard_logout_btn">
             Logout
         </div>
     </a>

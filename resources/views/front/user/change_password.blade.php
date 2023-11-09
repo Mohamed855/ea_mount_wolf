@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @include('includes.front.nav')
+    @include('includes.front.navbar')
 
     <div class="content-wraper withnav">
         <div class="body-content">
@@ -17,19 +17,25 @@
                                 @method('PUT')
                                 <div class="col-lg-8 m-auto">
                                     <div class="pb-2 px-1">
-                                        <input type="password" name="old_password" class="form-control @error('old_password') is-invalid @enderror" placeholder="old password *">
+                                        <input type="password" name="old_password"
+                                               class="form-control @error('old_password') is-invalid @enderror"
+                                               placeholder="old password *">
                                         @error('old_password')
                                         <span class="text-danger" role="alert">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="pb-2 px-1">
-                                        <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror" placeholder="new password *">
+                                        <input type="password" name="new_password"
+                                               class="form-control @error('new_password') is-invalid @enderror"
+                                               placeholder="new password *">
                                         @error('new_password')
                                         <span class="text-danger" role="alert">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="pb-2 px-1">
-                                        <input type="password" name="confirm_new_password" class="form-control @error('confirm_new_password') is-invalid @enderror" placeholder="confirm password *">
+                                        <input type="password" name="confirm_new_password"
+                                               class="form-control @error('confirm_new_password') is-invalid @enderror"
+                                               placeholder="confirm password *">
                                         @error('confirm_new_password')
                                         <span class="text-danger" role="alert">{{ $message }}</span>
                                         @enderror
@@ -38,15 +44,19 @@
                                 <div>
                                     @if(session()->has('changedSuccessfully'))
                                         <div class="m-auto">
-                                            <span class="text-primary" role="alert">{{ session()->get('changedSuccessfully') }}</span>
+                                            <span class="text-primary"
+                                                  role="alert">{{ session()->get('changedSuccessfully') }}</span>
                                         </div>
                                     @elseif(session()->has('incorrect'))
                                         <div class="m-auto">
-                                            <span class="text-danger" role="alert">{{ session()->get('incorrect') }}</span>
+                                            <span class="text-danger"
+                                                  role="alert">{{ session()->get('incorrect') }}</span>
                                         </div>
                                     @endif
 
-                                    <button type="submit" class="btn btn-outline-primary p-2 my-2 mx-lg-2">Update Password</button>
+                                    <button type="submit" class="btn btn-outline-primary p-2 my-2 mx-lg-2">Update
+                                        Password
+                                    </button>
                                 </div>
                             </form>
                         </div>

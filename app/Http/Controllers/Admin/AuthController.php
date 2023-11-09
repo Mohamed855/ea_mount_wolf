@@ -34,16 +34,4 @@ class AuthController extends Controller
         }
         return $this->backWithMessage('invalid', 'Invalid credentials');
     }
-
-    public function logout() {
-        return view('admin.logout');
-    }
-
-    public function endSession() {
-        if (Auth::check()) {
-            Session::flush();
-            Auth::logout();
-        }
-        return $this->redirect('choose-login');
-    }
 }

@@ -9,7 +9,7 @@
         $actionsController->viewed_video($video->id);
     @endphp
 
-    @include('includes.front.nav')
+    @include('includes.front.navbar')
 
     <div class="content-wraper withnav">
         <div class="body-content">
@@ -33,7 +33,7 @@
                                 <div class="video-views">
                                     <img src="{{ asset('images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
                                     <span
-                                        class="views-number">{{ $viewed->where('video_id', $video->id)->count() }}</span>
+                                            class="views-number">{{ $viewed->where('video_id', $video->id)->count() }}</span>
                                 </div>
                             </div>
                         </div>

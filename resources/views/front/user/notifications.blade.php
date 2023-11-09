@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @include('includes.front.nav')
+    @include('includes.front.navbar')
 
     <div class="content-wraper withnav">
         <div class="body-content">
@@ -12,17 +12,9 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
                         <div class="col-6 m-auto scroll-bar">
-                            @foreach($registration_notifications as $registration_notification)
-                                <a class="notification_item" href="{{ route('users.index') }}">
-                                    <div class="comment-box">
-                                        <div class="comment-txt">
-                                            <p>{{ $registration_notification->text }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            @endforeach
                             @foreach($comment_notifications as $comment_notification)
-                                <a class="notification_item" href="{{ route('topic', $comment_notification->topic_id) }}">
+                                <a class="notification_item"
+                                   href="{{ route('topic', $comment_notification->topic_id) }}">
                                     <div class="comment-box">
                                         <div class="comment-txt">
                                             <p>{{ $comment_notification->text }}</p>
@@ -40,7 +32,8 @@
                                 </a>
                             @endforeach
                             @foreach($file_notifications as $file_notification)
-                                <a class="notification_item" href="{{ route('file.view', $file_notification->file_id) }}">
+                                <a class="notification_item"
+                                   href="{{ route('file.view', $file_notification->file_id) }}">
                                     <div class="comment-box">
                                         <div class="comment-txt">
                                             <p>{{ $file_notification->text }}</p>
@@ -68,7 +61,7 @@
     @include('includes.front.scripts')
 
     <script>
-        document.getElementById('profile_picture').addEventListener('change', function() {
+        document.getElementById('profile_picture').addEventListener('change', function () {
             document.getElementById('profile_picture_form').submit();
         });
     </script>

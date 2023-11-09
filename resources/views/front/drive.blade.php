@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @include('includes.front.nav')
+    @include('includes.front.navbar')
 
     <div class="content-wraper withnav">
         <div class="body-content">
@@ -53,10 +53,12 @@
                                                 <a href="{{ route('file.view', $file->id) }}">
                                                     <div class="incentive-title">{{ $file->name }}</div>
                                                     <div class="incentive-body">
-                                                        <div class="incentive-txt">Published<br>{{ $file->created_at }}</div>
+                                                        <div class="incentive-txt">Published<br>{{ $file->created_at }}
+                                                        </div>
                                                         <div class="incentive-info-box">
                                                             <div class="incentive-info in-views">
-                                                                <img src="{{ asset('images/icons/download.svg') }}" style="max-width: 16px" alt="">
+                                                                <img src="{{ asset('images/icons/eye_light.svg') }}"
+                                                                     style="max-width: 16px" alt="">
                                                                 {{ $downloaded->where('file_id', $file->id)->count() }}
                                                             </div>
                                                             @php($file_icon = "")
@@ -78,10 +80,13 @@
                                                                 @php($file_icon = "default-icon.svg")
                                                             @endif
                                                             <div class="incentive-info in-files">
-                                                                <img src="{{ asset('images/icons/extensions/'.$file_icon) }}" style="max-width: 16px" alt="">
+                                                                <img
+                                                                    src="{{ asset('images/icons/extensions/'.$file_icon) }}"
+                                                                    style="max-width: 16px" alt="">
                                                             </div>
                                                             <div class="incentive-info in-comments">
-                                                                <img src="{{ asset('images/icons/pen-icon.svg') }}" style="max-width: 16px" alt="">
+                                                                <img src="{{ asset('images/icons/pen-icon.svg') }}"
+                                                                     style="max-width: 16px" alt="">
                                                                 {{ floor($file->size / 1000) < 1000 ?  floor($file->size / 1000) . ' K' :  floor($file->size / 1000 / 1000) . ' Mb' }}
                                                             </div>
                                                         </div>
@@ -138,14 +143,18 @@
                                                 <a href="{{ route('video', $video->id) }}">
                                                     <div class="incentive-title">{{ $video->name }}</div>
                                                     <div class="incentive-body">
-                                                        <div class="incentive-txt">Published<br>{{ $video->created_at }}</div>
+                                                        <div class="incentive-txt">Published<br>{{ $video->created_at }}
+                                                        </div>
                                                         <div class="incentive-info-box">
                                                             <div class="incentive-info in-views">
-                                                                <img src="{{ asset('images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
+                                                                <img src="{{ asset('images/icons/eye_light.svg') }}"
+                                                                     style="max-width: 16px" alt="">
                                                                 {{ $viewed->where('video_id', $video->id)->count() }}
                                                             </div>
                                                             <div class="incentive-info in-files">
-                                                                <img src="{{ asset('images/icons/extensions/video-icon.svg') }}" style="max-width: 16px" alt="">
+                                                                <img
+                                                                    src="{{ asset('images/icons/extensions/video-icon.svg') }}"
+                                                                    style="max-width: 16px" alt="">
                                                             </div>
                                                         </div>
                                                     </div>

@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @include('includes.front.nav')
+    @include('includes.front.navbar')
 
     <div class="content-wraper withnav">
         <div class="body-content">
@@ -23,36 +23,43 @@
                             <div>
                                 @if(session()->has('changedSuccessfully'))
                                     <div class="m-auto">
-                                        <span class="text-primary" role="alert">{{ session()->get('changedSuccessfully') }}</span>
+                                        <span class="text-primary"
+                                              role="alert">{{ session()->get('changedSuccessfully') }}</span>
                                     </div>
                                 @elseif(session()->has('deletedSuccessfully'))
                                     <div class="m-auto">
-                                        <span class="text-danger" role="alert">{{ session()->get('deletedSuccessfully') }}</span>
+                                        <span class="text-danger"
+                                              role="alert">{{ session()->get('deletedSuccessfully') }}</span>
                                     </div>
                                 @endif
 
                                 @if($user_details->profile_image == null)
                                     <div>
-                                        <form action="{{ route('profile_picture.update') }}" id="profile_picture_form" method="post" enctype="multipart/form-data">
+                                        <form action="{{ route('profile_picture.update') }}" id="profile_picture_form"
+                                              method="post" enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
                                             <label class="btn btn-sm btn-outline-primary btn-rounded">
-                                                <input type="file" name="profile_picture" id="profile_picture" accept=".png,.jpg">
+                                                <input type="file" name="profile_picture" id="profile_picture"
+                                                       accept=".png,.jpg">
                                                 Upload
                                             </label>
                                         </form>
                                     </div>
                                 @else
                                     <div>
-                                        <form action="{{ route('profile_picture.update') }}" id="profile_picture_form" method="post" enctype="multipart/form-data" class="d-inline">
+                                        <form action="{{ route('profile_picture.update') }}" id="profile_picture_form"
+                                              method="post" enctype="multipart/form-data" class="d-inline">
                                             @csrf
                                             @method('PUT')
                                             <label class="btn btn-sm btn-outline-primary btn-rounded">
-                                                <input type="file" name="profile_picture" id="profile_picture" accept=".png,.jpg">
+                                                <input type="file" name="profile_picture" id="profile_picture"
+                                                       accept=".png,.jpg">
                                                 Change
                                             </label>
                                         </form>
-                                        <form action="{{ route('profile_picture.delete') }}" method="post" class="d-inline">
+                                        <form action="{{ route('profile_picture.delete') }}" method="post"
+                                              class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">
@@ -115,7 +122,7 @@
     @include('includes.front.scripts')
 
     <script>
-        document.getElementById('profile_picture').addEventListener('change', function() {
+        document.getElementById('profile_picture').addEventListener('change', function () {
             document.getElementById('profile_picture_form').submit();
         });
     </script>

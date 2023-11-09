@@ -25,8 +25,16 @@
                             <span class="rounded fs-5">{{ $lines_count }}</span>
                         </div>
                         <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
-                            <h3 class="rounded text-center fs-6">Users</h3>
-                            <span class="rounded fs-5">{{ $users_count }}</span>
+                            <h3 class="rounded text-center fs-6">Admins</h3>
+                            <span class="rounded fs-5">{{ $admins_count }}</span>
+                        </div>
+                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
+                            <h3 class="rounded text-center fs-6">Managers</h3>
+                            <span class="rounded fs-5">{{ $managers_count }}</span>
+                        </div>
+                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
+                            <h3 class="rounded text-center fs-6">Employees</h3>
+                            <span class="rounded fs-5">{{ $employees_count }}</span>
                         </div>
                         <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
                             <h3 class="rounded text-center fs-6">Topics</h3>
@@ -40,11 +48,11 @@
                             <h3 class="rounded text-center fs-6">Videos</h3>
                             <span class="rounded fs-5">{{ $videos_count }}</span>
                         </div>
-                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
+                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5">
                             <h3 class="rounded text-center fs-6">Files Downloads</h3>
                             <span class="rounded fs-5">{{ $file_downloads_count }}</span>
                         </div>
-                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
+                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5">
                             <h3 class="rounded text-center fs-6">Videos Views</h3>
                             <span class="rounded fs-5">{{ $video_views_count }}</span>
                         </div>

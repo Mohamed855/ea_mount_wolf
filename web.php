@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\Panel\FilesController;
 use App\Http\Controllers\Admin\Panel\TopicsController;
-use App\Http\Controllers\Admin\Panel\UsersController;
+use App\Http\Controllers\Admin\Panel\ManagersController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Front\Auth\AuthController;
 use App\Http\Controllers\Front\Auth\ForgetPasswordController;
@@ -34,7 +34,7 @@ Route::get('forget_password', [ForgetPasswordController::class, 'forget_password
 Route::get('logout', [AuthController::class, 'logout']) ->middleware('auth') -> name('logout');
 
 // User credentials routes
-Route::resource('users', UsersController::class);
+Route::resource('users', ManagersController::class);
 
 // Files
 Route::resource('files', FilesController::class);

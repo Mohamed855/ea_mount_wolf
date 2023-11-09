@@ -21,7 +21,7 @@ class LinesController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.lines.index', [
-                    'lines' => DB::table('lines'),
+                    'lines' => Line::query()->with('sector'),
                     'countOfEmployees' => DB::table('users')->select('line_id')->get(),
                     'countOfFiles' => DB::table('files')->select('line_id')->get(),
                 ]);

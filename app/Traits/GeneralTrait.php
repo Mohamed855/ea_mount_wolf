@@ -17,7 +17,7 @@ trait GeneralTrait {
     public function deleteFromDB ($table, $id, $public_directory, $column_name) {
         $required_file_name = DB::table($table)->where('id', '=', $id)->first();
         if($public_directory !== null && $column_name !== null) {
-            if (file_exists(public_path($public_directory . $required_file_name->$column_name))) {
+            if ($required_file_name->$column_name !== null && file_exists(public_path($public_directory . $required_file_name->$column_name))) {
                 unlink(public_path($public_directory . $required_file_name->$column_name));
             }
         }

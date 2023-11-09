@@ -1,10 +1,10 @@
 @extends('layouts.panel')
 
-@section('title', 'Users Details')
+@section('title', 'Managers Details')
 
 @section('panel_title')
-    Users Details
-    <a href="{{ route('users.create') }}" class="btn btn-outline-success mx-3">Add New</a>
+    Managers Details
+    <a href="{{ route('managers.create') }}" class="btn btn-outline-success mx-3">Add New</a>
 @endsection
 
 @section('panel_content')
@@ -32,69 +32,69 @@
             </tr>
             </thead>
             <tbody>
-            @if(count($users->get()) > 0)
+            @if(count($managers->get()) > 0)
                 @if(isset($_GET['search']))
-                    @php($users = $users->where('users.first_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('users.middle_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('users.last_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('users.user_name', 'like', '%' . $_GET['search'] . '%')
+                    @php($managers = $managers->where('managers.first_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('managers.middle_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('managers.last_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('managers.user_name', 'like', '%' . $_GET['search'] . '%')
                         )
                 @endif
                 @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($users = $users->whereDate('users.created_at', $_GET['date'])->get())
+                    @php($managers = $managers->whereDate('managers.created_at', $_GET['date'])->get())
                 @else
-                    @php($users = $users->get())
+                    @php($managers = $managers->get())
                 @endif
-                @foreach($users as $user)
+                @foreach($managers as $manager)
                     <tr>
                         <td>
                             <div class="d-flex ps-5">
                                 <img src="{{
-                                            $user->profile_image == null ?
+                                            $manager->profile_image == null ?
                                             asset('images/profile_images/default_profile_image.jpg') :
-                                            asset('images/profile_images/' . $user->profile_image)
+                                            asset('images/profile_images/' . $manager->profile_image)
                                          }}"
                                      alt=""
                                      style="width: 45px; height: 45px"
                                      class="rounded-circle"/>
                                 <div class="ms-3">
-                                    <p class="fw-bold mb-1 text-start">{{ $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}</p>
-                                    <p class="text-muted mb-0">{{ ucfirst($user->user_name) }}</p>
+                                    <p class="fw-bold mb-1 text-start">{{ $manager->first_name . ' ' . $manager->middle_name . ' ' . $manager->last_name }}</p>
+                                    <p class="text-muted mb-0">{{ ucfirst($manager->user_name) }}</p>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="ms-3">
-                                <p class="fw-bold mb-1">{{ $user->email }}</p>
-                                <p class="text-muted mb-0">{{ $user->phone_number }}</p>
+                                <p class="fw-bold mb-1">{{ $manager->email }}</p>
+                                <p class="text-muted mb-0">{{ $manager->phone_number }}</p>
                             </div>
                         </td>
                         <td>
-                            <p class="fw-bold mb-1 text-center">{{ $user->sector_name }}</p>
-                            <p class="text-muted mb-0 text-center">{{ $user->line_name }}</p>
+                            <p class="fw-bold mb-1 text-center">{{ $manager->sector_name }}</p>
+                            <p class="text-muted mb-0 text-center">{{ $manager->line_name }}</p>
                         </td>
-                        <td>{{ $user->title_name }}</td>
+                        <td>{{ $manager->title_name }}</td>
                         <td>
                                             <span
-                                                class="{{ $user->activated ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">
-                                                {{ $user->activated ? 'Activated' : 'Waiting' }}
+                                                class="{{ $manager->activated ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">
+                                                {{ $manager->activated ? 'Activated' : 'Waiting' }}
                                             </span>
                         </td>
-                        <td>{{ date('d-m-Y, h:m a', strtotime($user->created_at)) }}</td>
+                        <td>{{ date('d-m-Y, h:m a', strtotime($manager->created_at)) }}</td>
                         <td>
-                            <a href="{{ route('users.edit', $user->id) }}"
+                            <a href="{{ route('managers.edit', $manager->id) }}"
                                class="btn btn-outline-primary btn-sm btn-rounded">
                                 Edit
                             </a>
-                            <form action="{{ route('toggle_active', $user->id) }}" method="post"
+                            <form action="{{ route('toggle_active', $manager->id) }}" method="post"
                                   class="d-inline">
                                 @csrf
                                 <button type="submit"
-                                        class="{{ $user->activated ? 'btn-outline-secondary' : 'btn-outline-success' }} btn btn-sm btn-rounded">
-                                    {{ $user->activated ? 'Deactive' : 'Active' }}
+                                        class="{{ $manager->activated ? 'btn-outline-secondary' : 'btn-outline-success' }} btn btn-sm btn-rounded">
+                                    {{ $manager->activated ? 'Deactive' : 'Active' }}
                                 </button>
                             </form>
-                            <form action="{{ route('users.destroy', $user->id) }}" method="post"
+                            <form action="{{ route('managers.destroy', $manager->id) }}" method="post"
                                   class="d-inline">
                                 @csrf
                                 @method('DELETE')

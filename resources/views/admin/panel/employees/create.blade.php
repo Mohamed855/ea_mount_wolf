@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title', 'Add User')
+@section('title', 'Add Employee')
 
 @section('panel_content')
     <div class="container px-4">
@@ -20,9 +20,9 @@
                 <div class="row text-center">
                     <div class="col-12 col-lg-8 m-auto">
                         <div class="overflow-scroll border bg-white shadow rounded-2 py-5 px-4 px-lg-5">
-                            <h3 class="pb-4">Add New User</h3>
+                            <h3 class="pb-4">Add New Employee</h3>
                             <div class="m-auto">
-                                <form action="{{ route('users.store') }}" method="POST">
+                                <form action="{{ route('employees.store') }}" method="POST">
                                     @csrf
                                     <div class="col-md-10 col-12 m-auto row">
                                         <div class="col-12 col-md-6 pb-2 px-1">
@@ -72,7 +72,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-10 col-12 m-auto">
-                                        <button type="submit" class="btn submit_btn p-2 my-3 w-100">Add User</button>
+                                        <button type="submit" class="btn submit_btn p-2 my-3 w-100">Add Employee</button>
                                     </div>
                                 </form>
                             </div>

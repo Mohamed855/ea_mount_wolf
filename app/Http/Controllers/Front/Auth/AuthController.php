@@ -38,6 +38,10 @@ class AuthController extends Controller
     }
 
     public function logout() {
+        return view('front.auth.logout');
+    }
+
+    public function endSession() {
         if (Auth::check()) {
             Session::flush();
             Auth::logout();

@@ -44,17 +44,17 @@
                     @foreach($sectors as $sector)
                         <tr>
                             <td>{{ $sector->name }}</td>
-                            <td style="max-width: 150px">
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-0 text-center">
-                                        {{ $sector_lines->where('sector_id', '=', $sector->id)->count() }}
-                                    </p>
-                                    <span class="text-muted mb-0">
-                                                    @foreach($sector_lines->where('sector_id', '=', $sector->id) as $line)
-                                            {{ $line->name }} |
-                                        @endforeach
-                                                </span>
-                                </div>
+                            <td>
+                                @if(count($sector->line) > 0)
+                                    <div style="max-height:100px; min-width: 100px; overflow-y:auto;">
+                                        @for($i = 0; $i < count($sector->line); $i++)
+                                            {{ $i + 1 }} - {{ $sector->line[$i]->name }}
+                                            <br>
+                                        @endfor
+                                    </div>
+                                @else
+                                    No Lines
+                                @endif
                             </td>
                             <td>{{ $countOfEmployees->where('sector_id', '=', $sector->id)->count() }}</td>
                             <td>{{ $countOfFiles->where('sector_id', '=', $sector->id)->count() }}</td>
