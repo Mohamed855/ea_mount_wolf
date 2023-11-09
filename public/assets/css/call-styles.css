@@ -45,7 +45,7 @@ div.scrollmenu a:hover{color:var(--pc);}
 .scroll-bar{height:90vh;overflow-y:scroll;overflow-x:auto;white-space:nowrap;padding:2vh 0 100px 0;}
 .side_bar{position:absolute;top:0;bottom:0;height:100vh;background-color:var(--pc);color:var(--fc);}
 .side_bar .scroll-bar{padding-bottom:2.5vh;}
-.sidebar-title{background-color:rgba(100,100,100,0.4);color:rgb(150,150,150);}
+.sidebar-title{background-color:rgba(100,100,100,0.4);color:rgb(150,150,150);font-weight:bold;}
 .side_bar a{max-width:50px;color:var(--fc);text-decoration:none;}
 .side_bar a .panel_btn:hover{background-color:var(--fc);color:var(--pc);}
 .active_dashboard_btn{background-color:var(--fc);color:var(--pc);}

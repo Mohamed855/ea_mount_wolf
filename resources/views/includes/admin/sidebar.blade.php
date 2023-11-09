@@ -65,7 +65,12 @@
             Overview
         </div>
     </a>
-    <div class="sidebar-title py-1">Main</div>
+    <a href="#">
+        <div class="sidebar-title py-1 row justify-content-evenly">
+            <span class="col-3">Main</span>
+            <span class="col-3"><img src="{{ asset('images/icons/down.png') }}" width="20px"></span>
+        </div>
+    </a>
     <a href="{{ route('announcements.index') }}">
         <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/announcements') ? 'active_dashboard_btn' : '' }}">
             Announcements
@@ -81,7 +86,12 @@
             Lines
         </div>
     </a>
-    <div class="sidebar-title py-1">Users</div>
+    <a href="#">
+        <div class="sidebar-title py-1 row justify-content-evenly">
+            <span class="col-3">Users</span>
+            <span class="col-3"><img src="{{ asset('images/icons/down.png') }}" width="20px"></span>
+        </div>
+    </a>
     <a href="{{ route('admins.index') }}">
         <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/admins') ? 'active_dashboard_btn' : '' }}">
             Admins
@@ -97,7 +107,13 @@
             Employees
         </div>
     </a>
-    <div class="sidebar-title py-1">Content</div>
+
+    <a href="#">
+        <div class="sidebar-title py-1 row justify-content-evenly">
+            <span class="col-3">Content</span>
+            <span class="col-3"><img src="{{ asset('images/icons/down.png') }}" width="20px"></span>
+        </div>
+    </a>
     <a href="{{ route('ea_topics.index') }}">
         <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/ea_topics') ? 'active_dashboard_btn' : '' }}">
             Topics
