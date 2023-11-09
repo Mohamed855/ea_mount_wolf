@@ -99,7 +99,7 @@
                 </a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <img src="{{ asset('images/icons/burgerMenu.png') }}" style="max-width: 20px">
+                <img src="{{ asset('../public/images/icons/burgerMenu.png') }}" style="max-width: 20px">
             </button>
             <div class="page-title fs-4">
                 @if($user_details->role === 1)
@@ -191,13 +191,13 @@
                     <div class="profile-pic bg-styles"
                          style="background-image:url({{
                             $user_details->profile_image == null ?
-                            asset('images/profile_images/default_profile_image.jpg') :
-                            asset('images/profile_images/'.$user_details->profile_image)
+                            asset('../public/images/profile_images/default_profile_image.jpg') :
+                            asset('../public/images/profile_images/'.$user_details->profile_image)
                          }});">
                     </div>
                     <li class="nav-item dropdown ellipsis-item">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ asset('images/icons/menu.svg') }}" style="max-width: 18px">
+                            <img src="{{ asset('../public/images/icons/menu.svg') }}" style="max-width: 18px">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
                             @guest

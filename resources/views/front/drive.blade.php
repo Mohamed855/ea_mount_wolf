@@ -45,8 +45,8 @@
                                                     <img src="
                                                     {{
                                                         in_array($file->id, $user_favorites_files->pluck('file_id')->toArray())  ?
-                                                        asset('images/icons/star.png') :
-                                                        asset('images/icons/star_light.png')
+                                                        asset('../public/images/icons/star.png') :
+                                                        asset('../public/images/icons/star_light.png')
                                                     }}" style="max-width: 16px">
                                                 </a>
                                             </span>
@@ -57,7 +57,7 @@
                                                         </div>
                                                         <div class="incentive-info-box">
                                                             <div class="incentive-info in-views">
-                                                                <img src="{{ asset('images/icons/eye_light.svg') }}"
+                                                                <img src="{{ asset('../public/images/icons/eye_light.svg') }}"
                                                                      style="max-width: 16px" alt="">
                                                                 {{ $downloaded->where('file_id', $file->id)->count() }}
                                                             </div>
@@ -81,11 +81,11 @@
                                                             @endif
                                                             <div class="incentive-info in-files">
                                                                 <img
-                                                                    src="{{ asset('images/icons/extensions/'.$file_icon) }}"
+                                                                    src="{{ asset('../public/images/icons/extensions/'.$file_icon) }}"
                                                                     style="max-width: 16px" alt="">
                                                             </div>
                                                             <div class="incentive-info in-comments">
-                                                                <img src="{{ asset('images/icons/pen-icon.svg') }}"
+                                                                <img src="{{ asset('../public/images/icons/pen-icon.svg') }}"
                                                                      style="max-width: 16px" alt="">
                                                                 {{ floor($file->size / 1000) < 1000 ?  floor($file->size / 1000) . ' K' :  floor($file->size / 1000 / 1000) . ' Mb' }}
                                                             </div>
@@ -135,8 +135,8 @@
                                                     <img src="
                                                     {{
                                                         in_array($video->id, $user_favorites_videos->pluck('video_id')->toArray())  ?
-                                                        asset('images/icons/star.png') :
-                                                        asset('images/icons/star_light.png')
+                                                        asset('../public/images/icons/star.png') :
+                                                        asset('../public/images/icons/star_light.png')
                                                     }}" style="max-width: 16px">
                                                 </a>
                                             </span>
@@ -147,13 +147,13 @@
                                                         </div>
                                                         <div class="incentive-info-box">
                                                             <div class="incentive-info in-views">
-                                                                <img src="{{ asset('images/icons/eye_light.svg') }}"
+                                                                <img src="{{ asset('../public/images/icons/eye_light.svg') }}"
                                                                      style="max-width: 16px" alt="">
                                                                 {{ $viewed->where('video_id', $video->id)->count() }}
                                                             </div>
                                                             <div class="incentive-info in-files">
                                                                 <img
-                                                                    src="{{ asset('images/icons/extensions/video-icon.svg') }}"
+                                                                    src="{{ asset('../public/images/icons/extensions/video-icon.svg') }}"
                                                                     style="max-width: 16px" alt="">
                                                             </div>
                                                         </div>

@@ -17,7 +17,7 @@
                             </h2>
                         </div>
                         <div class="brain-box ratio ratio-16x9 element-bg"
-                             style="background-image: url({{ asset('images/topics/'.$current_topic->image) }})">
+                             style="background-image: url({{ asset('../public/images/topics/'.$current_topic->image) }})">
                         </div>
 
                         <h5 class="text-center lh-lg pb-5 text-dark">
@@ -30,8 +30,8 @@
                                     <div class="comment-info">
                                         <div class="prof-pic bg-styles" style="background-image:url({{
                                     $comment_details->profile_image == null ?
-                                    asset('images/profile_images/default_profile_image.jpg') :
-                                    asset('images/profile_images/'.$comment_details->profile_image)
+                                    asset('../public/images/profile_images/default_profile_image.jpg') :
+                                    asset('../public/images/profile_images/'.$comment_details->profile_image)
                                  }}); max-width: 50px; max-height: 50px">
                                         </div>
                                         <div class="comment-name">{{ ucfirst($comment_details->user_name) }}</div>
@@ -58,8 +58,8 @@
                                     <div class="comment-info">
                                         <div class="prof-pic bg-styles" style="background-image:url({{
                                             $user_details->profile_image == null ?
-                                            asset('images/profile_images/default_profile_image.jpg') :
-                                            asset('images/profile_images/'.$user_details->profile_image)
+                                            asset('../public/images/profile_images/default_profile_image.jpg') :
+                                            asset('../public/images/profile_images/'.$user_details->profile_image)
                                          }}); max-width: 50px; max-height: 50px">
                                         </div>
                                         <h6 class="pt-1 comment-name">{{ ucfirst($user_details->user_name) }}</h6>
@@ -72,7 +72,7 @@
                                                       aria-label="Write a comment.." aria-describedby="button-addon2"
                                                       style="min-height: 100px" name="comment"></textarea>
                                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
-                                                <img src="{{ asset('images/icons/send.png') }}" style="max-width: 20px">
+                                                <img src="{{ asset('../public/images/icons/send.png') }}" style="max-width: 20px">
                                             </button>
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                                     @if($topic->id != $current_topic->id)
                                         <a href="{{ route('topic', $topic->id) }}">
                                             <div class="topic-box element-bg"
-                                                 style="background-image: url({{ asset('images/topics/' . $topic->image) }})">
+                                                 style="background-image: url({{ asset('../public/images/topics/' . $topic->image) }})">
                                                 {{ $topic->title }}
                                             </div>
                                         </a>

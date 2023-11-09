@@ -41,7 +41,7 @@
                 @endif
                 @foreach($announcements as $announcement)
                     <tr>
-                        <td><img src="{{ asset('images/announcements/' . $announcement->image ) }}"
+                        <td><img src="{{ asset('../public/images/announcements/' . $announcement->image ) }}"
                                  style="width: 100px; height: 40px;"></td>
                         <td>{{ $announcement->title }}</td>
                         <td>{{ ucfirst($announcement->user_name) }}</td>
