@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\Panel\FilesController;
-use App\Http\Controllers\Admin\Panel\TopicsController;
 use App\Http\Controllers\Admin\Panel\ManagersController;
+use App\Http\Controllers\Admin\Panel\TopicsController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Front\Auth\AuthController;
 use App\Http\Controllers\Front\Auth\ForgetPasswordController;
+use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\SiteController;
 use Illuminate\Support\Facades\Route;

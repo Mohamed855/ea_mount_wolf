@@ -40,7 +40,6 @@
                                         <span class="text-danger" role="alert">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="other-actions"><a href="{{ route('forget_password') }}">Forgot Password</a></div>
                                 <div class="form-btns">
                                     <button type="submit" class="ea-btns dark-btn">Log In</button>
                                 </div>

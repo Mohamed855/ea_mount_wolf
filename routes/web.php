@@ -7,15 +7,15 @@ use App\Http\Controllers\Admin\Panel\AnnouncementsController;
 use App\Http\Controllers\Admin\Panel\EmployeesController;
 use App\Http\Controllers\Admin\Panel\FilesController;
 use App\Http\Controllers\Admin\Panel\LinesController;
+use App\Http\Controllers\Admin\Panel\ManagersController;
 use App\Http\Controllers\Admin\Panel\OverviewController;
 use App\Http\Controllers\Admin\Panel\SectorsController;
 use App\Http\Controllers\Admin\Panel\TopicsController;
-use App\Http\Controllers\Admin\Panel\ManagersController;
 use App\Http\Controllers\Admin\Panel\VideosController;
 use App\Http\Controllers\ChooseLoginController;
 use App\Http\Controllers\Front\ActionsController;
-use App\Http\Controllers\Front\Auth\AuthController;
 use App\Http\Controllers\Front\Auth\ForgetPasswordController;
+use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\SiteController;
 use App\Http\Controllers\Front\UserController;
@@ -40,8 +40,6 @@ Route::middleware('db.connection')->group(function (){
     Route::post('login', [AuthController::class, 'check_credentials'])->name('check_credentials');
     Route::get('admin', [AdminAuthController::class, 'admin_login'])->name('admin.login');
     Route::post('admin', [AdminAuthController::class, 'admin_check_credentials'])->name('admin.check_credentials');
-    Route::get('forget_password', [ForgetPasswordController::class, 'forget_password'])->name('forget_password');
-    Route::post('forget_password', [ForgetPasswordController::class, 'check_credentials'])->name('reset_password_credentials');
     Route::get('logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
     Route::post('logout', [AuthController::class, 'endSession'])->middleware('auth')->name('session.end');
     // Panel
