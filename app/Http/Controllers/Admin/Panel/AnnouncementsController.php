@@ -54,7 +54,7 @@ class AnnouncementsController extends Controller
 
         $announcement->save();
 
-        $request->image->move(public_path('../public_html/images/announcements'), $announcement_image);
+        $request->image->move(public_path('images/announcements'), $announcement_image);
 
         return $this->backWithMessage('uploadedSuccessfully', 'Topic Shared Successfully');
     }
