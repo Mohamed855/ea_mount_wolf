@@ -63,7 +63,7 @@ class AnnouncementsController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('announcements', $id, '../public/images/announcements/', 'image');
+        $this->deleteFromDB('announcements', $id, 'images/announcements/', 'image');
         return $this->backWithMessage('deletedSuccessfully', 'announcement has been deleted');
     }
 }

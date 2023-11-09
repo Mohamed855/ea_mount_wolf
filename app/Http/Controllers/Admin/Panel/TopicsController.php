@@ -88,8 +88,8 @@ class TopicsController extends Controller
         $old_topic_name = DB::table('topics')->select('title')->where('id', $id)->first();
 
         $storedImage = DB::table('topics')->select('image')->where('id', $id)->first();
-        if (file_exists(asset('../public/images/topics/' . $storedImage->image)))
-            unlink(asset('../public/images/topics/' . $storedImage->image));
+        if (file_exists(asset('images/topics/' . $storedImage->image)))
+            unlink(asset('images/topics/' . $storedImage->image));
 
         $topic_title = str_replace(' ', '', $request->title);
         $topic_image = $topic_title . time() . '.' . $request->image->extension();
@@ -123,7 +123,7 @@ class TopicsController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('topics', $id, '../public/images/topics/', 'image');
+        $this->deleteFromDB('topics', $id, 'images/topics/', 'image');
         DB::table('comments')->where('topic_id', $id)->delete();
         return $this->backWithMessage('deletedSuccessfully', 'Topic has been deleted');
     }

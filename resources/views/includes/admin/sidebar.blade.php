@@ -68,7 +68,7 @@
     <a href="#">
         <div class="sidebar-title py-1 row justify-content-evenly">
             <span class="col-3">Main</span>
-            <span class="col-3"><img src="{{ asset('../public/images/icons/down.png') }}" width="20px"></span>
+            <span class="col-3"><img src="{{ asset('images/icons/down.png') }}" width="20px"></span>
         </div>
     </a>
     <a href="{{ route('announcements.index') }}">
@@ -89,7 +89,7 @@
     <a href="#">
         <div class="sidebar-title py-1 row justify-content-evenly">
             <span class="col-3">Users</span>
-            <span class="col-3"><img src="{{ asset('../public/images/icons/down.png') }}" width="20px"></span>
+            <span class="col-3"><img src="{{ asset('images/icons/down.png') }}" width="20px"></span>
         </div>
     </a>
     <a href="{{ route('admins.index') }}">
@@ -111,7 +111,7 @@
     <a href="#">
         <div class="sidebar-title py-1 row justify-content-evenly">
             <span class="col-3">Content</span>
-            <span class="col-3"><img src="{{ asset('../public/images/icons/down.png') }}" width="20px"></span>
+            <span class="col-3"><img src="{{ asset('images/icons/down.png') }}" width="20px"></span>
         </div>
     </a>
     <a href="{{ route('ea_topics.index') }}">

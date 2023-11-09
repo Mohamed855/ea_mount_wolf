@@ -21,10 +21,10 @@
                             @if(count($announcements) > 0)
                                 @foreach ($announcements as $announcement)
                                     <div
-                                        style="background-image: url('{{ asset('../public/images/announcements/' . $announcement->image) }}')" {{ $loop->first ? 'class=active' : '' }}></div>
+                                        style="background-image: url('{{ asset('images/announcements/' . $announcement->image) }}')" {{ $loop->first ? 'class=active' : '' }}></div>
                                 @endforeach
                             @else
-                                <div class="announcement-logo"><img src="{{ asset('../public/images/logos/logo.png') }}"
+                                <div class="announcement-logo"><img src="{{ asset('images/logos/logo.png') }}"
                                                                     class="mw-100" alt=""></div>
                                 <div class="announcement-title-txt">AVS Announcements</div>
                             @endif
@@ -67,7 +67,7 @@
                                         <div class="department-title">{{ $sector->name }}</div>
                                         <div class="department-views">
                                             Views <img
-                                                src="{{ asset($sector->id == $current_user_sector_id && $isNotAdmin ?  '../public/images/icons/eye_light.svg' : '../public/images/icons/eye.svg') }}"
+                                                src="{{ asset($sector->id == $current_user_sector_id && $isNotAdmin ?  'images/icons/eye_light.svg' : 'images/icons/eye.svg') }}"
                                                 style="max-width: 20px;"/>
                                             <span
                                                 class="views-number">{{ $views->where('sector_id', '=', $sector->id)->count() + $downloads->where('sector_id', '=', $sector->id)->count() }}</span>

@@ -8,7 +8,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xl-5 col-lg-6 col-md-8">
-                        <div class="main-logo"><img src="{{ asset('../public/images/logos/logo.png') }}" class="mw-100" alt=""></div>
+                        <div class="main-logo"><img src="{{ asset('images/logos/logo.png') }}" class="mw-100" alt=""></div>
                         <div class="welcome">Login As</div>
                         <div class="form-btns">
                             <a href="{{ route('employee.login') }}" class="ea-btns dark-btn text-center" style="text-decoration:none">Employee</a>

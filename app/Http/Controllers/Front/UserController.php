@@ -83,7 +83,7 @@ class UserController extends Controller
     }
     public function delete_profile_picture()
     {
-        $public_user_profile_image ='../public/images/profile_images/' . auth()->user()->profile_image;
+        $public_user_profile_image ='images/profile_images/' . auth()->user()->profile_image;
         if (file_exists(public_path($public_user_profile_image))) {
             unlink(public_path($public_user_profile_image));
         }

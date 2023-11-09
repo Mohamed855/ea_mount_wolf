@@ -31,7 +31,7 @@
                             </div>
                             <div class="video-statistics">
                                 <div class="video-views">
-                                    <img src="{{ asset('../public/images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
+                                    <img src="{{ asset('images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
                                     <span
                                             class="views-number">{{ $viewed->where('video_id', $video->id)->count() }}</span>
                                 </div>
