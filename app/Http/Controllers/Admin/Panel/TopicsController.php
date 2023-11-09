@@ -57,7 +57,7 @@ class TopicsController extends Controller
 
         $topic->save();
 
-        $request->image->move(public_path('images/topics'), $topic_image);
+        $request->image->move(asset('images/topics'), $topic_image);
 
         $notification = new TopicNotification;
 
@@ -88,8 +88,8 @@ class TopicsController extends Controller
         $old_topic_name = DB::table('topics')->select('title')->where('id', $id)->first();
 
         $storedImage = DB::table('topics')->select('image')->where('id', $id)->first();
-        if (file_exists(public_path('images/topics/' . $storedImage->image)))
-            unlink(public_path('images/topics/' . $storedImage->image));
+        if (file_exists(asset('images/topics/' . $storedImage->image)))
+            unlink(asset('images/topics/' . $storedImage->image));
 
         $topic_title = str_replace(' ', '', $request->title);
         $topic_image = $topic_title . time() . '.' . $request->image->extension();
@@ -102,7 +102,7 @@ class TopicsController extends Controller
                 'image' => $topic_image,
             ]);
 
-        $request->image->move(public_path('images/topics'), $topic_image);
+        $request->image->move(asset('images/topics'), $topic_image);
 
         $old_topic_name->title != $request->title ? $title_updated = 1 : $title_updated = 0;
 

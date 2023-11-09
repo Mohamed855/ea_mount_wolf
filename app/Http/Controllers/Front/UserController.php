@@ -72,7 +72,7 @@ class UserController extends Controller
         if ($request->hasFile('profile_picture')) {
             $profile_picture = $request->file('profile_picture');
             $filename = time() . '.' . $profile_picture->getClientOriginalExtension();
-            $profile_picture->move(public_path('images/profile_images'), $filename);
+            $profile_picture->move(asset('images/profile_images'), $filename);
             DB::table('users')
                 ->where('id', '=', auth()->user()->id)
                 ->update([

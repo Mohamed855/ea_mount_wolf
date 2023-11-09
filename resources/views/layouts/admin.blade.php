@@ -14,19 +14,19 @@
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-        <link rel="stylesheet" href="{{ public_path('assets/include/css/fontawesome.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/include/css/fontawesome.css') }}">
 
         <!--logo-->
-        <link rel="icon" type="image/icon" href="{{ public_path('assets/images/logo.png') }}">
+        <link rel="icon" type="image/icon" href="{{ asset('assets/images/logo.png') }}">
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ public_path('assets/css/bootstrap/bootstrap.min.css') }}" type="text/css">
-        <link rel="stylesheet" href="{{ public_path('assets/css/call-styles.css') }}" type="text/css">
-        <link rel="stylesheet" href="{{ public_path('assets/css/all.min.css') }}">
-        <link rel="stylesheet" href="{{ public_path('assets/css/animate.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap/bootstrap.min.css') }}" type="text/css">
+        <link rel="stylesheet" href="{{ asset('assets/css/call-styles.css') }}" type="text/css">
+        <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
 
         <!-- Scripts -->
-        <script type="text/javascript" src="{{ public_path('assets/include/js/virtual-select.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/include/js/virtual-select.min.js') }}"></script>
     </head>
 
     <body style="overflow: hidden;">
