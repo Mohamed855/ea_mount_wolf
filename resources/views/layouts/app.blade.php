@@ -12,10 +12,10 @@
     <title>@yield('title')</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap/bootstrap.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('assets/css/call-styles.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/css/bootstrap/bootstrap.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ public_path('assets/css/call-styles.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ public_path('assets/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/css/animate.css') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Asap&display=swap" rel="stylesheet">
 
     <!-- Scripts -->
-    <script src="{{ asset('assets/js/wow.min.js') }}"></script>
+    <script src="{{ public_path('assets/js/wow.min.js') }}"></script>
     <script>new WOW().init();</script>
 </head>
 

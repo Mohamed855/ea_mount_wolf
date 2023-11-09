@@ -47,8 +47,8 @@
                                 <td>
                                     <img src="{{
                                         $admin->profile_image == null ?
-                                        asset('assets/images/defaults/profile_image.jpg') :
-                                        asset($admin->profile_image)
+                                        public_path('assets/images/defaults/profile_image.jpg') :
+                                        public_path($admin->profile_image)
                                     }}" style="width: 45px; height: 45px" class="rounded-circle"/>
                                 </td>
                                 <td>

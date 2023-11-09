@@ -76,7 +76,7 @@ class FilesController extends Controller
 
         $file->save();
 
-        $request->file->move(asset('files'), $fileName);
+        $request->file->move(public_path('files'), $fileName);
 
         $notification = new FileNotification;
 

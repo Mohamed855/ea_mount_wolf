@@ -50,7 +50,7 @@
                                 </td>
                                 <td>
                                     @if($meal->image)
-                                        <img src="{{ asset($meal->image) }}" style="max-width: 200px">
+                                        <img src="{{ public_path($meal->image) }}" style="max-width: 200px">
                                     @else
                                         @lang('panel.notExist')
                                     @endif

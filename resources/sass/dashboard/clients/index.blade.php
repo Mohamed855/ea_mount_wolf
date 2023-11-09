@@ -48,7 +48,7 @@
                                 </td>
                                 <td>
                                     @if($client->image)
-                                        <img src="{{ asset($client->image) }}" style="max-width: 200px">
+                                        <img src="{{ public_path($client->image) }}" style="max-width: 200px">
                                     @else
                                         @lang('panel.notExist')
                                     @endif

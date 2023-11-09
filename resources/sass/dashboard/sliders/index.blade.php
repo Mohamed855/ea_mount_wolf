@@ -41,7 +41,7 @@
                             </td>
                             <td>
                                 @if($slider->image)
-                                    <img src="{{ asset($slider->image) }}" style="max-width: 200px">
+                                    <img src="{{ public_path($slider->image) }}" style="max-width: 200px">
                                 @else
                                     @lang('panel.notExist')
                                 @endif

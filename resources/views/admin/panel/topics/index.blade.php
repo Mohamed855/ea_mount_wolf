@@ -43,7 +43,7 @@
                 @endif
                 @foreach($topics as $topic)
                     <tr>
-                        <td><img src="{{ asset('images/topics/' . $topic->image ) }}"
+                        <td><img src="{{ public_path('images/topics/' . $topic->image ) }}"
                                  style="max-width: 100px; height: 60px;">
                         </td>
                         <td>{{ $topic->title }}</td>

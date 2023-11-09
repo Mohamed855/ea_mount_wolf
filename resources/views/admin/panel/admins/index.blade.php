@@ -51,8 +51,8 @@
                             <div class="d-flex ps-5">
                                 <img src="{{
                                             $admin->profile_image == null ?
-                                            asset('images/profile_images/default_profile_image.jpg') :
-                                            asset('images/profile_images/' . $admin->profile_image)
+                                            public_path('images/profile_images/default_profile_image.jpg') :
+                                            public_path('images/profile_images/' . $admin->profile_image)
                                          }}"
                                      alt=""
                                      style="width: 45px; height: 45px"

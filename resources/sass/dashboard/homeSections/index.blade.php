@@ -46,7 +46,7 @@
                             </td>
                             <td>
                                 @if($section->image)
-                                    <img src="{{ asset($section->image) }}" style="width: 200px">
+                                    <img src="{{ public_path($section->image) }}" style="width: 200px">
                                 @else
                                     @lang('panel.notExist')
                                 @endif

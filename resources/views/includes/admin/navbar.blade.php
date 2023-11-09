@@ -4,8 +4,8 @@
         <div class="profile-pic bg-styles"
              style="background-image:url({{
             $currAdmin->profile_image == null ?
-            asset('images/profile_images/default_profile_image.jpg') :
-            asset('images/profile_images/'. $currAdmin->profile_image)
+            public_path('images/profile_images/default_profile_image.jpg') :
+            public_path('images/profile_images/'. $currAdmin->profile_image)
          }});">
         </div>
     </div>
