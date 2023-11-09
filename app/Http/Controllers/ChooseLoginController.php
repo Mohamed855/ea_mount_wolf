@@ -13,6 +13,8 @@ class ChooseLoginController extends Controller
     use AuthTrait;
 
     public function index() {
-        return $this->successView('choose-login');
+        return $this->ifNotAuthenticated(
+            $this->successView('choose-login')
+        );
     }
 }
