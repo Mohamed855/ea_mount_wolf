@@ -55,7 +55,7 @@
                             @foreach($sectors as $sector)
                                 <div class="department-box col-12 col-md-5 col-lg-4 col-xl-3 {{ $sector->id == $current_user_sector_id && $isNotAdmin ? 'active' : '' }} ">
                                     <a href="
-                                    @if ($current_user_sector_id !== $sector->id && $current_user_sector_id !== 1 && auth()->user()->role !== 1)
+                                    @if ($current_user_sector_id !== $sector->id && auth()->user()->role !== 1)
                                         {{ route('not_authorized') }}
                                     @elseif ($current_user_sector_id === $sector->id && $current_user_sector_id !== 1 && auth()->user()->role !== 1)
                                         {{ route('drive', ['sector_id' => $sector->id, 'line_id' => auth()->user()->line_id]) }}

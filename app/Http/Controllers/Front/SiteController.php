@@ -127,8 +127,13 @@ class SiteController extends Controller
     {
         if (Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.createVideo',[
-                'sectors' => DB::table('sectors')->get(),
-                'lines' => DB::table('lines')->get(),
+                'sectors' => DB::table('sectors')->where('id', Auth::user()->sector_id)->get(),
+                'lines' => DB::table('lines')
+                    ->join('line_sector as ls', 'ls.line_id', '=', 'lines.id')
+                    ->join('sectors', 'ls.sector_id', '=', 'sectors.id')
+                    ->where('sectors.id', Auth::user()->sector_id)
+                    ->select('lines.*')
+                    ->get(),
                 'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
             ]);
         } else {
@@ -139,8 +144,13 @@ class SiteController extends Controller
     {
         if (Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.createFile',[
-                'sectors' => DB::table('sectors')->get(),
-                'lines' => DB::table('lines')->get(),
+                'sectors' => DB::table('sectors')->where('id', Auth::user()->sector_id)->get(),
+                'lines' => DB::table('lines')
+                    ->join('line_sector as ls', 'ls.line_id', '=', 'lines.id')
+                    ->join('sectors', 'ls.sector_id', '=', 'sectors.id')
+                    ->where('sectors.id', Auth::user()->sector_id)
+                    ->select('lines.*')
+                    ->get(),
                 'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
             ]);
         } else {

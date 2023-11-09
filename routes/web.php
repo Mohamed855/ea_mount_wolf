@@ -36,8 +36,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('db.connection')->group(function (){
     // Auth routes
     Route::get('choose-login', [ChooseLoginController::class, 'index'])->name('choose-login');
-    Route::get('login', [AuthController::class, 'login'])->name('login');
-    Route::post('login', [AuthController::class, 'check_credentials'])->name('check_credentials');
+    Route::get('employee', [AuthController::class, 'employee_login'])->name('employee.login');
+    Route::post('employee', [AuthController::class, 'employee_check_credentials'])->name('employee.check_credentials');
+    Route::get('manager', [AuthController::class, 'manager_login'])->name('manager.login');
+    Route::post('manager', [AuthController::class, 'manager_check_credentials'])->name('manager.check_credentials');
     Route::get('admin', [AdminAuthController::class, 'admin_login'])->name('admin.login');
     Route::post('admin', [AdminAuthController::class, 'admin_check_credentials'])->name('admin.check_credentials');
     Route::get('logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');

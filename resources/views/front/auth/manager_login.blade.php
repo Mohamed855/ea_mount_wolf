@@ -9,7 +9,7 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-5 col-lg-6 col-md-8">
                         <div class="main-logo"><img src="{{ asset('images/logos/logo.png') }}" class="mw-100" alt=""></div>
-                        <div class="welcome">Welcome to Averroes Employee Access</div>
+                        <div class="welcome">Welcome to Averroes Manager Access</div>
                         @if(session()->has('invalid'))
                             <div class="m-auto">
                                 <span class="text-danger" role="alert">{{ session()->get('invalid') }}</span>
@@ -20,7 +20,7 @@
                             </div>
                         @endif
                         <div class="ea-form">
-                            <form action="{{ route('check_credentials') }}" method="post">
+                            <form action="{{ route('manager.check_credentials') }}" method="post">
                                 @csrf
                                 <div>
                                     <input type="text" name="user_name" class="form-control @error('user_name') is-invalid @enderror" value="{{ old('user_name') }}" placeholder="User Name or Email">

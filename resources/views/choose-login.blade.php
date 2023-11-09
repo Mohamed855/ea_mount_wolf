@@ -11,7 +11,8 @@
                         <div class="main-logo"><img src="{{ asset('images/logos/logo.png') }}" class="mw-100" alt=""></div>
                         <div class="welcome">Login As</div>
                         <div class="form-btns">
-                            <a href="{{ route('login') }}" class="ea-btns dark-btn text-center" style="text-decoration:none">Employee</a>
+                            <a href="{{ route('employee.login') }}" class="ea-btns dark-btn text-center" style="text-decoration:none">Employee</a>
+                            <a href="{{ route('manager.login') }}" class="ea-btns dark-btn text-center" style="text-decoration:none">Manager</a>
                             <a href="{{ route('admin.login') }}" class="ea-btns dark-btn text-center" style="text-decoration:none">Admin</a>
                         </div>
                     </div>
