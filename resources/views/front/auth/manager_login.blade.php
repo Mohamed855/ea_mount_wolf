@@ -8,7 +8,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xl-5 col-lg-6 col-md-8">
-                        <div class="main-logo"><img src="{{ asset('images/logos/logo.png') }}" class="mw-100" alt=""></div>
+                        <div class="main-logo"><img src="{{ asset('storage/images/logos/logo.png') }}" class="mw-100" alt=""></div>
                         <div class="welcome">Welcome to Averroes Manager Access</div>
                         @if(session()->has('invalid'))
                             <div class="m-auto">

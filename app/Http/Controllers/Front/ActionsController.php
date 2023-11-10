@@ -69,14 +69,14 @@ class ActionsController extends Controller
         $file = DB::table('files')->where('id', $id)->first();
         $public_file_name ='files/' . $file->stored_name;
         $headers = array('Content-Type: ' . $file->type,);
-        return response()->download(public_path($public_file_name), $file->stored_name, $headers);
+        return response()->download(public_path('storage/' . $public_file_name), $file->stored_name, $headers);
     }
     public function view_file($id)
     {
         $file = DB::table('files')->where('id', $id)->first();
         $public_file_name = 'files/' . $file->stored_name;
         $headers = array('Content-Type: ' . $file->type,);
-        return response()->file(public_path($public_file_name), $headers);
+        return response()->file(public_path('storage/' . $public_file_name), $headers);
     }
     public function viewed_video($id) {
         $video_viewed = new VideoView();

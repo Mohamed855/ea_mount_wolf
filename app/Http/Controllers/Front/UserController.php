@@ -72,7 +72,7 @@ class UserController extends Controller
         if ($request->hasFile('profile_picture')) {
             $profile_picture = $request->file('profile_picture');
             $filename = time() . '.' . $profile_picture->getClientOriginalExtension();
-            $profile_picture->move(public_path('images/profile_images'), $filename);
+            $profile_picture->storeAs('public/images/profile_images', $filename);
             DB::table('users')
                 ->where('id', '=', auth()->user()->id)
                 ->update([
@@ -83,9 +83,9 @@ class UserController extends Controller
     }
     public function delete_profile_picture()
     {
-        $public_user_profile_image ='images/profile_images/' . auth()->user()->profile_image;
-        if (file_exists(public_path($public_user_profile_image))) {
-            unlink(public_path($public_user_profile_image));
+        $public_user_profile_image ='storage/images/profile_images/' . auth()->user()->profile_image;
+        if (file_exists(asset('storage/' . $public_user_profile_image))) {
+            unlink(asset('storage/' . $public_user_profile_image));
         }
         DB::table('users')
             ->where('id', '=', auth()->user()->id)

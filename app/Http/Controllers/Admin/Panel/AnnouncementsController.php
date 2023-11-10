@@ -54,7 +54,7 @@ class AnnouncementsController extends Controller
 
         $announcement->save();
 
-        $request->image->move(public_path('images/announcements'), $announcement_image);
+        $request->image->storeAs('public/images/announcements', $announcement_image);
 
         return $this->backWithMessage('uploadedSuccessfully', 'Topic Shared Successfully');
     }
@@ -63,7 +63,7 @@ class AnnouncementsController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('announcements', $id, 'images/announcements/', 'image');
+        $this->deleteFromDB('announcements', $id, 'storage/images/announcements/', 'image');
         return $this->backWithMessage('deletedSuccessfully', 'announcement has been deleted');
     }
 }

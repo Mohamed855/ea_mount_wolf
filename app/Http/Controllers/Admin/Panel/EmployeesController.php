@@ -133,7 +133,7 @@ class EmployeesController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('users', $id, 'images/profile_images/', 'profile_image');
+        $this->deleteFromDB('users', $id, 'storage/images/profile_images/', 'profile_image');
         return $this->backWithMessage('deletedSuccessfully', 'Employee has been deleted');
     }
 }

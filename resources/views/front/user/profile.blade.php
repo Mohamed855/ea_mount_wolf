@@ -15,8 +15,8 @@
                             <div class="profile-pic bg-styles m-auto mb-2"
                                  style="background-image:url({{
                             $user_details->profile_image == null ?
-                            asset('images/profile_images/default_profile_image.jpg') :
-                            asset('images/profile_images/'.$user_details->profile_image)
+                            asset('storage/images/profile_images/default_profile_image.jpg') :
+                            asset('storage/images/profile_images/'.$user_details->profile_image)
                              }}); width: 120px;  height: 120px">
                             </div>
 
