@@ -36,7 +36,7 @@
                             <thead class="bg-light">
                             <tr>
                                 <th>Name</th>
-                                <th>Youtube link</th>
+                                <th>Video link</th>
                                 <th>Uploaded By</th>
                                 <th>Sector | Line</th>
                                 <th>Viewed</th>

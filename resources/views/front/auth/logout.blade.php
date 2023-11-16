@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', __('translate.title') . ' - ' . __('panel.logout'))
+@section('title', 'logout')
 
 @section('content')
     <div class="content-wraper">

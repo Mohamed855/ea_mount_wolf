@@ -31,7 +31,7 @@
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="Video Name">
                                     </div>
                                     <div class="pb-3">
-                                        <input type="text" name="src" class="form-control py-2" value="{{ old('src') }}" placeholder="Youtube Link">
+                                        <input type="text" name="src" class="form-control py-2" value="{{ old('src') }}" placeholder="Video Link">
                                     </div>
                                     <div class="pb-3">
                                         <select name="sector" class="form-control @error('sector') is-invalid @enderror">
