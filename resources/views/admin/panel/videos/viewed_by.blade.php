@@ -4,7 +4,7 @@
 
 @section('panel_title')
     Views Details
-    <a href="{{ route('report.download', $video_id) }}" class="btn btn-outline-success mx-3">Download Report</a>
+    <a href="{{ route('report.download', ['id' => $video_id, 'table' => 'video_views']) }}" class="btn btn-outline-success mx-3">Download Report</a>
 @endsection
 
 @section('panel_content')

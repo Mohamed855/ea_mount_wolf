@@ -48,14 +48,6 @@
                             <h3 class="rounded text-center fs-6">Videos</h3>
                             <span class="rounded fs-5">{{ $videos_count }}</span>
                         </div>
-                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5">
-                            <h3 class="rounded text-center fs-6">Files Views</h3>
-                            <span class="rounded fs-5">{{ $file_views_count }}</span>
-                        </div>
-                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5">
-                            <h3 class="rounded text-center fs-6">Videos Views</h3>
-                            <span class="rounded fs-5">{{ $video_views_count }}</span>
-                        </div>
                     </div>
                     <div class="row justify-content-between py-5">
                         @foreach($sectors as $sector)

@@ -25,8 +25,6 @@ class OverviewController extends Controller
                 'files_count' => DB::table('files')->count(),
                 'videos_count' => DB::table('videos')->count(),
                 'sectors' => DB::table('sectors')->get(),
-                'file_views_count' => DB::table('file_views')->count(),
-                'video_views_count' => DB::table('video_views')->count(),
                 'files' => DB::table('files'),
                 'videos' => DB::table('videos'),
             ]);
