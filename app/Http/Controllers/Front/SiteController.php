@@ -38,8 +38,8 @@ class SiteController extends Controller
                     ->where('favorite_videos.user_id', auth()->user()->id)
                     ->where('videos.status', '=',1)
                     ->get(),
-                'downloaded' => DB::table('file_downloads')
-                    ->join('files', 'file_downloads.file_id', '=', 'files.id')->get(),
+                'downloaded' => DB::table('file_views')
+                    ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
                 'viewed' => DB::table('video_views')
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
             ]);
@@ -177,8 +177,8 @@ class SiteController extends Controller
                         'sectors.name as sector_name',
                         'lines.name as line_name',
                     ),
-                'downloaded' => DB::table('file_downloads')
-                    ->join('files', 'file_downloads.file_id', '=', 'files.id')->get(),
+                'downloaded' => DB::table('file_views')
+                    ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
             ]);
         } else {
             abort(404);

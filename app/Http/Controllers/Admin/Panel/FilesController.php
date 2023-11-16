@@ -38,8 +38,8 @@ class FilesController extends Controller
                     'sectors.name as sector_name',
                     'lines.name as line_name',
                 ),
-            'downloaded' => DB::table('file_downloads')
-                ->join('files', 'file_downloads.file_id', '=', 'files.id')->get(),
+            'viewed' => DB::table('file_views')
+                ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
         ]);
     }
 
@@ -107,9 +107,9 @@ class FilesController extends Controller
         }
     }
 
-    public function downloaded_by($id) {
-        $file_user_downloads = DB::table('file_downloads')
-            ->join('users', 'file_downloads.user_id', '=', 'users.id')
+    public function viewed_by($id) {
+        $file_user_views = DB::table('file_views')
+            ->join('users', 'file_views.user_id', '=', 'users.id')
             ->select(
                 'users.first_name',
                 'users.middle_name',
@@ -118,8 +118,9 @@ class FilesController extends Controller
                 'users.role',
                 'users.created_at',
             )->where('file_id', $id)->get();
-        return $this->ifAdmin('admin.panel.files.downloaded_by')->with([
-            'file_user_downloads' => $file_user_downloads,
+        return $this->ifAdmin('admin.panel.files.viewed_by')->with([
+            'file_user_views' => $file_user_views,
+            'file_id' => $id,
         ]);
     }
 
@@ -130,7 +131,7 @@ class FilesController extends Controller
     {
         $this->deleteFromDB('files', $id, 'files/', 'stored_name');
         DB::table('favorites')->where('file_id', $id)->delete();
-        DB::table('file_downloads')->where('file_id', $id)->delete();
+        DB::table('file_views')->where('file_id', $id)->delete();
         return $this->backWithMessage('success', 'File has been deleted');
     }
 }

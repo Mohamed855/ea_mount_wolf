@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('file_downloads', function (Blueprint $table) {
+        Schema::create('file_views', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(File::class);
             $table->foreignIdFor(User::class);
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('file_downloads');
+        Schema::dropIfExists('file_views');
     }
 };

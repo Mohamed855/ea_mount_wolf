@@ -103,8 +103,7 @@ class VideosController extends Controller
     }
 
     public function viewed_by($id) {
-        return $this->ifAdmin('admin.panel.videos.viewed_by')->with([
-            'video_user_views' => DB::table('video_views')
+        $video_user_views = DB::table('video_views')
                 ->join('users', 'video_views.user_id', '=', 'users.id')
                 ->select(
                     'users.first_name',
@@ -113,7 +112,10 @@ class VideosController extends Controller
                     'users.user_name',
                     'users.role',
                     'users.created_at',
-                )->where('video_id', $id)->get(),
+                )->where('video_id', $id)->get();
+        return $this->ifAdmin('admin.panel.videos.viewed_by')->with([
+            'video_user_views' => $video_user_views,
+            'video_id' => $id,
         ]);
     }
 

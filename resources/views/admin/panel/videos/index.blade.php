@@ -55,7 +55,7 @@
                         <td>{{ $viewed->where('video_id', $video->id)->count() }}</td>
                         <td>{{ date('d-m-Y, h:m a', strtotime($video->created_at)) }}</td>
                         <td>
-                            <a href="{{ route('viewed_by', $video->id) }}"
+                            <a href="{{ route('ea_videos.viewed_by', $video->id) }}"
                                class="btn btn-outline-warning btn-sm btn-rounded">
                                 Viewed By
                             </a>

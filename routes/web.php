@@ -63,10 +63,10 @@ Route::middleware('db.connection')->group(function (){
         Route::resource('ea_topics', TopicsController::class)->except(['show']);
         // Files
         Route::resource('ea_files', FilesController::class)->only(['index', 'create', 'store', 'destroy']);
-        Route::get('panel/ea_files/downloaded_by/{id}', [FilesController::class, 'downloaded_by'])->name('downloaded_by');
+        Route::get('panel/ea_files/viewed_by/{id}', [FilesController::class, 'viewed_by'])->name('ea_files.viewed_by');
         // Videos
         Route::resource('videos', VideosController::class)->only(['index', 'create', 'store', 'destroy']);
-        Route::get('panel/videos/viewed_by/{id}', [VideosController::class, 'viewed_by'])->name('viewed_by');
+        Route::get('panel/videos/viewed_by/{id}', [VideosController::class, 'viewed_by'])->name('ea_videos.viewed_by');
         // Actions
         Route::post('toggle_active/{id}', [AdminActionsController::class, 'toggle_active'])->name('toggle_active');
         Route::post('toggle_publish_announcement/{id}', [AdminActionsController::class, 'toggle_publish_announcement'])->name('toggle_publish_announcement');
@@ -103,5 +103,6 @@ Route::middleware('db.connection')->group(function (){
     Route::get('toggle_favorite_videos/{id}', [ActionsController::class, 'toggle_favorite_videos'])->name('favorite_videos.toggle');
     Route::get('download_file/{id}', [ActionsController::class, 'download_file'])->name('file.download');
     Route::get('view_file/{id}', [ActionsController::class, 'view_file'])->name('file.view');
+    Route::get('download_report/{id}', [ActionsController::class, 'download_report'])->name('report.download');
     Route::get('not_authorized', [ActionsController::class, 'not_authorized'])->name('not_authorized');
 });

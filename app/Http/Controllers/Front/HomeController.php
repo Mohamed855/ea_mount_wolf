@@ -21,8 +21,8 @@ class HomeController extends Controller
             ->where('announcements.status', '=',1)
             ->get();
 
-        $downloads = DB::table('file_downloads')
-            ->join('files', 'file_downloads.file_id', '=', 'files.id')
+        $downloads = DB::table('file_views')
+            ->join('files', 'file_views.file_id', '=', 'files.id')
             ->select(
                 'files.sector_id as sector_id'
             )->get();

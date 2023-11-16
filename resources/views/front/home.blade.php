@@ -37,11 +37,7 @@
                             @foreach($sectors as $sector)
                                 <div class="department-box col-12 col-md-5 col-lg-4 col-xl-3 {{ in_array($sector->id, $userSectors) && $isNotAdmin ? 'active' : '' }} ">
                                     <a href="
-                                    @if (auth()->user()->role == 1 || in_array(1, $userSectors) || in_array($sector->id, $userSectors) )
-                                        {{ route('sector_line.choose', $sector->id) }}
-                                    @else
-                                        {{ route('not_authorized') }}
-                                    @endif
+                                    {{ route('sector_line.choose', $sector->id) }}
                                     "
                                        class="text-decoration-none sector_text {{ in_array($sector->id, $userSectors) && $isNotAdmin ?  'sector_active' : ''}}">
                                         <div class="department-title">{{ $sector->name }}</div>

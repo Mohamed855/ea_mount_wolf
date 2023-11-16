@@ -32,8 +32,8 @@ class UserController extends Controller
                     ->join('favorite_videos', 'videos.id', '=', 'favorite_videos.video_id')
                     ->select('videos.*', 'favorite_videos.user_id', 'favorite_videos.video_id')
                     ->where('favorite_videos.user_id', auth()->user()->id),
-                'downloaded' => DB::table('file_downloads')
-                    ->join('files', 'file_downloads.file_id', '=', 'files.id')->get(),
+                'downloaded' => DB::table('file_views')
+                    ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
                 'viewed' => DB::table('video_views')
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
             ]);
