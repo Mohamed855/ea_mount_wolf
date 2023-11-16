@@ -90,7 +90,7 @@ class FilesController extends Controller
             $file->save();
 
             $request->file->storeAs('public/files', $fileName);
-            $request->file->move(public_path('public/storage/files'), $fileName);
+            $request->file->move(public_path('storage/files'), $fileName);
 
             $notification = new FileNotification;
 

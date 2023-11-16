@@ -70,7 +70,7 @@ class TopicsController extends Controller
             $topic->save();
 
             $request->image->storeAs('public/images/topics', $topic_image);
-            $request->image->move(public_path('public/storage/images/topics'), $topic_image);
+            $request->image->move(public_path('storage/images/topics'), $topic_image);
 
             $notification = new TopicNotification;
 
@@ -126,7 +126,7 @@ class TopicsController extends Controller
                 ]);
 
             $request->image->storeAs('public/images/topics', $topic_image);
-            $request->image->move(public_path('public/storage/images/topics'), $topic_image);
+            $request->image->move(public_path('storage/images/topics'), $topic_image);
 
             $old_topic_name->title != $request->title ? $title_updated = 1 : $title_updated = 0;
 

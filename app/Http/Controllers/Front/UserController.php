@@ -76,7 +76,7 @@ class UserController extends Controller
             $profile_picture = $request->file('profile_picture');
             $filename = time() . '.' . $profile_picture->getClientOriginalExtension();
             $profile_picture->storeAs('public/images/profile_images', $filename);
-            $profile_picture->move(public_path('public/storage/images/profile_images'), $filename);
+            $profile_picture->move(public_path('storage/images/profile_images'), $filename);
             DB::table('users')
                 ->where('id', '=', auth()->user()->id)
                 ->update([
