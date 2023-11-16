@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\Panel\TopicsController;
 use App\Http\Controllers\Admin\Panel\VideosController;
 use App\Http\Controllers\ChooseLoginController;
 use App\Http\Controllers\Front\ActionsController;
-use App\Http\Controllers\Front\Auth\ForgetPasswordController;
 use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\SiteController;
@@ -35,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('db.connection')->group(function (){
     // Auth routes
-    Route::get('choose-login', [ChooseLoginController::class, 'index'])->name('choose-login');
+    Route::get('select-user', [ChooseLoginController::class, 'index'])->name('select-user');
     Route::get('employee', [AuthController::class, 'employee_login'])->name('employee.login');
     Route::post('employee', [AuthController::class, 'employee_check_credentials'])->name('employee.check_credentials');
     Route::get('manager', [AuthController::class, 'manager_login'])->name('manager.login');
@@ -49,29 +48,30 @@ Route::middleware('db.connection')->group(function (){
         // Index
         Route::get('/', [OverviewController::class, 'overview'])->name('panel');
         // Announcements
-        Route::resource('announcements', AnnouncementsController::class);
+        Route::resource('announcements', AnnouncementsController::class)->only(['index', 'create', 'store', 'destroy']);
         // Sectors
-        Route::resource('sectors', SectorsController::class);
+        Route::resource('sectors', SectorsController::class)->except(['show']);
         // Lines
-        Route::resource('lines', LinesController::class);
+        Route::resource('lines', LinesController::class)->except(['show']);
         // Admins
-        Route::resource('admins', AdminsController::class);
+        Route::resource('admins', AdminsController::class)->except(['show']);
         // Managers
-        Route::resource('managers', ManagersController::class);
+        Route::resource('managers', ManagersController::class)->except(['show']);
         // Employees
-        Route::resource('employees', EmployeesController::class);
+        Route::resource('employees', EmployeesController::class)->except(['show']);
         // Topics
-        Route::resource('ea_topics', TopicsController::class);
+        Route::resource('ea_topics', TopicsController::class)->except(['show']);
         // Files
-        Route::resource('ea_files', FilesController::class);
+        Route::resource('ea_files', FilesController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::get('panel/ea_files/downloaded_by/{id}', [FilesController::class, 'downloaded_by'])->name('downloaded_by');
         // Videos
-        Route::resource('videos', VideosController::class);
+        Route::resource('videos', VideosController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::get('panel/videos/viewed_by/{id}', [VideosController::class, 'viewed_by'])->name('viewed_by');
         // Actions
         Route::post('toggle_active/{id}', [AdminActionsController::class, 'toggle_active'])->name('toggle_active');
         Route::post('toggle_publish_announcement/{id}', [AdminActionsController::class, 'toggle_publish_announcement'])->name('toggle_publish_announcement');
         Route::post('toggle_publish_topic/{id}', [AdminActionsController::class, 'toggle_publish_topic'])->name('toggle_publish_topic');
+        Route::post('toggle_publish_line/{id}', [AdminActionsController::class, 'toggle_publish_line'])->name('toggle_publish_line');
         Route::post('toggle_show_file/{id}', [AdminActionsController::class, 'toggle_show_file'])->name('toggle_show_file');
         Route::post('toggle_show_video/{id}', [AdminActionsController::class, 'toggle_show_video'])->name('toggle_show_video');
     });
@@ -92,7 +92,9 @@ Route::middleware('db.connection')->group(function (){
     Route::get('drive/{sector_id}/line/{line_id}', [SiteController::class, 'drive'])->name('drive');
     Route::get('video/{id}', [SiteController::class, 'video'])->name('video');
     Route::get('topic/{id}', [SiteController::class, 'topic'])->name('topic');
+    Route::get('my/video', [SiteController::class, 'managerVideos'])->name('manager.videos');
     Route::get('add/video', [SiteController::class, 'createVideo'])->name('video.add');
+    Route::get('my/file', [SiteController::class, 'managerFiles'])->name('manager.files');
     Route::get('add/file', [SiteController::class, 'createFile'])->name('file.add');
     // Actions
     Route::post('post_comment', [ActionsController::class, 'post_comment'])->name('comment.post');

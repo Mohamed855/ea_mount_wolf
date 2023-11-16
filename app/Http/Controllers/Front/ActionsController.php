@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use App\Models\CommentNotification;
 use App\Models\File;
@@ -12,6 +11,7 @@ use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoView;
 use App\Traits\GeneralTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
@@ -19,7 +19,7 @@ class ActionsController extends Controller
 {
     use GeneralTrait;
 
-    public function post_comment(CommentRequest $request) {
+    public function post_comment(Request $request) {
         $comment = new Comment();
         $data = $request->all();
 
@@ -45,7 +45,7 @@ class ActionsController extends Controller
     public function delete_comment(string $id)
     {
         $this->deleteFromDB('comments', $id, null, null);
-        return $this->backWithMessage('deletedSuccessfully', 'Comment has been deleted');
+        return $this->backWithMessage('success', 'Comment has been deleted');
     }
     public function toggle_favorite($id) {
         $current_user = User::find(auth()->user()->id);
@@ -87,6 +87,6 @@ class ActionsController extends Controller
         }
     }
     public function not_authorized() {
-        return $this->redirect('home')->with('notAuthorized', '');
+        return $this->redirect('home')->with('notAuthorized', 'You are not Authorized');
     }
 }

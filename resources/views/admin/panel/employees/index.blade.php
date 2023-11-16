@@ -24,10 +24,11 @@
             <tr>
                 <th>Name | Username</th>
                 <th>Email</th>
-                <th>Sector | Line</th>
                 <th>Title</th>
+                <th>Sectors</th>
+                <th>Lines</th>
                 <th>Status</th>
-                <th>Joining Date</th>
+                <th>Added At</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -69,11 +70,37 @@
                                 <p class="text-muted mb-0">{{ $employee->phone_number }}</p>
                             </div>
                         </td>
-                        <td>
-                            <p class="fw-bold mb-1 text-center">{{ $employee->sector_name }}</p>
-                            <p class="text-muted mb-0 text-center">{{ $employee->line_name }}</p>
-                        </td>
                         <td>{{ $employee->title_name }}</td>
+                        <td>
+                            @php($decodedSectors = json_decode($employee->sectors, true))
+                            @php($integerSectorIds = array_map('intval', $decodedSectors))
+                            @php($employee_sectors = \App\Models\Sector::query()->whereIn('id', $integerSectorIds)->get())
+                            @if(count($employee_sectors) > 0)
+                                <div class="text-start" style="max-height:100px; overflow-y:auto;">
+                                    @for($i = 0; $i < count($employee_sectors); $i++)
+                                        {{ $i + 1 }} - {{ $employee_sectors[$i]->name }}
+                                        <br>
+                                    @endfor
+                                </div>
+                            @else
+                                No sectors
+                            @endif
+                        </td>
+                        <td>
+                            @php($decodedLines = json_decode($employee->lines, true))
+                            @php($integerLineIds = array_map('intval', $decodedLines))
+                            @php($employee_lines = \App\Models\Line::query()->whereIn('id', $integerLineIds)->get())
+                            @if(count($employee_lines) > 0)
+                                <div class="text-start" style="max-height:100px; overflow-y:auto;">
+                                    @for($i = 0; $i < count($employee_lines); $i++)
+                                        {{ $i + 1 }} - {{ $employee_lines[$i]->name }}
+                                        <br>
+                                    @endfor
+                                </div>
+                            @else
+                                No Lines
+                            @endif
+                        </td>
                         <td>
                                             <span
                                                 class="{{ $employee->activated ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">

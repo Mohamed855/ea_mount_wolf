@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\FilesRequest;
 use App\Models\File;
 use App\Models\FileNotification;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
+use App\Traits\Messages\PanelMessagesTrait;
+use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FilesController extends Controller
 {
     use GeneralTrait;
     use AuthTrait;
+    use PanelRulesTrait;
+    use PanelMessagesTrait;
 
     /**
      * Display a listing of the resource.
@@ -22,19 +27,19 @@ class FilesController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.files.index', [
-                    'files' => DB::table('files')
-                        ->join('users', 'files.user_id', '=', 'users.id')
-                        ->join('lines', 'files.line_id', '=', 'lines.id')
-                        ->join('sectors', 'files.sector_id', '=', 'sectors.id')
-                        ->select(
-                            'files.*',
-                            'users.user_name',
-                            'sectors.name as sector_name',
-                            'lines.name as line_name',
-                        ),
-                    'downloaded' => DB::table('file_downloads')
-                        ->join('files', 'file_downloads.file_id', '=', 'files.id')->get(),
-                ]);
+            'files' => DB::table('files')
+                ->join('users', 'files.user_id', '=', 'users.id')
+                ->join('lines', 'files.line_id', '=', 'lines.id')
+                ->join('sectors', 'files.sector_id', '=', 'sectors.id')
+                ->select(
+                    'files.*',
+                    'users.user_name',
+                    'sectors.name as sector_name',
+                    'lines.name as line_name',
+                ),
+            'downloaded' => DB::table('file_downloads')
+                ->join('files', 'file_downloads.file_id', '=', 'files.id')->get(),
+        ]);
     }
 
     /**
@@ -46,48 +51,58 @@ class FilesController extends Controller
             if (auth()->user()->role == 1 || auth()->user()->role == 2)
                 return $this->successView('admin.panel.files.create')->with([
                     'sectors' => DB::table('sectors')->get(),
-                    'lines' => DB::table('lines')->get(),
+                    'lines' => DB::table('lines')->where('status', 1)->get(),
                     'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
                 ]);
             return $this->redirect('not_authorized');
         } else {
-            return $this->redirect('choose-login');
+            return $this->redirect('select-user');
         }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(FilesRequest $request)
+    public function store(Request $request)
     {
-        $fileName = str_replace(' ', '', $request->name);
-        $fileName .= time() . '.' . $request->file->extension();
+        try {
+            $validator = Validator::make($request->all(), $this->filesRules(), $this->filesMessages());
 
-        $file = new File();
+            if ($validator->fails()) {
+                return $this->backWithMessage('error', $validator->errors()->first());
+            }
 
-        $file->name = $request->name;
-        $file->type = $request->file->getClientMimeType();
-        $file->size = $request->file->getSize();
-        $file->sector_id = $request->sector;
-        $file->status = 1;
-        $file->stored_name = $fileName;
-        $file->line_id = $request->line;
-        $file->user_id = auth()->user()->id;
+            $fileName = str_replace(' ', '', $request->name);
+            $fileName .= time() . '.' . $request->file->extension();
 
-        $file->save();
+            $file = new File();
 
-        $request->file->storeAs('public/files', $fileName);
+            $file->name = $request->name;
+            $file->type = $request->file->getClientMimeType();
+            $file->size = $request->file->getSize();
+            $file->sector_id = $request->sector;
+            $file->status = 1;
+            $file->stored_name = $fileName;
+            $file->line_id = $request->line;
+            $file->user_id = auth()->user()->id;
 
-        $notification = new FileNotification;
+            $file->save();
 
-        $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new file - ' . $request->name;
-        $notification->sector_id = $request->sector;
-        $notification->line_id = $request->line;
-        $notification->file_id = DB::table('files')->latest('id')->first()->id;
+            $request->file->storeAs('public/files', $fileName);
 
-        $notification->save();
+            $notification = new FileNotification;
 
-        return $this->backWithMessage('uploadedSuccessfully', 'File Uploaded Successfully');
+            $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new file - ' . $request->name;
+            $notification->sector_id = $request->sector;
+            $notification->line_id = $request->line;
+            $notification->file_id = DB::table('files')->latest('id')->first()->id;
+
+            $notification->save();
+
+            return $this->backWithMessage('success', 'File Uploaded Successfully');
+        } catch (\Exception $e) {
+            return $this->backWithMessage('error', 'Something went error, please try again later');
+        }
     }
 
     public function downloaded_by($id) {
@@ -98,9 +113,10 @@ class FilesController extends Controller
                 'users.middle_name',
                 'users.last_name',
                 'users.user_name',
+                'users.role',
                 'users.created_at',
             )->where('file_id', $id)->get();
-        return $this->successView('admin.panel.files.downloaded_by')->with([
+        return $this->ifAdmin('admin.panel.files.downloaded_by')->with([
             'file_user_downloads' => $file_user_downloads,
         ]);
     }
@@ -113,6 +129,6 @@ class FilesController extends Controller
         $this->deleteFromDB('files', $id, 'files/', 'stored_name');
         DB::table('favorites')->where('file_id', $id)->delete();
         DB::table('file_downloads')->where('file_id', $id)->delete();
-        return $this->backWithMessage('deletedSuccessfully', 'File has been deleted');
+        return $this->backWithMessage('success', 'File has been deleted');
     }
 }

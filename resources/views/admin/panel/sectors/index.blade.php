@@ -17,6 +17,7 @@
             {{ session('error') }}
         </div>
     @endif
+
     @include('includes.admin.panel_filter')
     <div class="scroll-bar overflow-scroll">
         <table class="table bg-white">
@@ -24,7 +25,6 @@
                 <tr>
                     <th>Name</th>
                     <th>Lines</th>
-                    <th>No. Employees</th>
                     <th>No. Files</th>
                     <th>No. Views</th>
                     <th>Created At</th>
@@ -56,7 +56,6 @@
                                     No Lines
                                 @endif
                             </td>
-                            <td>{{ $countOfEmployees->where('sector_id', '=', $sector->id)->count() }}</td>
                             <td>{{ $countOfFiles->where('sector_id', '=', $sector->id)->count() }}</td>
                             <td>{{ $countOfFiles->where('sector_id', '=', $sector->id)->sum('viewed') }}</td>
                             <td>{{ date('d-m-Y, h:m a', strtotime($sector->created_at)) }}</td>

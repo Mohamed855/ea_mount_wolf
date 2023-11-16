@@ -16,7 +16,7 @@
                                 {{ $current_sector->name }} Lines
                             </h2>
                         </div>
-                        <div class="row buttons justify-content-between m-auto">
+                        <div class="row buttons justify-content-evenly m-auto">
                             @foreach($selected_sector_lines as $line)
                                 <a href="{{ route('drive', ['sector_id' =>  $current_sector->id, 'line_id' => $line->line_id]) }}"
                                    class="py-5 px-4 mb-5 control-btn text-decoration-none rounded"

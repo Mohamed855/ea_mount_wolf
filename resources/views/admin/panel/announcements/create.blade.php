@@ -2,9 +2,9 @@
 
 @section('panel_content')
     <div class="container px-4">
-        @if(session()->has('uploadedSuccessfully'))
+        @if(session()->has('success'))
             <div class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert">
-                {{ session('uploadedSuccessfully') }}
+                {{ session('success') }}
             </div>
         @elseif(session()->has('error'))
             <div class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert">

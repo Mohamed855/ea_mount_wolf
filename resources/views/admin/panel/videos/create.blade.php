@@ -4,9 +4,9 @@
 
 @section('panel_content')
     <div class="container px-4">
-        @if(session()->has('uploadedSuccessfully'))
+        @if(session()->has('success'))
             <div class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert">
-                {{ session('uploadedSuccessfully') }}
+                {{ session('success') }}
             </div>
         @elseif(session()->has('error'))
             <div class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert">
@@ -32,21 +32,17 @@
                                     </div>
                                     <div class="pb-3">
                                         <select name="sector" class="form-control @error('sector') is-invalid @enderror">
-                                            <option value="0">Sector *</option>
-                                            @if(auth()->user()->sector_id == 1)
-                                                @foreach($sectors as $sector)
-                                                    <option value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'selected' : '' }}>{{ $sector->name }}</option>
-                                                @endforeach
-                                            @else
-                                                <option value="{{ $user_sector->id }}">{{ $user_sector->name }}</option>
-                                            @endif
+                                            <option value="0" disabled selected>Sector *</option>
+                                            @foreach($sectors as $sector)
+                                                <option value="{{ $sector->id }}">{{ $sector->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="pb-3">
                                         <select name="line" class="form-control @error('line') is-invalid @enderror">
-                                            <option value="0">Line *</option>
+                                            <option value="0" disabled selected>Line *</option>
                                             @foreach($lines as $line)
-                                                <option value="{{ $line->id }}" {{ $line->id == old('line') ? 'selected' : '' }}>{{ $line->name }}</option>
+                                                <option value="{{ $line->id }} {{ $line->id == old('line') ? 'selected' : '' }}">{{ $line->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

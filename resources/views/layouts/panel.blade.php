@@ -19,7 +19,7 @@
                                             @yield('panel_title')
                                         </p>
                                     </div>
-                                    <div class="panel pb-5">
+                                    <div class="panel">
                                         @yield('panel_content')
                                     </div>
                                 </div>

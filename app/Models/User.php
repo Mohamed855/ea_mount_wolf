@@ -31,8 +31,8 @@ class User extends Authenticatable
         'password',
         'profile_image',
         'title_id',
-        'line_id',
-        'sector_id',
+        'lines',
+        'sectors',
         'role',
         'activated',
     ];
@@ -55,6 +55,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'lines' => 'array',
+        'sectors' => 'array',
     ];
 
     public function title(): HasOne
@@ -72,16 +74,6 @@ class User extends Authenticatable
         return $this->HasMany(Comment::class);
     }
 
-    public function line() : BelongsTo
-    {
-        return $this->BelongsTo(Line::class);
-    }
-
-    public function sector() : BelongsTo
-    {
-        return $this->BelongsTo(Sector::class);
-    }
-
     public function files() : BelongsToMany
     {
         return $this->belongsToMany(File::class, 'favorites');
@@ -91,5 +83,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Video::class, 'favorite_videos');
     }
-
 }

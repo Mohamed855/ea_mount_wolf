@@ -14,26 +14,26 @@
                         <div class="mb-4">
                             <div class="profile-pic bg-styles m-auto mb-2"
                                  style="background-image:url({{
-                            $user_details->profile_image == null ?
+                            auth()->user()->profile_image == null ?
                             asset('storage/images/profile_images/default_profile_image.jpg') :
-                            asset('storage/images/profile_images/'.$user_details->profile_image)
+                            asset('storage/images/profile_images/'.auth()->user()->profile_image)
                              }}); width: 120px;  height: 120px">
                             </div>
 
                             <div>
-                                @if(session()->has('changedSuccessfully'))
+                                @if(session()->has('success'))
                                     <div class="m-auto">
                                         <span class="text-primary"
-                                              role="alert">{{ session()->get('changedSuccessfully') }}</span>
+                                              role="alert">{{ session()->get('success') }}</span>
                                     </div>
-                                @elseif(session()->has('deletedSuccessfully'))
+                                @elseif(session()->has('success'))
                                     <div class="m-auto">
                                         <span class="text-danger"
-                                              role="alert">{{ session()->get('deletedSuccessfully') }}</span>
+                                              role="alert">{{ session()->get('success') }}</span>
                                     </div>
                                 @endif
 
-                                @if($user_details->profile_image == null)
+                                @if(auth()->user()->profile_image == null)
                                     <div>
                                         <form action="{{ route('profile_picture.update') }}" id="profile_picture_form"
                                               method="post" enctype="multipart/form-data">
@@ -72,14 +72,14 @@
                         </div>
 
                         <div class="pb-3">
-                            <h5 class="text-center">{{ auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' ' . auth()->user()->last_name }}</h5>
+                            <h5 class="text-center">{{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : ucfirst(auth()->user()->first_name) . ' ' . ucfirst(auth()->user()->middle_name) . ' ' . ucfirst(auth()->user()->last_name) }}</h5>
                             <hr class="col-4 m-auto">
                         </div>
 
                         <div class="d-table m-auto">
                             <div class="d-table-row">
                                 <div class="profile_details d-table-cell text-end">User name :</div>
-                                <div class="d-table-cell text-start px-2">{{ ucfirst(auth()->user()->user_name) }}</div>
+                                <div class="d-table-cell text-start px-2">{{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : ucfirst(auth()->user()->user_name) }}</div>
                             </div>
                             <div class="d-table-row">
                                 <div class="profile_details d-table-cell text-end">Email :</div>
@@ -87,23 +87,15 @@
                             </div>
                             <div class="d-table-row">
                                 <div class="profile_details d-table-cell text-end">CRM Code :</div>
-                                <div class="d-table-cell text-start px-2">{{ auth()->user()->crm_code }}</div>
+                                <div class="d-table-cell text-start px-2">{{ auth()->user()->role == 1 ? '_____' : auth()->user()->crm_code }}</div>
                             </div>
                             <div class="d-table-row">
                                 <div class="profile_details d-table-cell text-end">Phone Number :</div>
-                                <div class="d-table-cell text-start px-2">{{ auth()->user()->phone_number }}</div>
+                                <div class="d-table-cell text-start px-2">{{ auth()->user()->role == 1 ? '_____' : auth()->user()->phone_number }}</div>
                             </div>
                             <div class="d-table-row">
                                 <div class="profile_details d-table-cell text-end">Title :</div>
-                                <div class="d-table-cell text-start px-2">{{ $user_details->title_name }}</div>
-                            </div>
-                            <div class="d-table-row">
-                                <div class="profile_details d-table-cell text-end">Sector :</div>
-                                <div class="d-table-cell text-start px-2">{{ $user_details->sector_name}}</div>
-                            </div>
-                            <div class="d-table-row">
-                                <div class="profile_details d-table-cell text-end">Line :</div>
-                                <div class="d-table-cell text-start px-2">{{ $user_details->line_name }}</div>
+                                <div class="d-table-cell text-start px-2">{{ auth()->user()->role == 1 ? '_____' : $user_details->title_name }}</div>
                             </div>
                         </div>
                         <div class="m-auto pt-3">

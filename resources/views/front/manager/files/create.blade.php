@@ -1,23 +1,26 @@
-@extends('layouts.panel')
+@extends('layouts.app')
 
 @section('title', 'Add File')
 
-@section('panel_content')
-    <div class="container px-4">
-        @if(session()->has('success'))
-            <div class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert">
-                {{ session('success') }}
-            </div>
-        @elseif(session()->has('error'))
-            <div class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert">
-                {{ session('error') }}
-            </div>
-        @endif
-    </div>
+@section('content')
+
+    @include('includes.front.navbar')
+
     <div class="content-wraper withnav">
         <div class="body-content">
             <div class="container">
-                <div class="row text-center">
+                <div class="row justify-content-center">
+                    <div class="container px-4">
+                        @if(session()->has('success'))
+                            <div class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert">
+                                {{ session('success') }}
+                            </div>
+                        @elseif(session()->has('error'))
+                            <div class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                    </div>
                     <div class="col-12 col-lg-8 m-auto">
                         <div class="overflow-scroll border bg-white shadow rounded-2 py-5 px-4 px-lg-5">
                             <h3 class="pb-4">Add New File</h3>
@@ -59,5 +62,21 @@
                 </div>
             </div>
         </div>
+        @include('includes.front.footer')
     </div>
+
+    @include('includes.front.scripts')
+
+    <script src="{{ asset('assets/js/owl.carousel.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#topics-carousel").owlCarousel({
+                margin: 30,
+                autoplay: true,
+                loop: true,
+                autoplayHoverPause: true,
+                responsive: {0: {items: 2,}, 600: {items: 3,}, 1000: {items: 4,}}
+            });
+        });
+    </script>
 @endsection

@@ -9,31 +9,23 @@ use Illuminate\Support\Facades\Session;
 trait AuthTrait {
     use GeneralTrait;
 
-    public function ifAdmin ($view, $data) {
+    public function ifAdmin ($view, $data = []) {
         if(Auth::check()) {
             if (auth()->user()->role === 1) {
                 return $this->successView($view)->with($data);
             }
             return $this->redirect('not_authorized');
         }
-        return $this->redirect('choose-login');
+        return $this->redirect('select-user');
     }
     public function ifAuthenticated ($view, $data) {
          if(Auth::check()) {
             if (auth()->user()->activated) {
-                $current_user_id = auth()->user()->id;
                 $current_user_details = DB::table('users')
                     ->join('titles', 'users.title_id', '=', 'titles.id')
-                    ->join('lines', 'users.line_id', '=', 'lines.id')
-                    ->join('sectors', 'users.sector_id', '=', 'sectors.id')
                     ->select('users.user_name',
-                        'users.profile_image',
-                        'users.role',
                         'titles.name as title_name',
-                        'lines.name as line_name',
-                        'sectors.name as sector_name',
-                    )
-                    ->where('users.id', $current_user_id)
+                    )->where('users.id', auth()->user()->id)
                     ->first();
 
                 $video_notifications = [];
@@ -63,15 +55,14 @@ trait AuthTrait {
                         'file_notifications' => $file_notifications,
                         'comment_notifications' => $comment_notifications,
                         'topic_notifications' => $topic_notifications,
-                    ])
-                    ->with($data);
+                    ])->with($data);
             } else {
                 Session::flush();
                 Auth::logout();
                 return $this->redirect('login')->with('activeRequest', 'Your account is not activated');
             }
         }
-        return $this->redirect('choose-login');
+        return $this->redirect('select-user');
     }
     public function ifNotAuthenticated ($return) {
         if (!Auth::check())

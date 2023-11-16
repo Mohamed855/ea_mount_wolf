@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\AnnouncementsRequest;
 use App\Models\Announcement;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
+use App\Traits\Messages\PanelMessagesTrait;
+use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AnnouncementsController extends Controller
 {
     use GeneralTrait;
     use AuthTrait;
+    use PanelRulesTrait;
+    use PanelMessagesTrait;
 
     /**
      * Display a listing of the resource.
@@ -40,23 +45,33 @@ class AnnouncementsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AnnouncementsRequest $request)
+    public function store(Request $request)
     {
-        $announcement_title = str_replace(' ', '', $request->title);
-        $announcement_image = $announcement_title . time() . '.' . $request->image->extension();
+        try {
+            $validator = Validator::make($request->all(), $this->announcementRules(), $this->announcementMessages());
 
-        $announcement = new Announcement();
+            if ($validator->fails()) {
+                return $this->backWithMessage('error', $validator->errors()->first());
+            }
 
-        $announcement->title = $request->title;
-        $announcement->image = $announcement_image;
-        $announcement->user_id = auth()->user()->id;
-        $announcement->status = 1;
+            $announcement_title = str_replace(' ', '', $request->title);
+            $announcement_image = $announcement_title . time() . '.' . $request->image->extension();
 
-        $announcement->save();
+            $announcement = new Announcement();
 
-        $request->image->storeAs('public/images/announcements', $announcement_image);
+            $announcement->title = $request->title;
+            $announcement->image = $announcement_image;
+            $announcement->user_id = auth()->user()->id;
+            $announcement->status = 1;
 
-        return $this->backWithMessage('uploadedSuccessfully', 'Topic Shared Successfully');
+            $announcement->save();
+
+            $request->image->storeAs('public/images/announcements', $announcement_image);
+
+            return $this->backWithMessage('success', 'Topic Shared Successfully');
+        } catch (\Exception $e) {
+            return $this->backWithMessage('error', 'Something went error, please try again later');
+        }
     }
     /**
      * Remove the specified resource from storage.
@@ -64,6 +79,6 @@ class AnnouncementsController extends Controller
     public function destroy(string $id)
     {
         $this->deleteFromDB('announcements', $id, 'storage/images/announcements/', 'image');
-        return $this->backWithMessage('deletedSuccessfully', 'announcement has been deleted');
+        return $this->backWithMessage('success', 'announcement has been deleted');
     }
 }

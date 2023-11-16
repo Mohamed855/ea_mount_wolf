@@ -42,10 +42,10 @@
                                     </div>
                                 </div>
                                 <div>
-                                    @if(session()->has('changedSuccessfully'))
+                                    @if(session()->has('success'))
                                         <div class="m-auto">
                                             <span class="text-primary"
-                                                  role="alert">{{ session()->get('changedSuccessfully') }}</span>
+                                                  role="alert">{{ session()->get('success') }}</span>
                                         </div>
                                     @elseif(session()->has('incorrect'))
                                         <div class="m-auto">

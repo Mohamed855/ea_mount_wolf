@@ -3,19 +3,22 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\ProfilePictureRequest;
-use App\Http\Requests\Users\UpdatePasswordRequest;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
+use App\Traits\Messages\PanelMessagesTrait;
+use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 
 class UserController extends Controller
 {
     use GeneralTrait;
     use AuthTrait;
+    use PanelRulesTrait;
+    use PanelMessagesTrait;
 
     public function favorites()
     {
@@ -35,7 +38,7 @@ class UserController extends Controller
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
             ]);
         }
-        return $this->redirect('choose-login');
+        return $this->redirect('select-user');
     }
 
     public function notifications()
@@ -43,7 +46,7 @@ class UserController extends Controller
         if (Auth::check()) {
             return $this->ifAuthenticated('front.user.notifications', null);
         }
-        return $this->redirect('choose-login');
+        return $this->redirect('select-user');
     }
 
     public function profile($user_name) {
@@ -54,7 +57,7 @@ class UserController extends Controller
     {
         return $this->ifAuthenticated('front.user.change_password', null);
     }
-    public function update_password(UpdatePasswordRequest $request)
+    public function update_password(Request $request)
     {
         $user = Auth::user();
 
@@ -62,12 +65,12 @@ class UserController extends Controller
             $user->password = Hash::make($request->new_password);
             $user->save();
 
-            return $this->backWithMessage('changedSuccessfully', 'Password changed successfully');
+            return $this->backWithMessage('success', 'Password changed successfully');
         } else {
             return $this->backWithMessage('incorrect', 'Incorrect Password');
         }
     }
-    public function update_profile_picture(ProfilePictureRequest $request)
+    public function update_profile_picture(Request $request)
     {
         if ($request->hasFile('profile_picture')) {
             $profile_picture = $request->file('profile_picture');
@@ -79,7 +82,7 @@ class UserController extends Controller
                     'profile_image' => $filename,
                 ]);
         }
-        return $this->backWithMessage('changedSuccessfully', 'Profile picture changed successfully');
+        return $this->backWithMessage('success', 'Profile picture changed successfully');
     }
     public function delete_profile_picture()
     {
@@ -92,6 +95,6 @@ class UserController extends Controller
             ->update([
                 'profile_image' => null,
             ]);
-        return $this->backWithMessage('deletedSuccessfully', 'Profile picture deleted successfully');
+        return $this->backWithMessage('success', 'Profile picture deleted successfully');
     }
 }

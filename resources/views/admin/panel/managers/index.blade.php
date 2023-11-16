@@ -24,10 +24,11 @@
             <tr>
                 <th>Name | Username</th>
                 <th>Email</th>
-                <th>Sector | Line</th>
                 <th>Title</th>
+                <th>Sectors</th>
+                <th>Lines</th>
                 <th>Status</th>
-                <th>Joining Date</th>
+                <th>Added At</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -69,16 +70,42 @@
                                 <p class="text-muted mb-0">{{ $manager->phone_number }}</p>
                             </div>
                         </td>
-                        <td>
-                            <p class="fw-bold mb-1 text-center">{{ $manager->sector_name }}</p>
-                            <p class="text-muted mb-0 text-center">{{ $manager->line_name }}</p>
-                        </td>
                         <td>{{ $manager->title_name }}</td>
                         <td>
-                                            <span
-                                                class="{{ $manager->activated ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">
-                                                {{ $manager->activated ? 'Activated' : 'Waiting' }}
-                                            </span>
+                            @php($decodedSectors = json_decode($manager->sectors, true))
+                            @php($integerSectorIds = array_map('intval', $decodedSectors))
+                            @php($manager_sectors = \App\Models\Sector::query()->whereIn('id', $integerSectorIds)->get())
+                            @if(count($manager_sectors) > 0)
+                                <div class="text-start" style="max-height:100px; overflow-y:auto;">
+                                    @for($i = 0; $i < count($manager_sectors); $i++)
+                                        {{ $i + 1 }} - {{ $manager_sectors[$i]->name }}
+                                        <br>
+                                    @endfor
+                                </div>
+                            @else
+                                No sectors
+                            @endif
+                        </td>
+                        <td>
+                            @php($decodedLines = json_decode($manager->lines, true))
+                            @php($integerLineIds = array_map('intval', $decodedLines))
+                            @php($manager_lines = \App\Models\Line::query()->whereIn('id', $integerLineIds)->get())
+                            @if(count($manager_lines) > 0)
+                                <div class="text-start" style="max-height:100px; overflow-y:auto;">
+                                    @for($i = 0; $i < count($manager_lines); $i++)
+                                        {{ $i + 1 }} - {{ $manager_lines[$i]->name }}
+                                        <br>
+                                    @endfor
+                                </div>
+                            @else
+                                No Lines
+                            @endif
+                        </td>
+                        <td>
+                            <span
+                                class="{{ $manager->activated ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">
+                                {{ $manager->activated ? 'Activated' : 'Waiting' }}
+                            </span>
                         </td>
                         <td>{{ date('d-m-Y, h:m a', strtotime($manager->created_at)) }}</td>
                         <td>

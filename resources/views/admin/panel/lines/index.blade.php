@@ -24,9 +24,9 @@
             <tr>
                 <th>Name</th>
                 <th>Sectors</th>
-                <th>No. Employees</th>
                 <th>No. Files</th>
                 <th>No. Views</th>
+                <th>Status</th>
                 <th>Created At</th>
                 <th>Actions</th>
             </tr>
@@ -56,15 +56,28 @@
                                 No sectors
                             @endif
                         </td>
-                        <td>{{ $countOfEmployees->where('line_id', '=', $line->id)->count() }}</td>
                         <td>{{ $countOfFiles->where('line_id', '=', $line->id)->count() }}</td>
                         <td>{{ $countOfFiles->where('line_id', '=', $line->id)->sum('viewed') }}</td>
+                        <td>
+                            <span
+                                class="{{ $line->status ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">
+                                {{ $line->status ? 'Published' : 'Suppressed' }}
+                            </span>
+                        </td>
                         <td>{{ date('d-m-Y, h:m a', strtotime($line->created_at)) }}</td>
                         <td>
                             <a href="{{ route('lines.edit', $line->id) }}"
                                class="btn btn-outline-primary btn-sm btn-rounded">
                                 Edit
                             </a>
+                            <form action="{{ route('toggle_publish_line', $line->id) }}"
+                                  method="post" class="d-inline">
+                                @csrf
+                                <button type="submit"
+                                        class="{{ $line->status ? 'btn-outline-secondary' : 'btn-outline-success' }} btn btn-sm btn-rounded">
+                                    {{ $line->status ? 'Suppress' : 'Publish' }}
+                                </button>
+                            </form>
                             <form action="{{ route('lines.destroy', $line->id) }}" method="post"
                                   class="d-inline">
                                 @csrf

@@ -6,12 +6,6 @@
 
     @include('includes.front.navbar')
 
-    @if(session()->has('notAuthorized'))
-        <script>
-            alert('You are not authorized')
-        </script>
-    @endif
-
     <div class="content-wraper withnav">
         <div class="body-content">
             <div class="container">
@@ -29,45 +23,31 @@
                                 <div class="announcement-title-txt">AVS Announcements</div>
                             @endif
                         </div>
-                        <div class="date pb-5">
-                            <form>
-                                <div class="row form-group justify-content-evenly col-10 m-auto">
-                                    @if(auth()->user()->role == 1)
-                                        <div class="col-12 col-lg-7">
-                                            <a href="{{ route('panel') }}" class="btn py-2 mb-2 mb-lg-0 w-100 control-btn">Dashboard</a>
-                                        </div>
-                                    @elseif(auth()->user()->role == 2)
-                                        <div class="col-12 col-lg-5 py-2">
-                                            <a href="{{ route('file.add') }}"
-                                               class="btn py-2 mb-2 mb-lg-0 w-100 control-btn">Add Files</a>
-                                        </div>
-                                        <div class="col-12 col-lg-5 py-2">
-                                            <a href="{{ route('video.add') }}"
-                                               class="btn py-2 mb-2 mb-lg-0 w-100 control-btn">Add Video</a>
-                                        </div>
-                                    @endif
-                                </div>
-                            </form>
-                        </div>
+                        @if(session()->has('notAuthorized'))
+                            <div class="alert alert-danger text-center m-auto mb-2 justify-content-evenly col-10 col-md-8">
+                                {{ session('notAuthorized') }}
+                            </div>
+                        @endif
                         <div class="departments-section justify-content-evenly m-auto col-10">
-                            @php($current_user_sector_id = auth()->user()->sector_id)
+                            @php($userSectors = [])
+                            @if(auth()->user()->role != 1)
+                                @php($userSectors = array_map('intval', auth()->user()->sectors))
+                            @endif
                             @php(auth()->user()->role != 1 ? $isNotAdmin = true : $isNotAdmin = false)
                             @foreach($sectors as $sector)
-                                <div class="department-box col-12 col-md-5 col-lg-4 col-xl-3 {{ $sector->id == $current_user_sector_id && $isNotAdmin ? 'active' : '' }} ">
+                                <div class="department-box col-12 col-md-5 col-lg-4 col-xl-3 {{ in_array($sector->id, $userSectors) && $isNotAdmin ? 'active' : '' }} ">
                                     <a href="
-                                    @if ($current_user_sector_id !== $sector->id && auth()->user()->role !== 1)
-                                        {{ route('not_authorized') }}
-                                    @elseif ($current_user_sector_id === $sector->id && $current_user_sector_id !== 1 && auth()->user()->role !== 1)
-                                        {{ route('drive', ['sector_id' => $sector->id, 'line_id' => auth()->user()->line_id]) }}
-                                    @else
+                                    @if (auth()->user()->role == 1 || in_array(1, $userSectors) || in_array($sector->id, $userSectors) )
                                         {{ route('sector_line.choose', $sector->id) }}
+                                    @else
+                                        {{ route('not_authorized') }}
                                     @endif
                                     "
-                                       class="text-decoration-none sector_text {{ $sector->id == $current_user_sector_id && $isNotAdmin ?  'sector_active' : ''}}">
+                                       class="text-decoration-none sector_text {{ in_array($sector->id, $userSectors) && $isNotAdmin ?  'sector_active' : ''}}">
                                         <div class="department-title">{{ $sector->name }}</div>
                                         <div class="department-views">
                                             Views <img
-                                                src="{{ asset($sector->id == $current_user_sector_id && $isNotAdmin ?  'storage/images/icons/eye_light.svg' : 'storage/images/icons/eye.svg') }}"
+                                                src="{{ asset(in_array($sector->id, $userSectors) && $isNotAdmin ?  'storage/images/icons/eye_light.svg' : 'storage/images/icons/eye.svg') }}"
                                                 style="max-width: 20px;"/>
                                             <span
                                                 class="views-number">{{ $views->where('sector_id', '=', $sector->id)->count() + $downloads->where('sector_id', '=', $sector->id)->count() }}</span>

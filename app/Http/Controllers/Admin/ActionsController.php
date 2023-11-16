@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\File;
+use App\Models\Line;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Video;
@@ -15,12 +16,14 @@ class ActionsController extends Controller
     use GeneralTrait;
 
     public function toggle_active($id) {
-        $user = User::find($id);
-        if($user) {
-            $user->activated ? $user->activated = 0 : $user->activated = 1;
-            $user->save();
+        if ($id != 1) {
+            $user = User::find($id);
+            if($user) {
+                $user->activated ? $user->activated = 0 : $user->activated = 1;
+                $user->save();
+            }
         }
-        return redirect()->back();
+        return back();
     }
 
     public function toggle_publish_announcement($id) {
@@ -29,7 +32,7 @@ class ActionsController extends Controller
             $announcement->status ? $announcement->status = 0 : $announcement->status = 1;
             $announcement->save();
         }
-        return $this->redirect('announcements.index');
+        return back();
     }
 
     public function toggle_publish_topic($id) {
@@ -38,7 +41,16 @@ class ActionsController extends Controller
             $topic->status ? $topic->status = 0 : $topic->status = 1;
             $topic->save();
         }
-        return $this->redirect('ea_topics.index');
+        return back();
+    }
+
+    public function toggle_publish_line($id) {
+        $line = Line::find($id);
+        if($line) {
+            $line->status ? $line->status = 0 : $line->status = 1;
+            $line->save();
+        }
+        return back();
     }
 
     public function toggle_show_file($id) {
@@ -47,7 +59,7 @@ class ActionsController extends Controller
             $file->status ? $file->status = 0 : $file->status = 1;
             $file->save();
         }
-        return $this->redirect('ea_files.index');
+        return back();
     }
 
     public function toggle_show_video($id) {
@@ -56,6 +68,6 @@ class ActionsController extends Controller
             $video->status ? $video->status = 0 : $video->status = 1;
             $video->save();
         }
-        return $this->redirect('videos.index');
+        return back();
     }
 }

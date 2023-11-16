@@ -101,12 +101,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <img src="{{ asset('storage/images/icons/burgerMenu.png') }}" style="max-width: 20px">
             </button>
-            <div class="page-title fs-4">
-                @if($user_details->role === 1)
-                    Admin View
-                @else
-                    {{ $user_details->line_name . ' - ' . $user_details->sector_name}}
-                @endif
+            <div class="page-title fs-4">Hello {{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : ucfirst(auth()->user()->user_name) }}
             </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -190,9 +185,9 @@
                     </li>
                     <div class="profile-pic bg-styles"
                          style="background-image:url({{
-                            $user_details->profile_image == null ?
+                            auth()->user()->profile_image == null ?
                             asset('storage/images/profile_images/default_profile_image.jpg') :
-                            asset('storage/images/profile_images/'.$user_details->profile_image)
+                            asset('storage/images/profile_images/'.auth()->user()->profile_image)
                          }});">
                     </div>
                     <li class="nav-item dropdown ellipsis-item">
@@ -204,7 +199,13 @@
                                 <li><a class="dropdown-item" href="{{ route('sign_up') }}">Sign Up</a></li>
                                 <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
                             @else
-                                <li><a class="dropdown-item" href="{{ route('profile', auth()->user()->user_name) }}">{{ ucfirst(auth()->user()->user_name) }}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile', auth()->user()->user_name) }}">Edit Profile</a></li>
+                                @if(auth()->user()->role == 1)
+                                    <li><a class="dropdown-item" href="{{ route('panel') }}">Dashboard</a></li>
+                                @elseif(auth()->user()->role == 2)
+                                    <li><a class="dropdown-item" href="{{ route('manager.files') }}">My Files</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('manager.videos') }}">My Video</a></li>
+                                @endif
                                 <li><a class="dropdown-item" href="{{ auth()->user()->role == 1 ? route('logout') : route('logout') }}">Logout</a></li>
                             @endguest
                         </ul>

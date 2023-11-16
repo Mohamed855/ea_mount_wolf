@@ -59,80 +59,125 @@
         </svg>
     </a>
 </div>
-<div class="scroll-bar overflow-scroll">
+<div class="scroll-bar">
     <a href="{{ route('panel') }}">
         <div class="panel_btn py-3 my-2 {{ request()->is('panel') ? 'active_dashboard_btn' : '' }}">
             Overview
         </div>
     </a>
-    <a href="#">
-        <div class="sidebar-title py-1 row justify-content-evenly">
+    <a onclick="showMainContainer()" style="cursor:pointer">
+        <div class="sidebar-title py-2 my-2 row justify-content-evenly">
             <span class="col-3">Main</span>
             <span class="col-3"><img src="{{ asset('storage/images/icons/down.png') }}" width="20px"></span>
         </div>
     </a>
-    <a href="{{ route('announcements.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/announcements') ? 'active_dashboard_btn' : '' }}">
-            Announcements
-        </div>
-    </a>
-    <a href="{{ route('sectors.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/sectors') ? 'active_dashboard_btn' : '' }}">
-            Sectors
-        </div>
-    </a>
-    <a href="{{ route('lines.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/lines') ? 'active_dashboard_btn' : '' }}">
-            Lines
-        </div>
-    </a>
-    <a href="#">
-        <div class="sidebar-title py-1 row justify-content-evenly">
+    <div id="main_container" style="display: {{
+                check_url($currUrl, $panel_url . '/announcements') ||
+                check_url($currUrl, $panel_url . '/sectors') ||
+                check_url($currUrl, $panel_url . '/lines') ?
+                'block' : 'none'
+            }}">
+        <a href="{{ route('announcements.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/announcements') ? 'active_dashboard_btn' : '' }}">
+                Announcements
+            </div>
+        </a>
+        <a href="{{ route('sectors.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/sectors') ? 'active_dashboard_btn' : '' }}">
+                Sectors
+            </div>
+        </a>
+        <a href="{{ route('lines.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/lines') ? 'active_dashboard_btn' : '' }}">
+                Lines
+            </div>
+        </a>
+    </div>
+    <a onclick="showUserContainer()" style="cursor:pointer">
+        <div class="sidebar-title py-2 my-2 row justify-content-evenly">
             <span class="col-3">Users</span>
             <span class="col-3"><img src="{{ asset('storage/images/icons/down.png') }}" width="20px"></span>
         </div>
     </a>
-    <a href="{{ route('admins.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/admins') ? 'active_dashboard_btn' : '' }}">
-            Admins
-        </div>
-    </a>
-    <a href="{{ route('managers.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/managers') ? 'active_dashboard_btn' : '' }}">
-            Managers
-        </div>
-    </a>
-    <a href="{{ route('employees.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/employees') ? 'active_dashboard_btn' : '' }}">
-            Employees
-        </div>
-    </a>
-
-    <a href="#">
-        <div class="sidebar-title py-1 row justify-content-evenly">
+    <div id="users_container" style="display: {{
+                check_url($currUrl, $panel_url . '/admins') ||
+                check_url($currUrl, $panel_url . '/managers') ||
+                check_url($currUrl, $panel_url . '/employees') ?
+                'block' : 'none'
+            }}">
+        <a href="{{ route('admins.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/admins') ? 'active_dashboard_btn' : '' }}">
+                Admins
+            </div>
+        </a>
+        <a href="{{ route('managers.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/managers') ? 'active_dashboard_btn' : '' }}">
+                Managers
+            </div>
+        </a>
+        <a href="{{ route('employees.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/employees') ? 'active_dashboard_btn' : '' }}">
+                Employees
+            </div>
+        </a>
+    </div>
+    <a onclick="showContentContainer()" style="cursor:pointer">
+        <div class="sidebar-title py-2 my-2 row justify-content-evenly">
             <span class="col-3">Content</span>
             <span class="col-3"><img src="{{ asset('storage/images/icons/down.png') }}" width="20px"></span>
         </div>
     </a>
-    <a href="{{ route('ea_topics.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/ea_topics') ? 'active_dashboard_btn' : '' }}">
-            Topics
-        </div>
-    </a>
-    <a href="{{ route('ea_files.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/ea_files') ? 'active_dashboard_btn' : '' }}">
-            Files
-        </div>
-    </a>
-    <a href="{{ route('videos.index') }}">
-        <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/videos') ? 'active_dashboard_btn' : '' }}">
-            Videos
-        </div>
-    </a>
+    <div id="content_container" style="display: {{
+                check_url($currUrl, $panel_url . '/ea_topics') ||
+                check_url($currUrl, $panel_url . '/ea_files') ||
+                check_url($currUrl, $panel_url . '/videos') ?
+                'block' : 'none'
+            }}">
+        <a href="{{ route('ea_topics.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/ea_topics') ? 'active_dashboard_btn' : '' }}">
+                Topics
+            </div>
+        </a>
+        <a href="{{ route('ea_files.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/ea_files') ? 'active_dashboard_btn' : '' }}">
+                Files
+            </div>
+        </a>
+        <a href="{{ route('videos.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/videos') ? 'active_dashboard_btn' : '' }}">
+                Videos
+            </div>
+        </a>
+    </div>
     <a href="{{ route('logout') }}">
         <div class="py-3 my-2 dashboard_logout_btn">
             Logout
         </div>
     </a>
 </div>
+
+<script type="text/javascript">
+    function showMainContainer() {
+        let main_container = document.getElementById('main_container');
+        main_container.style.display === 'block' ?
+        main_container.style.display = 'none' :
+        main_container.style.display = 'block';
+    }
+    function showUserContainer() {
+        let users_container = document.getElementById('users_container');
+        if (users_container.style.display === 'block'){
+            users_container.style.display = 'none';
+        } else {
+            users_container.style.display = 'block';
+        }
+    }
+    function showContentContainer() {
+        let content_container = document.getElementById('content_container');
+        if (content_container.style.display === 'block'){
+            content_container.style.display = 'none';
+        } else {
+            content_container.style.display = 'block';
+        }
+    }
+</script>
 

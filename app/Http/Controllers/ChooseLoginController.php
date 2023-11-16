@@ -14,7 +14,7 @@ class ChooseLoginController extends Controller
 
     public function index() {
         return $this->ifNotAuthenticated(
-            $this->successView('choose-login')
+            $this->successView('select-user')
         );
     }
 }

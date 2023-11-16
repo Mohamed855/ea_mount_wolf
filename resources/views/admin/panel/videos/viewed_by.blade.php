@@ -21,8 +21,8 @@
                 @if(count($video_user_views) > 0)
                     @foreach($video_user_views as $user)
                         <tr>
-                            <td>{{ $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}</td>
-                            <td>{{ ucfirst($user->user_name) }}</td>
+                            <td>{{ $user->role == 1 ? ucfirst($user->first_name) : ucfirst($user->first_name) . ' ' . ucfirst($user->middle_name) . ' ' . ucfirst($user->last_name) }}</td>
+                            <td>{{ $user->role == 1 ? '_____' : ucfirst($user->user_name) }}</td>
                             <td>{{ $user->created_at }}</td>
                         </tr>
                     @endforeach

@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SectorsRequest;
 use App\Models\LineSector;
 use App\Models\Sector;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
+use App\Traits\Messages\PanelMessagesTrait;
+use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SectorsController extends Controller
 {
     use GeneralTrait;
     use AuthTrait;
+    use PanelRulesTrait;
+    use PanelMessagesTrait;
 
     /**
      * Display a listing of the resource.
@@ -22,7 +27,6 @@ class SectorsController extends Controller
     {
         return $this->ifAdmin('admin.panel.sectors.index', [
             'sectors' => Sector::query()->with('line'),
-            'countOfEmployees' => DB::table('users')->select('sector_id')->get(),
             'countOfFiles' => DB::table('files')->select('sector_id')->get(),
         ]);
     }
@@ -33,29 +37,39 @@ class SectorsController extends Controller
     public function create()
     {
         return $this->ifAdmin('admin.panel.sectors.create', [
-            'lines' => DB::table('lines')->get(),
+            'lines' => DB::table('lines')->where('status', 1)->get(),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SectorsRequest $request)
+    public function store(Request $request)
     {
-        $sectors = new Sector();
-        $sectors->name = $request->name;
-        $sectors->save();
+        try {
+            $validator = Validator::make($request->all(), $this->sectorsRules(), $this->sectorMessages());
 
-        $lines = $request->input('lines');
-        $sector_id = Sector::latest('id')->first()->id;
-        foreach ($lines as $line) {
-            $line_sector = new LineSector();
-            $line_sector->line_id = $line;
-            $line_sector->sector_id = $sector_id;
-            $line_sector->save();
+            if ($validator->fails()) {
+                return $this->backWithMessage('error', $validator->errors()->first());
+            }
+
+            $sectors = new Sector();
+            $sectors->name = $request->name;
+            $sectors->save();
+
+            $lines = $request->input('lines');
+            $sector_id = Sector::latest('id')->first()->id;
+            foreach ($lines as $line) {
+                $line_sector = new LineSector();
+                $line_sector->line_id = $line;
+                $line_sector->sector_id = $sector_id;
+                $line_sector->save();
+            }
+
+            return $this->backWithMessage('success', 'Sector Created Successfully');
+        } catch (\Exception $e) {
+            return $this->backWithMessage('error', 'Something went error, please try again later');
         }
-
-        return $this->backWithMessage('uploadedSuccessfully', 'Sector Created Successfully');
     }
 
     /**
@@ -65,7 +79,7 @@ class SectorsController extends Controller
     {
         return $this->ifAdmin('admin.panel.sectors.edit',[
             'selected_sector' => DB::table('sectors')->where('id', '=', $id)->first(),
-            'lines' => DB::table('lines')->get(),
+            'lines' => DB::table('lines')->where('status', 1)->get(),
             'selected_lines' => DB::table('line_sector')->where('line_sector.sector_id', '=', $id)->get(),
         ]);
     }
@@ -73,24 +87,34 @@ class SectorsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(SectorsRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
-        DB::table('sectors')
-            ->where('id', '=', $id)
-            ->update([
-                'name' => $request->name
-            ]);
+        try {
+            $validator = Validator::make($request->all(), $this->sectorsRules(), $this->sectorMessages());
 
-        $selected_lines = $request->input('lines');
-        DB::table('line_sector')->where('sector_id', $id)->delete();
-        foreach ($selected_lines as $line) {
-            $line_sector = new LineSector();
-            $line_sector->line_id = $line;
-            $line_sector->sector_id = $id;
-            $line_sector->save();
+            if ($validator->fails()) {
+                return $this->backWithMessage('error', $validator->errors()->first());
+            }
+
+            DB::table('sectors')
+                ->where('id', '=', $id)
+                ->update([
+                    'name' => $request->name
+                ]);
+
+            $selected_lines = $request->input('lines');
+            DB::table('line_sector')->where('sector_id', $id)->delete();
+            foreach ($selected_lines as $line) {
+                $line_sector = new LineSector();
+                $line_sector->line_id = $line;
+                $line_sector->sector_id = $id;
+                $line_sector->save();
+            }
+
+            return $this->backWithMessage('success', 'Sector saved successfully');
+        } catch (\Exception $e) {
+            return $this->backWithMessage('error', 'Something went error, please try again later');
         }
-
-        return $this->backWithMessage('savedSuccessfully', 'Sector saved successfully');
     }
 
     /**
@@ -102,6 +126,6 @@ class SectorsController extends Controller
         DB::table('line_sector')->where('sector_id', $id)->delete();
         DB::table('files')->where('sector_id', $id)->delete();
         DB::table('videos')->where('sector_id', $id)->delete();
-        return $this->backWithMessage('deletedSuccessfully', 'Sector has been deleted');
+        return $this->backWithMessage('success', 'Sector has been deleted');
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Line;
-use App\Models\Sector;
 use App\Models\Title;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -22,12 +20,12 @@ return new class extends Migration
             $table->string('user_name')->unique();
             $table->string('crm_code')->unique();
             $table->string('email')->unique();
-            $table->string('phone_number',11)->unique();
+            $table->string('phone_number')->unique();
             $table->string('password');
             $table->string('profile_image')->nullable();
             $table->foreignIdFor(Title::class);
-            $table->foreignIdFor(Line::class);
-            $table->foreignIdFor(Sector::class);
+            $table->json('lines');
+            $table->json('sectors');
             $table->tinyInteger('role')->default(3);
             $table->boolean('activated')->default(0);
             $table->timestamp('email_verified_at')->nullable();

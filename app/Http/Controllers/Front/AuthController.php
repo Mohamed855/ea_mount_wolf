@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
+use App\Traits\Messages\PanelMessagesTrait;
+use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
     use GeneralTrait;
     use AuthTrait;
+    use PanelRulesTrait;
+    use PanelMessagesTrait;
 
     public function manager_login() {
         return $this->ifNotAuthenticated(
@@ -21,7 +25,7 @@ class AuthController extends Controller
         );
     }
 
-    public function manager_check_credentials(LoginRequest $request) {
+    public function manager_check_credentials(Request $request) {
         $user_name = $request->input('user_name');
         $crm_code = $request->input('crm_code');
         $password = $request->input('password');
@@ -48,7 +52,7 @@ class AuthController extends Controller
         );
     }
 
-    public function employee_check_credentials(LoginRequest $request) {
+    public function employee_check_credentials(Request $request) {
         $user_name = $request->input('user_name');
         $crm_code = $request->input('crm_code');
         $password = $request->input('password');
@@ -78,6 +82,6 @@ class AuthController extends Controller
             Session::flush();
             Auth::logout();
         }
-        return $this->redirect('choose-login');
+        return $this->redirect('select-user');
     }
 }

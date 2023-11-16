@@ -34,14 +34,13 @@
                                     asset('storage/images/profile_images/'.$comment_details->profile_image)
                                  }}); max-width: 50px; max-height: 50px">
                                         </div>
-                                        <div class="comment-name">{{ ucfirst($comment_details->user_name) }}</div>
-                                        <div
-                                            class="comment-title">{{ $comment_details->user_title . ' - ' . $comment_details->user_sector .  ' - ' . $comment_details->user_line }}</div>
+                                        <h6 class="pt-2 comment-title">{{ $comment_details->user_title }}</h6>
+                                        <h6 class="comment-name">{{ ucfirst($comment_details->user_name) }}</h6>
                                     </div>
                                     <div class="comment-txt">
                                         <p>{{ $comment_details->comment }}</p>
                                     </div>
-                                    @if($comment_details->user_id === auth()->user()->id || auth()->user()->sector_id == 1)
+                                    @if($comment_details->user_id === auth()->id() || auth()->user()->role == 1)
                                         <form action="{{ route('comment.delete', $comment_details->id) }}" method="post"
                                               class="d-inline">
                                             @csrf
@@ -57,13 +56,13 @@
                                 <div class="comment-box write-comment">
                                     <div class="comment-info">
                                         <div class="prof-pic bg-styles" style="background-image:url({{
-                                            $user_details->profile_image == null ?
+                                            auth()->user()->profile_image == null ?
                                             asset('storage/images/profile_images/default_profile_image.jpg') :
-                                            asset('storage/images/profile_images/'.$user_details->profile_image)
+                                            asset('storage/images/profile_images/'. auth()->user()->profile_image)
                                          }}); max-width: 50px; max-height: 50px">
                                         </div>
-                                        <h6 class="pt-1 comment-name">{{ ucfirst($user_details->user_name) }}</h6>
-                                        <h6 class="comment-title">{{ $user_details->title_name . ' - ' . $user_details->sector_name . ' - ' . $user_details->line_name }}</h6>
+                                        <h6 class="pt-2 comment-title">{{ auth()->user()->role == 1 ? '' : $user_details->title_name }}</h6>
+                                        <h6 class="comment-name">{{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : ucfirst($user_details->user_name) }}</h6>
                                     </div>
                                     <div class="comment-txt">
                                         <div class="input-group mb-3">

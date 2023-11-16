@@ -4,9 +4,9 @@
 
 @section('panel_content')
     <div class="container px-4">
-        @if(session()->has('savedSuccessfully'))
+        @if(session()->has('success'))
             <div class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert">
-                {{ session('savedSuccessfully') }}
+                {{ session('success') }}
             </div>
         @elseif(session()->has('error'))
             <div class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert">
@@ -36,10 +36,10 @@
                                             <input type="text" name="last_name" class="form-control py-2" value="{{ $selected_employee->last_name }}" placeholder="Last Name">
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
-                                            <input type="text" name="email" class="form-control py-2" value="{{ $selected_employee->email }}" placeholder="Email">
+                                            <input type="text" name="user_name" class="form-control py-2" value="{{ $selected_employee->user_name }}" placeholder="User Name">
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
-                                            <input type="text" name="password" class="form-control py-2" placeholder="Password">
+                                            <input type="text" name="email" class="form-control py-2" value="{{ $selected_employee->email }}" placeholder="Email">
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
                                             <input type="text" name="crm_code" class="form-control py-2" value="{{ $selected_employee->crm_code }}" placeholder="CRM Code">
@@ -48,26 +48,26 @@
                                             <input type="text" name="phone_number" class="form-control py-2" value="{{ $selected_employee->phone_number }}" placeholder="Phone Number">
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="sector" class="form-control py-2">
-                                                <option value="0">Sector *</option>
-                                                @foreach($sectors as $sector)
-                                                    <option value="{{ $sector->id }}" {{ $sector->id == $selected_employee->sector_id ? 'selected' : '' }}>{{ $sector->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
                                             <select name="title" class="form-control py-2">
-                                                <option value="0">Title *</option>
+                                                <option value="0" disabled>Title *</option>
                                                 @foreach($titles as $title)
                                                     <option value="{{ $title->id }}" {{ $title->id == $selected_employee->title_id ? 'selected' : '' }}>{{ $title->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="line" class="form-control py-2">
-                                                <option value="0">Line *</option>
+                                            <select name="sectors[]" class="form-control py-2" multiple>
+                                                <option value="0" disabled>Sector *</option>
+                                                @foreach($sectors as $sector)
+                                                    <option value="{{ $sector->id }}" {{ in_array($sector->id, $integerSectorIds) ? 'selected' : '' }}>{{ $sector->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6 pb-2 px-1">
+                                            <select name="lines[]" class="form-control py-2" multiple>
+                                                <option value="0" disabled>Line *</option>
                                                 @foreach($lines as $line)
-                                                    <option value="{{ $line->id }}" {{ $line->id == $selected_employee->line_id ? 'selected' : '' }}>{{ $line->name }}</option>
+                                                    <option value="{{ $line->id }}" {{ in_array($line->id, $integerLineIds) ? 'selected' : '' }}>{{ $line->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

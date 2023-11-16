@@ -50,7 +50,7 @@
                                                     }}" style="max-width: 16px">
                                                 </a>
                                             </span>
-                                                <a href="{{ route('file.view', $file->id) }}">
+                                                <a href="{{ route('file.view', $file->id) }}" target="_bluck">
                                                     <div class="incentive-title">{{ $file->name }}</div>
                                                     <div class="incentive-body">
                                                         <div class="incentive-txt">Published<br>{{ $file->created_at }}
