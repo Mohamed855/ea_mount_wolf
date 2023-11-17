@@ -96,7 +96,7 @@ class ManagersController extends Controller
 
             $manager->save();
 
-            return $this->backWithMessage('success', 'Manager Added Successfully');
+            return $this->backWithMessage('success', 'Manager added successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
@@ -157,7 +157,7 @@ class ManagersController extends Controller
                     'activated' => 1,
                 ]);
 
-            return $this->backWithMessage('success', 'Manager Details saved successfully');
+            return $this->backWithMessage('success', 'Manager details saved successfully');
         }  catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

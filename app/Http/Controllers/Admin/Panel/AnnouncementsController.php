@@ -69,7 +69,7 @@ class AnnouncementsController extends Controller
             $request->image->storeAs('public/images/announcements', $announcement_image);
             $request->image->move(public_path('storage/images/announcements'), $announcement_image);
 
-            return $this->backWithMessage('success', 'Topic Shared Successfully');
+            return $this->backWithMessage('success', 'Announcement shared successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
@@ -80,6 +80,6 @@ class AnnouncementsController extends Controller
     public function destroy(string $id)
     {
         $this->deleteFromDB('announcements', $id, 'storage/images/announcements/', 'image');
-        return $this->backWithMessage('success', 'announcement has been deleted');
+        return $this->backWithMessage('success', 'Announcement has been deleted');
     }
 }

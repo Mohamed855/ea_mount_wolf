@@ -61,13 +61,15 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        if (Hash::check($request->old_password, $user->password)) {
-            $user->password = Hash::make($request->new_password);
-            $user->save();
+        if (Auth::check()) {
+            if (Hash::check($request->old_password, $user->password)) {
+                $user->password = Hash::make($request->new_password);
+                $user->save();
 
-            return $this->backWithMessage('success', 'Password changed successfully');
-        } else {
-            return $this->backWithMessage('incorrect', 'Incorrect Password');
+                return $this->backWithMessage('success', 'Password changed successfully');
+            } else {
+                return $this->backWithMessage('error', 'Incorrect Password');
+            }
         }
     }
     public function update_profile_picture(Request $request)

@@ -66,7 +66,7 @@ class SectorsController extends Controller
                 $line_sector->save();
             }
 
-            return $this->backWithMessage('success', 'Sector Created Successfully');
+            return $this->backWithMessage('success', 'Sector created successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

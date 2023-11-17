@@ -10,7 +10,7 @@
         <div class="body-content">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-lg-12 py-3">
+                    <div class="col-lg-12">
                         @include('includes.front.filter')
                         <div class="brain-box-title">
                             <h2 class="text-center">
@@ -19,7 +19,7 @@
                         </div>
                         <hr>
                         <div class="content">
-                            <div class="row scroll-bar">
+                            <div class="row scroll-bar" style="height: auto">
                                 @if(count($user_files->get()) > 0)
                                     @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
                                         @php($user_files = $user_files->whereDate('created_at', $_GET['date']))
@@ -38,7 +38,7 @@
                                         @php($user_files = $user_files->get())
                                     @endif
                                     @foreach($user_files as $file)
-                                        <div class="col-6 col-md-4 col-lg-3">
+                                        <div class="col-6 col-md-4 col-lg-3 py-3">
                                             <div class="incentive-box favorite border pb-3 mb-3">
                                             <span>
                                                 <a href="{{ route('favorites.toggle', $file->id) }}">
@@ -111,7 +111,7 @@
                         </div>
                         <hr>
                         <div class="content">
-                            <div class="row scroll-bar">
+                            <div class="row scroll-bar py-3" style="height: auto">
                                 @if(count($user_videos->get()) > 0)
                                     @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
                                         @php($user_videos = $user_videos->whereDate('created_at', $_GET['date']))

@@ -79,7 +79,7 @@ class TopicsController extends Controller
 
             $notification->save();
 
-            return $this->backWithMessage('success', 'Topic Shared Successfully');
+            return $this->backWithMessage('success', 'Topic shared successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

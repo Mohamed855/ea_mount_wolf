@@ -34,16 +34,16 @@ class AuthController extends Controller
         $credentials = [$field => $user_name, 'crm_code' => $crm_code , 'password' => $password];
         if (Auth::attempt($credentials)) {
             if (DB::table('users')->where('crm_code', $crm_code)->value('activated') === 0) {
-                return $this->backWithMessage('invalid', 'Your account isn\'t activated');
+                return $this->backWithMessage('error', 'Your account isn\'t activated');
             }
             if (auth()->user()->role == 2){
                 return $this->redirect('home');
             }
             Session::flush();
             Auth::logout();
-            return $this->backWithMessage('invalid', 'Invalid credentials');
+            return $this->backWithMessage('error', 'Invalid credentials');
         }
-        return $this->backWithMessage('invalid', 'Invalid credentials');
+        return $this->backWithMessage('error', 'Invalid credentials');
     }
 
     public function employee_login() {
@@ -61,16 +61,16 @@ class AuthController extends Controller
         $credentials = [$field => $user_name, 'crm_code' => $crm_code , 'password' => $password];
         if (Auth::attempt($credentials)) {
             if (DB::table('users')->where('crm_code', $crm_code)->value('activated') === 0) {
-                return $this->backWithMessage('invalid', 'Your account isn\'t activated');
+                return $this->backWithMessage('error', 'Your account isn\'t activated');
             }
             if (auth()->user()->role == 3){
                 return $this->redirect('home');
             }
             Session::flush();
             Auth::logout();
-            return $this->backWithMessage('invalid', 'Invalid credentials');
+            return $this->backWithMessage('error', 'Invalid credentials');
         }
-        return $this->backWithMessage('invalid', 'Invalid credentials');
+        return $this->backWithMessage('error', 'Invalid credentials');
     }
 
     public function logout() {

@@ -41,12 +41,12 @@ trait AuthTrait {
                 elseif (auth()->user()->role == 2) {
                     $video_notifications = DB::table('video_notifications')->where('sector_id', auth()->user()->sector_id)->get();
                     $file_notifications = DB::table('file_notifications')->where('sector_id', auth()->user()->sector_id)->get();
-                    $comment_notifications = DB::table('comment_notifications')->where('sector_id', auth()->user()->sector_id)->get();
+                    $comment_notifications = DB::table('comment_notifications')->get();
                 }
                 elseif (auth()->user()->role == 3) {
                     $video_notifications = DB::table('video_notifications')->where('sector_id', auth()->user()->sector_id)->where('line_id', auth()->user()->line_id)->get();
                     $file_notifications = DB::table('file_notifications')->where('sector_id', auth()->user()->sector_id)->where('line_id', auth()->user()->line_id)->get();
-                    $comment_notifications = DB::table('comment_notifications')->where('sector_id', auth()->user()->sector_id)->where('line_id', auth()->user()->line_id)->get();
+                    $comment_notifications = DB::table('comment_notifications')->get();
                 }
                 return $this->successView($view)
                     ->with([

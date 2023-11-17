@@ -96,7 +96,7 @@ class VideosController extends Controller
 
             $notification->save();
 
-            return $this->backWithMessage('success', 'Video Added Successfully');
+            return $this->backWithMessage('success', 'Video added successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

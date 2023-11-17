@@ -34,8 +34,8 @@ class AuthController extends Controller
             }
             Session::flush();
             Auth::logout();
-            return $this->backWithMessage('invalid', 'Invalid credentials');
+            return $this->backWithMessage('error', 'Invalid credentials');
         }
-        return $this->backWithMessage('invalid', 'Invalid credentials');
+        return $this->backWithMessage('error', 'Invalid credentials');
     }
 }

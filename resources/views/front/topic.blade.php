@@ -13,7 +13,7 @@
                     <div class="col-lg-12">
                         <div class="brain-box-title">
                             <h2 class="text-center">
-                                {{ $current_topic->title }}
+                                {{ ucfirst($current_topic->title) }}
                             </h2>
                         </div>
                         <div class="brain-box ratio ratio-16x9 element-bg"
@@ -34,8 +34,7 @@
                                     asset('storage/images/profile_images/'.$comment_details->profile_image)
                                  }}); max-width: 50px; max-height: 50px">
                                         </div>
-                                        <h6 class="pt-2 comment-title">{{ $comment_details->user_title }}</h6>
-                                        <h6 class="comment-name">{{ ucfirst($comment_details->user_name) }}</h6>
+                                        <span class="pt-2 comment-name">{{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : $user_details->title_name . '. ' . ucfirst($user_details->user_name) }}</span>
                                     </div>
                                     <div class="comment-txt">
                                         <p>{{ $comment_details->comment }}</p>
@@ -61,15 +60,14 @@
                                             asset('storage/images/profile_images/'. auth()->user()->profile_image)
                                          }}); max-width: 50px; max-height: 50px">
                                         </div>
-                                        <h6 class="pt-2 comment-title">{{ auth()->user()->role == 1 ? '' : $user_details->title_name }}</h6>
-                                        <h6 class="comment-name">{{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : ucfirst($user_details->user_name) }}</h6>
+                                        <span class="pt-2 comment-name">{{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : $user_details->title_name . '. ' . ucfirst($user_details->user_name) }}</span>
                                     </div>
                                     <div class="comment-txt">
                                         <div class="input-group mb-3">
                                             <input type="hidden" name="topic" value="{{ $current_topic->id }}">
                                             <textarea type="text" class="form-control" placeholder="Write a comment.."
                                                       aria-label="Write a comment.." aria-describedby="button-addon2"
-                                                      style="min-height: 100px" name="comment"></textarea>
+                                                      style="max-height:65px;resize:none" name="comment"></textarea>
                                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                                                 <img src="{{ asset('storage/images/icons/send.png') }}" style="max-width: 20px">
                                             </button>

@@ -13,7 +13,7 @@
                         @include('includes.front.filter')
                         <h2 class="text-center">Favorite Files</h2>
                         <hr>
-                        <div class="row scroll-bar">
+                        <div class="row scroll-bar py-3" style="height: auto">
                             @if(count($favorites->get()) > 0)
                                 @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
                                     @php($favorites = $favorites->whereDate('created_at', $_GET['date']))
@@ -99,7 +99,7 @@
                             </div>
                             <hr>
                             <div class="content">
-                                <div class="row scroll-bar">
+                                <div class="row scroll-bar py-3" style="height: auto">
                                     @if(count($favorite_videos->get()) > 0)
                                         @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
                                             @php($favorite_videos = $favorite_videos->whereDate('created_at', $_GET['date']))

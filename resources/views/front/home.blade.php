@@ -14,11 +14,10 @@
                         <div class="announcement-title {{ count($announcements) > 0 ? 'image-bar' : '' }}">
                             @if(count($announcements) > 0)
                                 @foreach ($announcements as $announcement)
-                                    <div style="background-image: url('{{ asset('storage/images/announcements/' . $announcement->image) }}');" {{ $loop->first ? 'class=active' : '' }}>
-                                        <img id="back" class="back_forward_buttons" src="{{ asset('storage/images/icons/back.png') }}" style="position:absolute; left:20px;top:50%" onclick="prevImage()">
-                                        <img id="forward" class="back_forward_buttons" src="{{ asset('storage/images/icons/forward.png') }}" style="position:absolute; right:20px;top:50%" onclick="nextImage()">
-                                    </div>
+                                    <div style="background-image: url('{{ asset('storage/images/announcements/' . $announcement->image) }}');" {{ $loop->first ? 'class=active' : '' }}></div>
                                 @endforeach
+                                <img id="back" class="back_forward_buttons" src="{{ asset('storage/images/icons/back.png') }}" style="position:absolute; left:20px;top:50%" onclick="prevImage()">
+                                <img id="forward" class="back_forward_buttons" src="{{ asset('storage/images/icons/forward.png') }}" style="position:absolute; right:20px;top:50%" onclick="nextImage()">
                                 <span class="dots-container" style="position:absolute; bottom:20px;z-index:3">
                                     @for ($i = 0; $i < count($announcements); $i++)
                                         <span class="px-1 rounded m-2 dot {{ $i == 0 ? 'active' : '' }}" onclick="getImageByIndex({{ $i }})"></span>
@@ -35,7 +34,7 @@
                                 {{ session('notAuthorized') }}
                             </div>
                         @endif
-                        <div class="departments-section justify-content-evenly m-auto col-10">
+                        <div class="departments-section justify-content-evenly m-auto col-10 py-5">
                             @php($userSectors = [])
                             @if(auth()->user()->role != 1)
                                 @php($userSectors = array_map('intval', auth()->user()->sectors))

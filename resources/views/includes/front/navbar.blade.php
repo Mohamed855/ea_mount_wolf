@@ -183,14 +183,16 @@
                             </svg>
                         </a>
                     </li>
-                    <div class="profile-pic bg-styles"
-                         style="background-image:url({{
+                    <a href="{{ route('profile', auth()->user()->user_name) }}">
+                        <div class="profile-pic bg-styles m-auto"
+                             style="background-image:url({{
                             auth()->user()->profile_image == null ?
                             asset('storage/images/profile_images/default_profile_image.jpg') :
-                            asset('storage/images/profile_images/'.auth()->user()->profile_image)
+                            asset('storage/images/profile_images/' . auth()->user()->profile_image)
                          }});">
-                    </div>
-                    <li class="nav-item dropdown ellipsis-item">
+                        </div>
+                    </a>
+                    <li class="nav-item dropdown ellipsis-item m-auto mt-2 mt-lg-0">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{{ asset('storage/images/icons/menu.svg') }}" style="max-width: 18px">
                         </a>

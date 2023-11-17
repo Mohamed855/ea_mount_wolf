@@ -97,7 +97,7 @@ class EmployeesController extends Controller
 
             $employee->save();
 
-            return $this->backWithMessage('success', 'Employee Added Successfully');
+            return $this->backWithMessage('success', 'Employee added successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
@@ -158,7 +158,7 @@ class EmployeesController extends Controller
                     'activated' => 1,
                 ]);
 
-            return $this->backWithMessage('success', 'Employee Details saved successfully');
+            return $this->backWithMessage('success', 'Employee details saved successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

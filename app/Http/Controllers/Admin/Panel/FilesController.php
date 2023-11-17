@@ -101,7 +101,7 @@ class FilesController extends Controller
 
             $notification->save();
 
-            return $this->backWithMessage('success', 'File Uploaded Successfully');
+            return $this->backWithMessage('success', 'File uploaded successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

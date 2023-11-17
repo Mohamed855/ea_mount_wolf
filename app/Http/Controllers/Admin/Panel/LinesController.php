@@ -67,7 +67,7 @@ class LinesController extends Controller
                 $line_sector->save();
             }
 
-            return $this->backWithMessage('success', 'Line Created Successfully');
+            return $this->backWithMessage('success', 'Line created successfully');
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
