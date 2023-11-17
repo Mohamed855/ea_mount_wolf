@@ -17,8 +17,6 @@ return new class extends Migration
         Schema::create('comment_notifications', function (Blueprint $table) {
             $table->id();
             $table->text('text');
-            $table->foreignIdFor(Sector::class);
-            $table->foreignIdFor(Line::class);
             $table->foreignIdFor(Topic::class);
             $table->timestamps();
         });

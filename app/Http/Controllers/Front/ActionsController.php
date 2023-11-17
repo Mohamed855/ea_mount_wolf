@@ -34,8 +34,6 @@ class ActionsController extends Controller
         $notification = new CommentNotification;
 
         $notification->text = auth()->user()->user_name . ' commented on a topic (' . $topic_name->title . ')';
-        $notification->sector_id = auth()->user()->sector->id;
-        $notification->line_id = auth()->user()->line->id;
         $notification->topic_id = $data['topic'];
 
         $notification->save();
