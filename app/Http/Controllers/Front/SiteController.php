@@ -56,9 +56,11 @@ class SiteController extends Controller
             ->select('lines.id as line_id', 'lines.name', 'line_sector.sector_id')
             ->orderBy('lines.name');
 
-        if (\auth()->user()->role != 1) {
-            $integerLineIds = array_map('intval', auth()->user()->lines);
-            $selected_sector_lines = $selected_sector_lines->whereIn('lines.id', $integerLineIds);
+        if (Auth::check()){
+            if (Auth::user()->role != 1) {
+                $integerLineIds = array_map('intval', auth()->user()->lines);
+                $selected_sector_lines = $selected_sector_lines->whereIn('lines.id', $integerLineIds);
+            }
         }
 
         return $this->ifAuthenticated('front.chooseLine', [

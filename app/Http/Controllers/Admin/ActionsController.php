@@ -10,6 +10,8 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Video;
 use App\Traits\GeneralTrait;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class ActionsController extends Controller
 {
@@ -69,5 +71,39 @@ class ActionsController extends Controller
             $video->save();
         }
         return back();
+    }
+    public function download_report($table, $id) {
+        if (auth()->user()->role = 1) {
+
+            $fileOrVideo = $table == 'file_views' ?
+                File::query()->join('sectors', 'sectors.id', '=', 'files.sector_id')
+                    ->join('lines', 'lines.id', '=', 'files.line_id')
+                    ->where('files.id', $id)->select([
+                        'files.*',
+                        'sectors.name as sector_name',
+                        'lines.name as line_name'
+                    ])->first() :
+                Video::query()->join('sectors', 'sectors.id', '=', 'videos.sector_id')
+                    ->join('lines', 'lines.id', '=', 'videos.line_id')
+                    ->where('videos.id', $id)->select([
+                        'videos.*',
+                        'sectors.name as sector_name',
+                        'lines.name as line_name'
+                    ])->first();
+
+            $data = DB::table($table)
+                ->join('users', 'file_views.user_id', '=', 'users.id')
+                ->select(
+                    'users.first_name',
+                    'users.middle_name',
+                    'users.last_name',
+                    'users.user_name',
+                    'users.role',
+                    'users.created_at',
+                )->where('file_id', $id)->get();
+            $pdf = PDF::loadView('admin.panel.files.pdf', compact(['data', 'fileOrVideo', 'table']));
+            return $pdf->download($fileOrVideo->name . '_views.pdf');
+        }
+        return abort(404);
     }
 }

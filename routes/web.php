@@ -74,6 +74,7 @@ Route::middleware('db.connection')->group(function (){
         Route::post('toggle_publish_line/{id}', [AdminActionsController::class, 'toggle_publish_line'])->name('toggle_publish_line');
         Route::post('toggle_show_file/{id}', [AdminActionsController::class, 'toggle_show_file'])->name('toggle_show_file');
         Route::post('toggle_show_video/{id}', [AdminActionsController::class, 'toggle_show_video'])->name('toggle_show_video');
+        Route::get('download_report/{table}/{id}', [AdminActionsController::class, 'download_report'])->name('report.download');
     });
     // Profile
     Route::group(['prefix' => 'me'], function (){
@@ -103,6 +104,5 @@ Route::middleware('db.connection')->group(function (){
     Route::get('toggle_favorite_videos/{id}', [ActionsController::class, 'toggle_favorite_videos'])->name('favorite_videos.toggle');
     Route::get('download_file/{id}', [ActionsController::class, 'download_file'])->name('file.download');
     Route::get('view_file/{id}', [ActionsController::class, 'view_file'])->name('file.view');
-    Route::get('download_report/{table}/{id}', [ActionsController::class, 'download_report'])->name('report.download');
     Route::get('not_authorized', [ActionsController::class, 'not_authorized'])->name('not_authorized');
 });

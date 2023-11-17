@@ -15,6 +15,7 @@
             <tr>
                 <th>Full Name</th>
                 <th>Username</th>
+                <th>Role</th>
                 <th>Date</th>
             </tr>
             </thead>
@@ -24,6 +25,15 @@
                         <tr>
                             <td>{{ $user->role == 1 ? ucfirst($user->first_name) : ucfirst($user->first_name) . ' ' . ucfirst($user->middle_name) . ' ' . ucfirst($user->last_name) }}</td>
                             <td>{{ $user->role == 1 ? '_____' : ucfirst($user->user_name) }}</td>
+                            <td>
+                                @if($user->role == 1)
+                                    Admin
+                                @elseif($user->role == 2)
+                                    Manager
+                                @else
+                                    Employee
+                                @endif
+                            </td>
                             <td>{{ $user->created_at }}</td>
                         </tr>
                     @endforeach

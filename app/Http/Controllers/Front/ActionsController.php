@@ -11,10 +11,8 @@ use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoView;
 use App\Traits\GeneralTrait;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
 
 
 class ActionsController extends Controller
@@ -90,24 +88,6 @@ class ActionsController extends Controller
             $video_viewed->video_id = $id;
             $video_viewed->save();
         }
-    }
-    public function download_report($table, $id) {
-        if (auth()->user()->role = 1) {
-            $fileOrVideo = $table == 'file_views' ? File::query()->find($id) : Video::query()->find($id);
-            $data = DB::table($table)
-                ->join('users', 'file_views.user_id', '=', 'users.id')
-                ->select(
-                    'users.first_name',
-                    'users.middle_name',
-                    'users.last_name',
-                    'users.user_name',
-                    'users.role',
-                    'users.created_at',
-                )->where('file_id', $id)->get();
-            $pdf = PDF::loadView('admin.panel.files.pdf', compact(['data', 'fileOrVideo']));
-            return $pdf->download($fileOrVideo->name . '_views.pdf');
-        }
-        return abort(404);
     }
     public function not_authorized() {
         return $this->redirect('home')->with('notAuthorized', 'You are not Authorized');

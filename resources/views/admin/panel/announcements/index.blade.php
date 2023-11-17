@@ -17,6 +17,7 @@
             {{ session('error') }}
         </div>
     @endif
+    @include('includes.admin.panel_filter')
     <div class="scroll-bar overflow-scroll">
         <table class="table bg-white">
             <thead class="bg-light">
@@ -39,42 +40,46 @@
                 @else
                     @php($announcements = $announcements->get())
                 @endif
-                @foreach($announcements as $announcement)
-                    <tr>
-                        <td><img src="{{ asset('storage/images/announcements/' . $announcement->image ) }}"
-                                 style="width: 100px; height: 40px;"></td>
-                        <td>{{ $announcement->title }}</td>
-                        <td>{{ ucfirst($announcement->user_name) }}</td>
-                        <td>
-                            <span
-                                class="{{ $announcement->status ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">
-                                {{ $announcement->status ? 'Published' : 'Suppressed' }}
-                            </span>
-                        </td>
-                        <td>{{ date('d-m-Y, h:m a', strtotime($announcement->created_at)) }}</td>
-                        <td>
-                            <form action="{{ route('toggle_publish_announcement', $announcement->id) }}"
-                                  method="post" class="d-inline">
-                                @csrf
-                                <button type="submit"
-                                        class="{{ $announcement->status ? 'btn-outline-secondary' : 'btn-outline-success' }} btn btn-sm btn-rounded">
-                                    {{ $announcement->status ? 'Suppress' : 'Publish' }}
-                                </button>
-                            </form>
-                            <form action="{{ route('announcements.destroy', $announcement->id) }}"
-                                  method="post" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
+                @if(count($announcements) > 0)
+                    @foreach($announcements as $announcement)
+                        <tr>
+                            <td><img src="{{ asset('storage/images/announcements/' . $announcement->image ) }}"
+                                     style="width: 100px; height: 40px;"></td>
+                            <td>{{ $announcement->title }}</td>
+                            <td>{{ ucfirst($announcement->user_name) }}</td>
+                            <td>
+                                <span
+                                    class="{{ $announcement->status ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">
+                                    {{ $announcement->status ? 'Published' : 'Suppressed' }}
+                                </span>
+                            </td>
+                            <td>{{ date('d-m-Y, h:m a', strtotime($announcement->created_at)) }}</td>
+                            <td>
+                                <form action="{{ route('toggle_publish_announcement', $announcement->id) }}"
+                                      method="post" class="d-inline">
+                                    @csrf
+                                    <button type="submit"
+                                            class="{{ $announcement->status ? 'btn-outline-secondary' : 'btn-outline-success' }} btn btn-sm btn-rounded">
+                                        {{ $announcement->status ? 'Suppress' : 'Publish' }}
+                                    </button>
+                                </form>
+                                <form action="{{ route('announcements.destroy', $announcement->id) }}"
+                                      method="post" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
                 @else
                     @include('includes.admin.empty_message')
                 @endif
+            @else
+                @include('includes.admin.empty_message')
+            @endif
             </tbody>
         </table>
     </div>

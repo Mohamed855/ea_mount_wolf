@@ -14,9 +14,16 @@
                         <div class="announcement-title {{ count($announcements) > 0 ? 'image-bar' : '' }}">
                             @if(count($announcements) > 0)
                                 @foreach ($announcements as $announcement)
-                                    <div
-                                        style="background-image: url('{{ asset('storage/images/announcements/' . $announcement->image) }}')" {{ $loop->first ? 'class=active' : '' }}></div>
+                                    <div style="background-image: url('{{ asset('storage/images/announcements/' . $announcement->image) }}');" {{ $loop->first ? 'class=active' : '' }}>
+                                        <img id="back" class="back_forward_buttons" src="{{ asset('storage/images/icons/back.png') }}" style="position:absolute; left:20px;top:50%" onclick="prevImage()">
+                                        <img id="forward" class="back_forward_buttons" src="{{ asset('storage/images/icons/forward.png') }}" style="position:absolute; right:20px;top:50%" onclick="nextImage()">
+                                    </div>
                                 @endforeach
+                                <span class="dots-container" style="position:absolute; bottom:20px;z-index:3">
+                                    @for ($i = 0; $i < count($announcements); $i++)
+                                        <span class="px-1 rounded m-2 dot {{ $i == 0 ? 'active' : '' }}" onclick="getImageByIndex({{ $i }})"></span>
+                                    @endfor
+                                </span>
                             @else
                                 <div class="announcement-logo"><img src="{{ asset('storage/images/logos/logo.png') }}"
                                                                     class="mw-100" alt=""></div>
@@ -64,14 +71,39 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
     <script>
-        var images = document.querySelectorAll(".image-bar div");
-        var index = 0;
+        let images = document.querySelectorAll(".image-bar div");
+        let dots = document.querySelectorAll(".dots-container span");
+        let index = 0;
 
-        setInterval(function () {
+        function getImageByIndex(i) {
             images[index].classList.remove("active");
-            index = (index + 1) % images.length;
+            dots[index].classList.remove("active");
+
+            index = i;
+
             images[index].classList.add("active");
-        }, 30000);
+            dots[index].classList.add("active");
+        }
+
+        function prevImage() {
+            images[index].classList.remove("active");
+            dots[index].classList.remove("active");
+
+            index = (index - 1 + images.length) % images.length;
+
+            images[index].classList.add("active");
+            dots[index].classList.add("active");
+        }
+
+        function nextImage() {
+            images[index].classList.remove("active");
+            dots[index].classList.remove("active");
+
+            index = (index + 1) % images.length;
+
+            images[index].classList.add("active");
+            dots[index].classList.add("active");
+        }
     </script>
 
     <script type="text/javascript">
