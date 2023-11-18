@@ -18,7 +18,7 @@
         </div>
     @endif
     @include('includes.admin.panel_filter')
-    <div class="scroll-bar">
+    <div class="scroll-bar overflow-scroll">
         <table class="table bg-white">
             <thead class="bg-light">
                 <tr>
