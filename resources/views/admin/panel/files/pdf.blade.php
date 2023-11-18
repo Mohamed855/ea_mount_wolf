@@ -5,7 +5,7 @@
             h2{text-align:center;text-decoration:underline}
             .details{text-align:left}
             table{text-align: center;margin: 0 auto;border-collapse: collapse;width: 100%}
-            th, td{text-align: center;padding:8px}
+            th, td{text-align: center;border:1px solid #707070;padding:8px}
             th{background-color:#030101;color:white}
         </style>
     </head>
