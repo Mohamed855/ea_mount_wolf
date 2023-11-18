@@ -49,27 +49,33 @@
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
                                             <select name="title" class="form-control py-2">
-                                                <option value="0" disabled>Title *</option>
+                                                <option value="0" disabled selected>Title *</option>
                                                 @foreach($titles as $title)
                                                     <option value="{{ $title->id }}" {{ $title->id == $selected_employee->title_id ? 'selected' : '' }}>{{ $title->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="sectors[]" class="form-control py-2" multiple>
-                                                <option value="0" disabled>Sector *</option>
+                                        <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                            <div class="row">
+                                                <h6 class="text-start">Choose sectors</h6>
                                                 @foreach($sectors as $sector)
-                                                    <option value="{{ $sector->id }}" {{ in_array($sector->id, $integerSectorIds) ? 'selected' : '' }}>{{ $sector->name }}</option>
+                                                    <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                        <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ in_array($sector->id, $integerSectorIds) ? 'checked' : '' }} style="cursor:pointer" onchange="generateSectorLines({{ $sector->id }})">
+                                                        <label class="small" for="{{ 's_' . $sector->id }}">{{ $sector->name }}</label>
+                                                    </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="lines[]" class="form-control py-2" multiple>
-                                                <option value="0" disabled>Line *</option>
+                                        <div class="col-12 p-3 mb-3 border rounded">
+                                            <div class="row">
+                                                <h6 class="text-start">Choose lines</h6>
                                                 @foreach($lines as $line)
-                                                    <option value="{{ $line->id }}" {{ in_array($line->id, $integerLineIds) ? 'selected' : '' }}>{{ $line->name }}</option>
+                                                    <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                        <input type="checkbox" id="{{ 'l_' . $line->id }}" name="{{ 'l_' . $line->id }}" value="{{ $line->id }}" {{ in_array($line->id, $integerLineIds) ? 'checked' : '' }} style="cursor:pointer">
+                                                        <label class="small" for="{{ 'l_' . $line->id }}">{{ $line->name }}</label>
+                                                    </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-10 col-12 m-auto">
@@ -82,4 +88,5 @@
                 </div>
             </div>
         </div>
+    </div>
 @endsection

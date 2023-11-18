@@ -26,10 +26,10 @@
                                         <span class="text-primary"
                                               role="alert">{{ session()->get('success') }}</span>
                                     </div>
-                                @elseif(session()->has('success'))
+                                @elseif(session()->has('error'))
                                     <div class="m-auto">
                                         <span class="text-danger"
-                                              role="alert">{{ session()->get('success') }}</span>
+                                              role="alert">{{ session()->get('error') }}</span>
                                     </div>
                                 @endif
 

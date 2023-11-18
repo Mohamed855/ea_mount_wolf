@@ -30,7 +30,12 @@ class AuthController extends Controller
         $credentials = ['email' => $email, 'password' => $password];
         if (Auth::attempt($credentials)) {
             if (auth()->user()->role == 1){
-                return $this->redirect('panel');
+                if (auth()->user()->activated){
+                    return $this->redirect('panel');
+                }
+                Session::flush();
+                Auth::logout();
+                return $this->backWithMessage('error', 'Your account isn\'t activated');
             }
             Session::flush();
             Auth::logout();

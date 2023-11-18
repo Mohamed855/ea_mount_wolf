@@ -72,13 +72,28 @@ class EmployeesController extends Controller
             }
 
             $firstName = strtolower($data['first_name']);
-            $middleName = strtolower($data['middle_name']);
             $username = $firstName . rand(1, 9);
 
             $i = 0;
             while (User::whereuser_name($username)->exists()) {
                 $i++;
                 $username .= $i;
+            }
+
+            $employeeSectors = [];
+            $sectorIds = Sector::query()->get(['id']);
+            foreach ($sectorIds as $sector) {
+                if ($request['s_' . $sector->id]) {
+                    $employeeSectors[] = $sector->id;
+                }
+            }
+
+            $employeeLines = [];
+            $lineIds = Sector::query()->get(['id']);
+            foreach ($lineIds as $lines) {
+                if ($request['l_' . $lines->id]) {
+                    $employeeLines[] = $lines->id;
+                }
             }
 
             $employee->first_name = $data['first_name'];
@@ -90,8 +105,8 @@ class EmployeesController extends Controller
             $employee->phone_number = $data['phone_number'];
             $employee->password = bcrypt($data['password']);
             $employee->title_id = $data['title'];
-            $employee->lines = $data['lines'];
-            $employee->sectors = $data['sectors'];
+            $employee->sectors = $employeeSectors;
+            $employee->lines = $employeeLines;
             $employee->role = 3;
             $employee->activated = 1;
 
@@ -141,6 +156,22 @@ class EmployeesController extends Controller
                 return $this->backWithMessage('error', $validator->errors()->first());
             }
 
+            $userSectors = [];
+            $sectorIds = Sector::query()->get(['id']);
+            foreach ($sectorIds as $sector) {
+                if ($request['s_' . $sector->id]) {
+                    $userSectors[] = $sector->id;
+                }
+            }
+
+            $userLines = [];
+            $lineIds = Sector::query()->get(['id']);
+            foreach ($lineIds as $lines) {
+                if ($request['l_' . $lines->id]) {
+                    $userLines[] = $lines->id;
+                }
+            }
+
             DB::table('users')
                 ->where('id', '=', $id)
                 ->update([
@@ -152,8 +183,8 @@ class EmployeesController extends Controller
                     'email' => $request->email,
                     'phone_number' => $request->phone_number,
                     'title_id' => $request->title,
-                    'lines' => $request->lines,
-                    'sectors' => $request->sectors,
+                    'sectors' => $userSectors,
+                    'lines' => $userLines,
                     'role' => 3,
                     'activated' => 1,
                 ]);

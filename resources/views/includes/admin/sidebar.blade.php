@@ -60,11 +60,6 @@
     </a>
 </div>
 <div class="scroll-bar">
-    <a href="{{ route('panel') }}">
-        <div class="panel_btn py-3 my-2 {{ request()->is('panel') ? 'active_dashboard_btn' : '' }}">
-            Overview
-        </div>
-    </a>
     <a onclick="showMainContainer()" style="cursor:pointer">
         <div class="sidebar-title py-2 my-2 row justify-content-evenly">
             <span class="col-3">Main</span>
@@ -72,11 +67,17 @@
         </div>
     </a>
     <div id="main_container" style="display: {{
+                request()->is('panel') ||
                 check_url($currUrl, $panel_url . '/announcements') ||
                 check_url($currUrl, $panel_url . '/sectors') ||
                 check_url($currUrl, $panel_url . '/lines') ?
                 'block' : 'none'
             }}">
+        <a href="{{ route('panel') }}">
+            <div class="panel_btn py-3 my-2 {{ request()->is('panel') ? 'active_dashboard_btn' : '' }}">
+                Overview
+            </div>
+        </a>
         <a href="{{ route('announcements.index') }}">
             <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/announcements') ? 'active_dashboard_btn' : '' }}">
                 Announcements

@@ -23,19 +23,23 @@
                             <h3 class="pb-4">Add New Line</h3>
                             <form action="{{ route('lines.store') }}" method="POST">
                                 @csrf
-                                <div class="col-md-8 col-12 d-inline-block">
+                                <div class="col-md-10 col-12 d-inline-block">
                                     <div class="pb-3">
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="Line Name">
                                     </div>
-                                    <div class="pb-3">
-                                        <select name="sectors[]" class="form-control py-2" multiple="multiple">
-                                            @foreach($sectors as $sector)
-                                                <option value="{{ $sector->id }}">{{ $sector->name }}</option>
-                                            @endforeach
-                                        </select>
+                                </div>
+                                <div class="col-12 col-md-10 p-3 mb-3 m-auto border rounded">
+                                    <div class="row">
+                                        <h6 class="text-start">Choose sectors</h6>
+                                        @foreach($sectors as $sector)
+                                            <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ $sector->id == old('s_' . $sector->id) ? 'checked' : '' }} style="cursor:pointer">
+                                                <label class="small" for="{{ 's_' . $sector->id }}">{{ $sector->name }}</label>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-12 m-auto">
+                                <div class="col-md-10 col-12 m-auto">
                                     <button type="submit" class="btn submit_btn p-2 my-3 w-100">Create Line</button>
                                 </div>
                             </form>

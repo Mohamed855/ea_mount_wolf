@@ -65,7 +65,7 @@
                                     <div class="comment-txt">
                                         <div class="input-group mb-3">
                                             <input type="hidden" name="topic" value="{{ $current_topic->id }}">
-                                            <textarea type="text" class="form-control" placeholder="Write a comment.."
+                                            <textarea type="text" class="form-control py-2" placeholder="Write a comment.."
                                                       aria-label="Write a comment.." aria-describedby="button-addon2"
                                                       style="max-height:65px;resize:none" name="comment"></textarea>
                                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">

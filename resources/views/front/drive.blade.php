@@ -97,7 +97,7 @@
                                     @endforeach
                                 @else
                                     <div class="m-auto">
-                                        <p class="fs-4 p-5 text-center">There is no files in this sector</p>
+                                        <p class="fs-4 p-5 text-center">There is no files in this line</p>
                                     </div>
                                 @endif
                             </div>
@@ -164,7 +164,7 @@
                                     @endforeach
                                 @else
                                     <div class="m-auto">
-                                        <p class="fs-4 p-5 text-center">There is no Videos in this sector</p>
+                                        <p class="fs-4 p-5 text-center">There is no Videos in this line</p>
                                     </div>
                                 @endif
                             </div>

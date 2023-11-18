@@ -29,7 +29,7 @@
         <script type="text/javascript" src="{{ asset('assets/include/js/virtual-select.min.js') }}"></script>
     </head>
 
-    <body style="overflow: hidden;">
+    <body>
         @yield('content')
     </body>
 

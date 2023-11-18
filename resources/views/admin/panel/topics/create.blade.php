@@ -23,7 +23,7 @@
                             <h3 class="pb-4">Add New Topic</h3>
                             <form action="{{ route('ea_topics.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <div class="col-md-8 col-12 d-inline-block">
+                                <div class="col-md-10 col-12 d-inline-block">
                                     <div class="pb-3">
                                         <input type="text" name="title" class="form-control py-2" value="{{ old('title') }}" placeholder="Topic title">
                                     </div>
@@ -31,12 +31,12 @@
                                         <textarea name="description" class="form-control py-2" value="{{ old('description') }}" placeholder="Topic description" style="min-height: 200px"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-12 m-auto">
+                                <div class="col-md-10 col-12 m-auto">
                                     <div class="pb-3">
                                         <input type="file" name="image" id="file" class="form-control py-2" accept="image/png, image/gif, image/jpeg">
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-12 m-auto">
+                                <div class="col-md-10 col-12 m-auto">
                                     <button type="submit" class="btn submit_btn p-2 my-3 w-100">Add Topic</button>
                                 </div>
                             </form>

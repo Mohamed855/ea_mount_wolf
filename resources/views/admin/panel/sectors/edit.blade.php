@@ -24,23 +24,25 @@
                             <form action="{{ route('sectors.update', $selected_sector->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <div class="col-md-8 col-12 d-inline-block">
+                                <div class="col-md-10 col-12 d-inline-block">
                                     <div class="pb-3">
                                         <input type="text" name="name" class="form-control py-2" value="{{ $selected_sector->name }}" placeholder="Sector Name">
                                     </div>
-                                    <div class="pb-3">
-                                        <select name="lines[]" class="form-control py-2" multiple="multiple">
-                                            @foreach($lines as $line)
-                                                <option value="{{ $line->id }}"
-                                                @foreach($selected_lines as $selected_line)
-                                                    {{ $selected_line->line_id == $line->id ? 'selected' : '' }}
-                                                    @endforeach
-                                                >{{ $line->name }}</option>
-                                            @endforeach
-                                        </select>
+                                </div>
+                                <div class="col-12 col-md-10 p-3 mb-3 m-auto border rounded">
+                                    <div class="row">
+                                        <h6 class="text-start">Choose lines</h6>
+                                        @foreach($lines as $line)
+                                            <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                <input type="checkbox" id="{{ 'l_' . $line->id }}" name="{{ 'l_' . $line->id }}" value="{{ $line->id }}" @foreach($selected_lines as $selected_line)
+                                                    {{ $selected_line->line_id == $line->id ? 'checked' : '' }}
+                                                @endforeach style="cursor:pointer">
+                                                <label class="small" for="{{ 'l_' . $line->id }}">{{ $line->name }}</label>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-12 m-auto">
+                                <div class="col-md-10 col-12 m-auto">
                                     <button type="submit" class="btn submit_btn p-2 my-3 w-100">Save</button>
                                 </div>
                             </form>

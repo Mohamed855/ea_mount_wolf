@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Line;
 use App\Models\LineSector;
+use App\Models\Sector;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
@@ -58,13 +59,15 @@ class LinesController extends Controller
             $lines->status = 1;
             $lines->save();
 
-            $sectors = $request->input('sectors');
+            $sectorIds = Sector::query()->get(['id']);
             $line_id = Line::latest('id')->first()->id;
-            foreach ($sectors as $sector) {
-                $line_sector = new LineSector();
-                $line_sector->sector_id = $sector;
-                $line_sector->line_id = $line_id;
-                $line_sector->save();
+            foreach ($sectorIds as $sector) {
+                if ($request['s_' . $sector->id]) {
+                    $line_sector = new LineSector();
+                    $line_sector->sector_id = $sector->id;
+                    $line_sector->line_id = $line_id;
+                    $line_sector->save();
+                }
             }
 
             return $this->backWithMessage('success', 'Line created successfully');
@@ -103,13 +106,15 @@ class LinesController extends Controller
                     'name' => $request->name
                 ]);
 
-            $selected_sectors = $request->input('sectors');
+            $sectorIds = Sector::query()->get(['id']);
             DB::table('line_sector')->where('line_id', $id)->delete();
-            foreach ($selected_sectors as $sector) {
-                $line_sector = new LineSector();
-                $line_sector->sector_id = $sector;
-                $line_sector->line_id = $id;
-                $line_sector->save();
+            foreach ($sectorIds as $sector) {
+                if ($request['s_' . $sector->id]) {
+                    $line_sector = new LineSector();
+                    $line_sector->sector_id = $sector->id;
+                    $line_sector->line_id = $id;
+                    $line_sector->save();
+                }
             }
 
             return $this->backWithMessage('success', 'Line saved successfully');

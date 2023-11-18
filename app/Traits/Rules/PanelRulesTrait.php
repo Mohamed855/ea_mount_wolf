@@ -67,8 +67,6 @@ trait PanelRulesTrait {
             'last_name' => 'required|min:2,|max:20',
             'crm_code' => 'required|unique:users',
             'title' => 'required',
-            'sectors' => 'required',
-            'lines' => 'required',
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|regex:/(01)[0-9]{9}/|unique:users',
             'password'  => 'required|min:8|max:20|string',
@@ -86,9 +84,7 @@ trait PanelRulesTrait {
             'crm_code' => ['required', Rule::unique('users', 'crm_code')->where(function ($query) use ($id) {
                 $query->where('id', '!=', $id);
             })],
-            'sector' => 'not_in:0',
             'title' => 'not_in:0',
-            'line' => 'not_in:0',
             'email' => ['required', 'email', Rule::unique('users', 'email')->where(function ($query) use ($id) {
                 $query->where('id', '!=', $id);
             })],

@@ -34,7 +34,7 @@
                                         <input type="text" name="src" class="form-control py-2" value="{{ old('src') }}" placeholder="Video Link">
                                     </div>
                                     <div class="pb-3">
-                                        <select name="sector" class="form-control @error('sector') is-invalid @enderror">
+                                        <select name="sector" class="form-control">
                                             <option value="0" disabled selected>Sector *</option>
                                             @foreach($sectors as $sector)
                                                 <option value="{{ $sector->id }}">{{ $sector->name }}</option>
@@ -42,7 +42,7 @@
                                         </select>
                                     </div>
                                     <div class="pb-3">
-                                        <select name="line" class="form-control @error('line') is-invalid @enderror">
+                                        <select name="line" class="form-control">
                                             <option value="0" disabled selected>Line *</option>
                                             @foreach($lines as $line)
                                                 <option value="{{ $line->id }} {{ $line->id == old('line') ? 'selected' : '' }}">{{ $line->name }}</option>

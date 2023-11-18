@@ -47,28 +47,36 @@
                                             <input type="text" name="phone_number" class="form-control py-2" value="{{ old('phone_number') }}" placeholder="Phone Number">
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="title" class="form-control @error('title') is-invalid @enderror">
-                                                <option value="0" disabled>Title *</option>
+                                            <select name="title" class="form-control py-2">
+                                                <option value="0" disabled selected>Title *</option>
                                                 @foreach($titles as $title)
                                                     <option value="{{ $title->id }}" {{ $title->id == old('title') ? 'selected' : '' }}>{{ $title->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="sectors[]" class="form-control @error('sector') is-invalid @enderror" multiple>
-                                                <option value="0" disabled>Sector *</option>
+                                    </div>
+                                    <div class="col-md-10 col-12 m-auto row">
+                                        <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                            <div class="row">
+                                                <h6 class="text-start">Choose sectors</h6>
                                                 @foreach($sectors as $sector)
-                                                    <option value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'selected' : '' }}>{{ $sector->name }}</option>
+                                                    <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                        <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ $sector->id == old('s_' . $sector->id) ? 'checked' : '' }} style="cursor:pointer">
+                                                        <label class="small" for="{{ 's_' . $sector->id }}">{{ $sector->name }}</label>
+                                                    </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="lines[]" class="form-control @error('line') is-invalid @enderror" multiple>
-                                                <option value="0" disabled>Line *</option>
+                                        <div class="col-12 p-3 mb-3 border rounded">
+                                            <div class="row">
+                                                <h6 class="text-start">Choose lines</h6>
                                                 @foreach($lines as $line)
-                                                    <option value="{{ $line->id }}" {{ $line->id == old('line') ? 'selected' : '' }}>{{ $line->name }}</option>
+                                                    <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                        <input type="checkbox" id="{{ 'l_' . $line->id }}" name="{{ 'l_' . $line->id }}" value="{{ $line->id }}" {{ $line->id == old('l_' . $line->id) ? 'checked' : '' }} style="cursor:pointer">
+                                                        <label class="small" for="{{ 'l_' . $line->id }}">{{ $line->name }}</label>
+                                                    </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-10 col-12 m-auto">
@@ -81,4 +89,5 @@
                 </div>
             </div>
         </div>
+    </div>
 @endsection

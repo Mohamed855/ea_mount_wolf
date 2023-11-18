@@ -12,9 +12,13 @@
                             <h5 class="pb-3">Are you sure, you want to logout</h5>
                             <form action="{{ route('session.end') }}" method="post">
                                 @csrf
-                                <div class="my-4 text-end d-flex justify-content-between">
-                                    <button class="btn d-inline-block p-2 col-5" onclick="history.back()">Back</button>
-                                    <button type="submit" class="btn confirm_logout p-2 col-6">Confirm</button>
+                                <div class="my-4 text-end row justify-content-between">
+                                    <div class="p-2 col-6">
+                                        <button class="btn d-inline-block border w-100" onclick="history.back()">Back</button>
+                                    </div>
+                                    <div class="p-2 col-6">
+                                        <button type="submit" class="btn confirm_logout w-100">Confirm</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>

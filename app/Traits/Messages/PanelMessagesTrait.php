@@ -105,9 +105,7 @@ trait PanelMessagesTrait {
             'crm_code.required' => 'CRM code is required',
             'crm_code.unique' => 'CRM code is already exist',
 
-            'sectors.required' => 'Sector is required',
             'title.required' => 'Title is required',
-            'lines.required' => 'Line is required',
 
             'email.required' => 'Email is required',
             'email.email' => 'Enter a valid email',
@@ -146,9 +144,7 @@ trait PanelMessagesTrait {
             'crm_code.required' => 'CRM code is required',
             'crm_code.unique' => 'CRM code is already exist',
 
-            'sector.not_in' => 'Sector is required',
             'title.not_in' => 'Title is required',
-            'line.not_in' => 'Line is required',
 
             'email.required' => 'Email is required',
             'email.email' => 'Enter a valid email',

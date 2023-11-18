@@ -19,7 +19,7 @@
             <div class="container">
                 <div class="row text-center">
                     <div class="col-12 col-lg-8 m-auto">
-                        <div class="overflow-scroll border bg-white shadow rounded-2 py-5 px-4 px-lg-5">
+                        <div class="border bg-white shadow rounded-2 py-5 px-4 px-lg-5">
                             <h3 class="pb-4">Add New Manager</h3>
                             <div class="m-auto">
                                 <form action="{{ route('managers.store') }}" method="POST">
@@ -47,28 +47,48 @@
                                             <input type="text" name="phone_number" class="form-control py-2" value="{{ old('phone_number') }}" placeholder="Phone Number">
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="title" class="form-control @error('title') is-invalid @enderror">
-                                                <option value="0" disabled>Title *</option>
+                                            <select name="title" class="form-control py-2">
+                                                <option value="0" disabled selected>Title *</option>
                                                 @foreach($titles as $title)
                                                     <option value="{{ $title->id }}" {{ $title->id == old('title') ? 'selected' : '' }}>{{ $title->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="sectors[]" class="form-control @error('sector') is-invalid @enderror" multiple>
-                                                <option value="0" disabled>Sector *</option>
+                                        <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                            <div class="row">
+                                                <h6 class="text-start">Choose sectors</h6>
                                                 @foreach($sectors as $sector)
-                                                    <option value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'selected' : '' }}>{{ $sector->name }}</option>
+                                                    <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                        <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ $sector->id == old('s_' . $sector->id) ? 'checked' : '' }} style="cursor:pointer" onchange="generateSectorLines({{ $sector->id }})">
+                                                        <label class="small" for="{{ 's_' . $sector->id }}">{{ $sector->name }}</label>
+                                                    </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="lines[]" class="form-control @error('line') is-invalid @enderror" multiple>
-                                                <option value="0" disabled>Line *</option>
-                                                @foreach($lines as $line)
-                                                    <option value="{{ $line->id }}" {{ $line->id == old('line') ? 'selected' : '' }}>{{ $line->name }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-12 p-3 border rounded">
+                                            <h6 class="text-start">Choose lines</h6>
+                                            @foreach($sectors as $sl)
+                                                <div id="{{ 'sl_' . $sl->id }}" style="display: {{ $sl->id == old('s_' . $sl->id) ? 'flex' : 'none' }}">
+                                                    @php($lines = \Illuminate\Support\Facades\DB::table('lines as l')
+                                                            ->join('line_sector as ls', 'ls.line_id', '=', 'l.id')
+                                                            ->where('ls.sector_id', $sl->id)
+                                                            ->where('l.status', 1)
+                                                            ->select(['l.id', 'l.name'])
+                                                            ->orderBy('l.id')->get()
+                                                        )
+                                                    <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                                        <div class="row">
+                                                            <h6 class="text-start">{{ $sl->name }}</h6>
+                                                            @foreach($lines as $line)
+                                                                <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                                    <input type="checkbox" name="{{ 's_' . $sl->id . 'l_' . $line->id }}" value="{{ $line->id }}" {{ $line->id == old('s_' . $sl->id . 'l_' . $line->id) ? 'checked' : '' }} style="cursor:pointer">
+                                                                    <label class="small" for="{{ 's_' . $sl->id . 'l_' . $line->id }}">{{ $line->name }}</label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="col-md-10 col-12 m-auto">
@@ -81,4 +101,6 @@
                 </div>
             </div>
         </div>
+    </div>
+    @include('includes.admin.scripts')
 @endsection

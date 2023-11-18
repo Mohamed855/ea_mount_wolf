@@ -33,11 +33,13 @@ class AuthController extends Controller
 
         $credentials = [$field => $user_name, 'crm_code' => $crm_code , 'password' => $password];
         if (Auth::attempt($credentials)) {
-            if (DB::table('users')->where('crm_code', $crm_code)->value('activated') === 0) {
-                return $this->backWithMessage('error', 'Your account isn\'t activated');
-            }
             if (auth()->user()->role == 2){
-                return $this->redirect('home');
+                if (auth()->user()->activated) {
+                    return $this->redirect('home');
+                }
+                Session::flush();
+                Auth::logout();
+                return $this->backWithMessage('error', 'Your account isn\'t activated');
             }
             Session::flush();
             Auth::logout();
@@ -60,11 +62,13 @@ class AuthController extends Controller
 
         $credentials = [$field => $user_name, 'crm_code' => $crm_code , 'password' => $password];
         if (Auth::attempt($credentials)) {
-            if (DB::table('users')->where('crm_code', $crm_code)->value('activated') === 0) {
-                return $this->backWithMessage('error', 'Your account isn\'t activated');
-            }
             if (auth()->user()->role == 3){
-                return $this->redirect('home');
+                if (auth()->user()->activated) {
+                    return $this->redirect('home');
+                }
+                Session::flush();
+                Auth::logout();
+                return $this->backWithMessage('error', 'Your account isn\'t activated');
             }
             Session::flush();
             Auth::logout();

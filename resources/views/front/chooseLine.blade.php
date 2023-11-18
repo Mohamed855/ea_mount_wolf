@@ -17,14 +17,19 @@
                             </h2>
                         </div>
                         <div class="row buttons justify-content-evenly m-auto">
-                            @foreach($selected_sector_lines as $line)
-                                <a href="{{ route('drive', ['sector_id' =>  $current_sector->id, 'line_id' => $line->line_id]) }}"
-                                   class="py-5 px-4 mb-5 control-btn text-decoration-none rounded"
-                                   style="max-width: 200px;">
-                                    <span class="rounded text-center text-white fs-5">{{ $line->name }}</span>
-                                </a>
-                            @endforeach
-
+                            @if(count($selected_sector_lines) > 0)
+                                @foreach($selected_sector_lines as $line)
+                                    <a href="{{ route('drive', ['sector_id' =>  $current_sector->id, 'line_id' => $line->line_id]) }}"
+                                       class="py-5 px-4 mb-5 control-btn text-decoration-none rounded"
+                                       style="max-width: 200px;">
+                                        <span class="rounded text-center text-white fs-5">{{ $line->name }}</span>
+                                    </a>
+                                @endforeach
+                            @else
+                                <div class="m-auto">
+                                    <p class="fs-4 p-5 text-center">There is no lines in this sector</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

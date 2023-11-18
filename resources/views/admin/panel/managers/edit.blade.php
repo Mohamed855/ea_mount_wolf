@@ -49,27 +49,47 @@
                                         </div>
                                         <div class="col-12 col-md-6 pb-2 px-1">
                                             <select name="title" class="form-control py-2">
-                                                <option value="0" disabled>Title *</option>
+                                                <option value="0" disabled selected>Title *</option>
                                                 @foreach($titles as $title)
                                                     <option value="{{ $title->id }}" {{ $title->id == $selected_manager->title_id ? 'selected' : '' }}>{{ $title->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="sectors[]" class="form-control py-2" multiple>
-                                                <option value="0" disabled>Sector *</option>
+                                        <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                            <div class="row">
+                                                <h6 class="text-start">Choose sectors</h6>
                                                 @foreach($sectors as $sector)
-                                                    <option value="{{ $sector->id }}" {{ in_array($sector->id, $integerSectorIds) ? 'selected' : '' }}>{{ $sector->name }}</option>
+                                                    <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                        <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ in_array($sector->id, $integerSectorIds) ? 'checked' : '' }} style="cursor:pointer" onchange="generateSectorLines({{ $sector->id }})">
+                                                        <label class="small" for="{{ 's_' . $sector->id }}">{{ $sector->name }}</label>
+                                                    </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-md-6 pb-2 px-1">
-                                            <select name="lines[]" class="form-control py-2" multiple>
-                                                <option value="0" disabled>Line *</option>
-                                                @foreach($lines as $line)
-                                                    <option value="{{ $line->id }}" {{ in_array($line->id, $integerLineIds) ? 'selected' : '' }}>{{ $line->name }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-12 p-3 border rounded">
+                                            <h6 class="text-start">Choose lines</h6>
+                                            @foreach($sectors as $sl)
+                                                <div id="{{ 'sl_' . $sl->id }}" style="display: {{ in_array($sl->id, $integerSectorIds) ? 'flex' : 'none' }}">
+                                                    @php($lines = \Illuminate\Support\Facades\DB::table('lines as l')
+                                                            ->join('line_sector as ls', 'ls.line_id', '=', 'l.id')
+                                                            ->where('ls.sector_id', $sl->id)
+                                                            ->where('l.status', 1)
+                                                            ->select(['l.id', 'l.name'])
+                                                            ->orderBy('l.id')->get()
+                                                        )
+                                                    <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                                        <div class="row">
+                                                            <h6 class="text-start">{{ $sl->name }}</h6>
+                                                            @foreach($lines as $line)
+                                                                <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                                    <input type="checkbox" name="{{ 's_' . $sl->id . 'l_' . $line->id }}" value="{{ $line->id }}" {{ in_array($line->id, $integerLineIds) ? 'checked' : '' }} style="cursor:pointer">
+                                                                    <label class="small" for="{{ 's_' . $sl->id . 'l_' . $line->id }}">{{ $line->name }}</label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="col-md-10 col-12 m-auto">
@@ -82,4 +102,6 @@
                 </div>
             </div>
         </div>
+    </div>
+    @include('includes.admin.scripts')
 @endsection

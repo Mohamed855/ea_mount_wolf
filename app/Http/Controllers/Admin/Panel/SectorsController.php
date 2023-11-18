@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Line;
 use App\Models\LineSector;
 use App\Models\Sector;
 use App\Traits\AuthTrait;
@@ -57,13 +58,15 @@ class SectorsController extends Controller
             $sectors->name = $request->name;
             $sectors->save();
 
-            $lines = $request->input('lines');
+            $linesIds = Line::query()->get(['id']);
             $sector_id = Sector::latest('id')->first()->id;
-            foreach ($lines as $line) {
-                $line_sector = new LineSector();
-                $line_sector->line_id = $line;
-                $line_sector->sector_id = $sector_id;
-                $line_sector->save();
+            foreach ($linesIds as $line) {
+                if ($request['l_' . $line->id]) {
+                    $line_sector = new LineSector();
+                    $line_sector->line_id = $line->id;
+                    $line_sector->sector_id = $sector_id;
+                    $line_sector->save();
+                }
             }
 
             return $this->backWithMessage('success', 'Sector created successfully');
@@ -102,14 +105,17 @@ class SectorsController extends Controller
                     'name' => $request->name
                 ]);
 
-            $selected_lines = $request->input('lines');
+            $sectorIds = Sector::query()->get(['id']);
             DB::table('line_sector')->where('sector_id', $id)->delete();
-            foreach ($selected_lines as $line) {
-                $line_sector = new LineSector();
-                $line_sector->line_id = $line;
-                $line_sector->sector_id = $id;
-                $line_sector->save();
+            foreach ($sectorIds as $line) {
+                if ($request['l_' . $line->id]) {
+                    $line_sector = new LineSector();
+                    $line_sector->line_id = $line->id;
+                    $line_sector->sector_id = $id;
+                    $line_sector->save();
+                }
             }
+
 
             return $this->backWithMessage('success', 'Sector saved successfully');
         } catch (\Exception $e) {

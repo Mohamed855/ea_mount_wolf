@@ -14,14 +14,12 @@
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-lg-12">
-                                    <div class="text-center my-4">
+                                    <div class="text-center my-5">
                                         <p class="d-inline fs-4">
                                             @yield('panel_title')
                                         </p>
                                     </div>
-                                    <div class="panel">
-                                        @yield('panel_content')
-                                    </div>
+                                    @yield('panel_content')
                                 </div>
                             </div>
                         </div>

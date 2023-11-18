@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Line;
+use App\Models\Sector;
 use App\Models\User;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
@@ -50,7 +52,6 @@ class ManagersController extends Controller
     {
         return $this->ifAdmin('admin.panel.managers.create', [
                 'sectors' => DB::table('sectors')->select(['id', 'name'])->get(),
-                'lines' => DB::table('lines')->where('status', 1)->select(['id', 'name'])->get(),
                 'titles' => DB::table('titles')->select(['id', 'name'])->get(),
             ]);
     }
@@ -71,13 +72,32 @@ class ManagersController extends Controller
             }
 
             $firstName = strtolower($data['first_name']);
-            $middleName = strtolower($data['middle_name']);
             $username = $firstName . rand(1, 9);
 
             $i = 0;
             while (User::whereuser_name($username)->exists()) {
                 $i++;
                 $username .= $i;
+            }
+
+            $managerSectors = [];
+            $managerLines = [];
+            $sectorIds = Sector::query()->get(['id']);
+            $lineIds = Line::query()->get(['id']);
+
+            foreach ($sectorIds as $sector) {
+                if ($request['s_' . $sector->id]) {
+                    $managerSectors[] = $sector->id;
+                    foreach ($lineIds as $line) {
+                        if ($request['s_' . $sector->id . 'l_' . $line->id]) {
+                            /////// this if should be solved
+                            if (! in_array($line->id, $managerLines)) {
+                                $managerLines[] = $line->id;
+                            }
+                            /////// end if
+                        }
+                    }
+                }
             }
 
             $manager->first_name = $data['first_name'];
@@ -89,8 +109,8 @@ class ManagersController extends Controller
             $manager->phone_number = $data['phone_number'];
             $manager->password = bcrypt($data['password']);
             $manager->title_id = $data['title'];
-            $manager->lines = $data['lines'];
-            $manager->sectors = $data['sectors'];
+            $manager->sectors = $managerSectors;
+            $manager->lines = $managerLines;
             $manager->role = 2;
             $manager->activated = 1;
 
@@ -109,7 +129,6 @@ class ManagersController extends Controller
     {
         $selected_manager = DB::table('users')->where('id', '=', $id)->first();
         $sectors = DB::table('sectors')->select(['id', 'name'])->get();
-        $lines = DB::table('lines')->where('status', 1)->select(['id', 'name'])->get();
         $titles = DB::table('titles')->select(['id', 'name'])->get();
 
         $decodedLines = json_decode($selected_manager->lines, true);
@@ -121,7 +140,6 @@ class ManagersController extends Controller
         return $this->ifAdmin('admin.panel.managers.edit', [
             'selected_manager' => $selected_manager,
             'sectors' => $sectors,
-            'lines' => $lines,
             'titles' => $titles,
             'integerSectorIds' => $integerSectorIds,
             'integerLineIds' => $integerLineIds,
@@ -140,6 +158,26 @@ class ManagersController extends Controller
                 return $this->backWithMessage('error', $validator->errors()->first());
             }
 
+            $managerSectors = [];
+            $managerLines = [];
+            $sectorIds = Sector::query()->get(['id']);
+            $lineIds = Line::query()->get(['id']);
+
+            foreach ($sectorIds as $sector) {
+                if ($request['s_' . $sector->id]) {
+                    $managerSectors[] = $sector->id;
+                    foreach ($lineIds as $line) {
+                        if ($request['s_' . $sector->id . 'l_' . $line->id]) {
+                            /////// this if should be solved
+                            if (! in_array($line->id, $managerLines)) {
+                                $managerLines[] = $line->id;
+                            }
+                            /////// end if
+                        }
+                    }
+                }
+            }
+
             DB::table('users')
                 ->where('id', '=', $id)
                 ->update([
@@ -151,8 +189,8 @@ class ManagersController extends Controller
                     'email' => $request->email,
                     'phone_number' => $request->phone_number,
                     'title_id' => $request->title,
-                    'lines' => $request->lines,
-                    'sectors' => $request->sectors,
+                    'sectors' => $managerSectors,
+                    'lines' => $managerLines,
                     'role' => 2,
                     'activated' => 1,
                 ]);

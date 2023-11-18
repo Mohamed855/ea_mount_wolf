@@ -11,30 +11,21 @@
                         <div class="main-logo"><img src="{{ asset('storage/images/logos/logo.png') }}" class="mw-100" alt=""></div>
                         <div class="welcome">Welcome to Averroes Manager Access</div>
                         @if(session()->has('error'))
-                            <div class="m-auto">
-                                <span class="text-danger" role="alert">{{ session()->get('invalid') }}</span>
+                            <div class="alert alert-danger text-center m-auto mb-2 col-12" role="alert">
+                                {{ session('error') }}
                             </div>
                         @endif
                         <div class="ea-form">
                             <form action="{{ route('manager.check_credentials') }}" method="post">
                                 @csrf
                                 <div>
-                                    <input type="text" name="user_name" class="form-control @error('user_name') is-invalid @enderror" value="{{ old('user_name') }}" placeholder="User Name or Email">
-                                    @error('user_name')
-                                        <span class="text-danger" role="alert">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" name="user_name" class="form-control py-2" value="{{ old('user_name') }}" placeholder="User Name or Email">
                                 </div>
                                 <div>
-                                    <input type="text" name="crm_code" class="form-control @error('crm_code') is-invalid @enderror" value="{{ old('crm_code') }}" placeholder="CRM Code">
-                                    @error('crm_code')
-                                        <span class="text-danger" role="alert">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" name="crm_code" class="form-control py-2" value="{{ old('crm_code') }}" placeholder="CRM Code">
                                 </div>
                                 <div>
-                                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password">
-                                    @error('password')
-                                        <span class="text-danger" role="alert">{{ $message }}</span>
-                                    @enderror
+                                    <input type="password" name="password" class="form-control py-2" placeholder="Password">
                                 </div>
                                 <div class="form-btns">
                                     <button type="submit" class="ea-btns dark-btn">Log In</button>

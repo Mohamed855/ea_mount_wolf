@@ -28,7 +28,7 @@
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="@lang('panel.name')">
                                     </div>
                                     <div class="pb-3">
-                                        <select name="category" class="form-control">
+                                        <select name="category" class="form-control py-2">
                                             <option value="0" selected disabled>@lang('panel.categories')</option>
                                             @foreach($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
