@@ -129,7 +129,7 @@
                                 <path id="_Color" data-name=" ↳Color" d="M8,19.5a2,2,0,0,1-2-2h4A2,2,0,0,1,8,19.5Zm8-3H0v-1l2-2v-5A7.1,7.1,0,0,1,3.174,4.44,5.522,5.522,0,0,1,6.5,2.18V1.5a1.5,1.5,0,0,1,3,0v.68a5.529,5.529,0,0,1,3.322,2.264A7.085,7.085,0,0,1,14,8.5v5l2,2v1Z" transform="translate(4 2)" fill="#f0f0f0"/>
                             </svg>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end scroll-bar p-2">
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end notifications-dropdown scroll-bar p-2">
                             @php
                                $comment_notifications = count($comment_notifications) >= 5 ? $comment_notifications->take(5) : $comment_notifications;
                                $video_notifications = count($video_notifications) >= 5 ? $video_notifications->take(5) : $video_notifications;

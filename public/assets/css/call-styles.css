@@ -42,6 +42,7 @@ div.scrollmenu a:hover{color:var(--pc);}
 #profile_picture{display:none;}
 
 .scroll-bar{overflow-x:hidden;white-space:nowrap;}
+.notifications-dropdown{max-height:80vh;}
 .side_bar{position:fixed;top:0;bottom:0;height:100vh;background-color:var(--pc);color:var(--fc);overflow-y:scroll;}
 .side_bar .scroll-bar{padding-bottom:2.5vh;}
 .sidebar-title{background-color:rgba(100,100,100,0.4);color:rgb(150,150,150);font-weight:bold;}
