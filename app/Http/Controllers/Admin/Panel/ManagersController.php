@@ -135,7 +135,6 @@ class ManagersController extends Controller
         $sectors = DB::table('sectors')->select(['id', 'name'])->get();
         $titles = DB::table('titles')->select(['id', 'name'])->get();
 
-        $decodedLines = json_decode($selected_manager->lines, true);
         $decodedSectors = json_decode($selected_manager->sectors, true);
 
         return $this->ifAdmin('admin.panel.managers.edit', [
@@ -143,7 +142,6 @@ class ManagersController extends Controller
             'sectors' => $sectors,
             'titles' => $titles,
             'integerSectorIds' => $decodedSectors,
-            'integerLineIds' => $decodedLines,
         ]);
     }
 

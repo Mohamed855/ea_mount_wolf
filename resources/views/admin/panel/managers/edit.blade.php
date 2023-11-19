@@ -77,12 +77,15 @@
                                                             ->select(['l.id', 'l.name'])
                                                             ->orderBy('l.id')->get()
                                                         )
+                                                    @php($manager_lines = \App\Models\ManagerLines::query()
+                                                            ->where('user_id', $selected_manager->id)
+                                                            ->where('sector_id', $sl->id)->first()->lines ?? [])
                                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                                         <div class="row">
                                                             <h6 class="text-start">{{ $sl->name }}</h6>
                                                             @foreach($lines as $line)
                                                                 <div class="col-12 col-md-6 col-xxl-4 text-start">
-                                                                    <input type="checkbox" name="{{ 's_' . $sl->id . 'l_' . $line->id }}" value="{{ $line->id }}" {{ in_array($line->id, $integerLineIds) ? 'checked' : '' }} style="cursor:pointer">
+                                                                    <input type="checkbox" name="{{ 's_' . $sl->id . 'l_' . $line->id }}" value="{{ $line->id }}" {{ in_array($line->id, $manager_lines) ? 'checked' : '' }} style="cursor:pointer">
                                                                     <label class="small" for="{{ 's_' . $sl->id . 'l_' . $line->id }}">{{ $line->name }}</label>
                                                                 </div>
                                                             @endforeach
