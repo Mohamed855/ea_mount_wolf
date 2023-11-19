@@ -129,16 +129,13 @@ class EmployeesController extends Controller
         $lines = Line::query()->where('status', 1)->select(['id', 'name'])->get();
         $titles = Title::query()->select(['id', 'name'])->get();
 
-        $decodedLines = json_decode($selected_employee->lines, true);
-        $decodedSectors = json_decode($selected_employee->sectors, true);
-
         return $this->ifAdmin('admin.panel.employees.edit', [
             'selected_employee' => $selected_employee,
             'sectors' => $sectors,
             'lines' => $lines,
             'titles' => $titles,
-            'integerSectorIds' => $decodedSectors,
-            'integerLineIds' => $decodedLines,
+            'integerSectorIds' => $selected_employee->sectors,
+            'integerLineIds' => $selected_employee->lines,
         ]);
     }
 
