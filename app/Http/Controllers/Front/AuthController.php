@@ -39,7 +39,7 @@ class AuthController extends Controller
                 }
                 Session::flush();
                 Auth::logout();
-                return $this->backWithMessage('error', 'Your account isn\'t activated');
+                return $this->backWithMessage('error', 'Your account has been suspended');
             }
             Session::flush();
             Auth::logout();
@@ -68,7 +68,7 @@ class AuthController extends Controller
                 }
                 Session::flush();
                 Auth::logout();
-                return $this->backWithMessage('error', 'Your account isn\'t activated');
+                return $this->backWithMessage('error', 'Your account has been suspended');
             }
             Session::flush();
             Auth::logout();

@@ -59,7 +59,7 @@ trait AuthTrait {
             } else {
                 Session::flush();
                 Auth::logout();
-                return redirect()->route('login')->with('activeRequest', 'Your account is not activated');
+                return redirect()->route('select-user');
             }
         }
         return redirect()->route('select-user');
