@@ -32,7 +32,7 @@ class SiteController extends Controller
                 }
             }
             elseif (auth()->user()->role == 3) {
-                if (! in_array($sector_id, auth()->user()->sectors) || ! in_array($line_id, auth()->user()->lines)) {
+                if (! in_array($line_id, auth()->user()->lines)) {
                     return redirect()->route('not_authorized');
                 }
             }
