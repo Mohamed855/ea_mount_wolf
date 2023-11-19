@@ -133,13 +133,11 @@ class ManagersController extends Controller
         $sectors = Sector::query()->select(['id', 'name'])->get();
         $titles = Title::query()->select(['id', 'name'])->get();
 
-        $decodedSectors = json_decode($selected_manager->sectors, true);
-
         return $this->ifAdmin('admin.panel.managers.edit', [
             'selected_manager' => $selected_manager,
             'sectors' => $sectors,
             'titles' => $titles,
-            'integerSectorIds' => $decodedSectors,
+            'integerSectorIds' => $selected_manager->sectors,
         ]);
     }
 
