@@ -21,7 +21,7 @@ class AuthController extends Controller
 
     public function manager_login() {
         return $this->ifNotAuthenticated(
-            $this->successView('front.auth.manager_login')
+            view('front.auth.manager_login')
         );
     }
 
@@ -35,7 +35,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             if (auth()->user()->role == 2){
                 if (auth()->user()->activated) {
-                    return $this->redirect('home');
+                    return redirect()->route('home');
                 }
                 Session::flush();
                 Auth::logout();
@@ -50,7 +50,7 @@ class AuthController extends Controller
 
     public function employee_login() {
         return $this->ifNotAuthenticated(
-             $this->successView('front.auth.emp_login')
+            view('front.auth.emp_login')
         );
     }
 
@@ -64,7 +64,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             if (auth()->user()->role == 3){
                 if (auth()->user()->activated) {
-                    return $this->redirect('home');
+                    return redirect()->route('home');
                 }
                 Session::flush();
                 Auth::logout();
@@ -86,6 +86,6 @@ class AuthController extends Controller
             Session::flush();
             Auth::logout();
         }
-        return $this->redirect('select-user');
+        return redirect()->route('select-user');
     }
 }

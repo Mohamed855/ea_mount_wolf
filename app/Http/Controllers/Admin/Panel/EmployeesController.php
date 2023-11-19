@@ -131,16 +131,13 @@ class EmployeesController extends Controller
         $decodedLines = json_decode($selected_employee->lines, true);
         $decodedSectors = json_decode($selected_employee->sectors, true);
 
-        $integerSectorIds = array_map('intval', $decodedSectors);
-        $integerLineIds = array_map('intval', $decodedLines);
-
         return $this->ifAdmin('admin.panel.employees.edit', [
             'selected_employee' => $selected_employee,
             'sectors' => $sectors,
             'lines' => $lines,
             'titles' => $titles,
-            'integerSectorIds' => $integerSectorIds,
-            'integerLineIds' => $integerLineIds,
+            'integerSectorIds' => $decodedSectors,
+            'integerLineIds' => $decodedLines,
         ]);
     }
 

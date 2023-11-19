@@ -52,7 +52,7 @@
                             <span>{{ $video->sector_name . " | " }}</span>
                             <span>{{ $video->line_name }}</span>
                         </td>
-                        <td>{{ $viewed->where('video_id', $video->id)->count() }}</td>
+                        <td>{{ $videoViewed->where('video_id', $video->id)->count() }}</td>
                         <td>{{ date('d-m-Y, h:m a', strtotime($video->created_at)) }}</td>
                         <td>
                             <a href="{{ route('ea_videos.viewed_by', $video->id) }}"

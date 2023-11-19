@@ -33,7 +33,7 @@
                             @endforeach
                             @foreach($file_notifications as $file_notification)
                                 <a class="notification_item"
-                                   href="{{ route('file.view', $file_notification->file_id) }}">
+                                   href="{{ route('file.view', $file_notification->file_id) }}" target="_bluck">
                                     <div class="comment-box">
                                         <div class="comment-txt">
                                             <p>{{ $file_notification->text }}</p>

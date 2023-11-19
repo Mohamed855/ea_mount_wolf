@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\ManagerLines;
 use App\Models\Topic;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
@@ -38,13 +39,13 @@ class SiteController extends Controller
                     ->where('favorite_videos.user_id', auth()->user()->id)
                     ->where('videos.status', '=',1)
                     ->get(),
-                'downloaded' => DB::table('file_views')
+                'fileViewed' => DB::table('file_views')
                     ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
-                'viewed' => DB::table('video_views')
+                'videoViewed' => DB::table('video_views')
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
             ]);
         }
-        return $this->redirect('select-user');
+        return redirect()->route('select-user');
     }
     public function choose_line(string $sector_id)
     {
@@ -58,8 +59,13 @@ class SiteController extends Controller
 
         if (Auth::check()){
             if (Auth::user()->role != 1) {
-                $integerLineIds = array_map('intval', auth()->user()->lines);
-                $selected_sector_lines = $selected_sector_lines->whereIn('lines.id', $integerLineIds);
+                $lineIds = auth()->user()->lines;
+                if (Auth::user()->role == 2) {
+                    $managerSector = ManagerLines::query()->where('user_id', auth()->id())
+                        ->where('sector_id', $sector_id)->first();
+                    $lineIds  = $managerSector ? $managerSector->lines : [];
+                }
+                $selected_sector_lines = $selected_sector_lines->whereIn('lines.id', $lineIds);
             }
         }
 
@@ -80,7 +86,7 @@ class SiteController extends Controller
             if ($video->status) {
                 return $this->ifAuthenticated('front.video', [
                     'video' => $video,
-                    'viewed' => $viewed,
+                    'videoViewed' => $viewed,
                 ]);
             }
             return abort(404);
@@ -94,7 +100,7 @@ class SiteController extends Controller
 
         if(Auth::check())
             return redirect()->route('topic', $latest_topic->id);
-        return $this->redirect('select-user');
+        return redirect()->route('select-user');
     }
 
     public function topic(string $id)
@@ -144,7 +150,7 @@ class SiteController extends Controller
                         'sectors.name as sector_name',
                         'lines.name as line_name',
                     ),
-                'viewed' => DB::table('video_views')
+                'videoViewed' => DB::table('video_views')
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
             ]);
         } else {
@@ -154,11 +160,8 @@ class SiteController extends Controller
     public function createVideo()
     {
         if (Auth::user()->role == 2) {
-            $userSectors = array_map('intval', auth()->user()->sectors);
-            $userLines = array_map('intval', auth()->user()->lines);
             return $this->ifAuthenticated('front.manager.videos.create',[
-                'sectors' => DB::table('sectors')->whereIn('id', $userSectors)->get(),
-                'lines' => DB::table('lines')->whereIn('id', $userLines)->get(),
+                'sectors' => DB::table('sectors')->whereIn('id', auth()->user()->sectors)->get(),
             ]);
         } else {
             abort(404);
@@ -179,7 +182,7 @@ class SiteController extends Controller
                         'sectors.name as sector_name',
                         'lines.name as line_name',
                     ),
-                'downloaded' => DB::table('file_views')
+                'fileViewed' => DB::table('file_views')
                     ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
             ]);
         } else {
@@ -189,11 +192,8 @@ class SiteController extends Controller
     public function createFile()
     {
         if (Auth::user()->role == 2) {
-            $userSectors = array_map('intval', auth()->user()->sectors);
-            $userLines = array_map('intval', auth()->user()->lines);
             return $this->ifAuthenticated('front.manager.files.create',[
-                'sectors' => DB::table('sectors')->whereIn('id', $userSectors)->get(),
-                'lines' => DB::table('lines')->whereIn('id', $userLines)->get(),
+                'sectors' => DB::table('sectors')->whereIn('id', auth()->user()->sectors)->get(),
             ]);
         } else {
             abort(404);

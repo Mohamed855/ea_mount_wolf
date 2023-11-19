@@ -88,6 +88,6 @@ class ActionsController extends Controller
         }
     }
     public function not_authorized() {
-        return $this->redirect('home')->with('notAuthorized', 'You are not Authorized');
+        return redirect()->route('home')->with('notAuthorized', 'You are not Authorized');
     }
 }

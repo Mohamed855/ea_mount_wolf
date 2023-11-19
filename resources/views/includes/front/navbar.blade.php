@@ -154,7 +154,7 @@
                             @endforeach
                             @foreach($file_notifications as $file_notification)
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('file.view', $file_notification->file_id) }}">
+                                    <a class="dropdown-item" href="{{ route('file.view', $file_notification->file_id) }}" target="_bluck">
                                         {{ $file_notification->text }}
                                     </a>
                                     <hr>

@@ -5,12 +5,6 @@ namespace App\Traits;
 use Illuminate\Support\Facades\DB;
 
 trait GeneralTrait {
-    public function successView ($view) {
-        return view($view);
-    }
-    public function redirect ($route) {
-        return redirect()->route($route);
-    }
     public function backWithMessage ($key, $value) {
         return redirect()->back()->with($key, $value);
     }

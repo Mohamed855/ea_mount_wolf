@@ -33,21 +33,46 @@
                                     <div class="pb-3">
                                         <input type="text" name="src" class="form-control py-2" value="{{ old('src') }}" placeholder="Video Link">
                                     </div>
-                                    <div class="pb-3">
-                                        <select name="sector" class="form-control">
-                                            <option value="0" disabled selected>Sector *</option>
+                                    <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                        <div class="row">
+                                            <h6 class="text-start">Choose sector</h6>
                                             @foreach($sectors as $sector)
-                                                <option value="{{ $sector->id }}">{{ $sector->name }}</option>
+                                                <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                    <input type="radio" id="{{ 's_' . $sector->id }}" name="{{ 'sector' }}" value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'checked' : '' }} style="cursor:pointer" onchange="generateOneSectorLines({{ $sector->id }})">
+                                                    <label class="small" for="{{ 'sector' }}">{{ $sector->name }}</label>
+                                                </div>
                                             @endforeach
-                                        </select>
+                                        </div>
                                     </div>
-                                    <div class="pb-3">
-                                        <select name="line" class="form-control">
-                                            <option value="0" disabled selected>Line *</option>
-                                            @foreach($lines as $line)
-                                                <option value="{{ $line->id }} {{ $line->id == old('line') ? 'selected' : '' }}">{{ $line->name }}</option>
-                                            @endforeach
-                                        </select>
+
+                                    <div class="col-12 p-3 mb-3 border rounded">
+                                        <h6 class="text-start">Choose line</h6>
+                                        @foreach($sectors as $sl)
+                                            @php($integerSectorIds = array_map('intval', auth()->user()->sectors))
+                                            <div id="{{ 'sl_' . $sl->id }}" style="display: {{ $sl->id == old('s_' . $sl->id) ? 'flex' : 'none' }}">
+                                                @php($manager_lines = \App\Models\ManagerLines::query()
+                                                    ->where('user_id', auth()->id())
+                                                    ->whereIn('sector_id', $integerSectorIds)
+                                                    ->get())
+
+                                                <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                                    <div class="row">
+                                                        <h6 class="text-start">{{ $sl->name }}</h6>
+                                                        @php($lines = \App\Models\Line::query()->get())
+                                                        @for($i = 0; $i < count($manager_lines); $i++)
+                                                            @foreach($lines as $line)
+                                                                @if($manager_lines[$i]->sector_id == $sl->id && in_array($line->id, $manager_lines[$i]->lines))
+                                                                    <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                                        <input type="radio" name="{{ 'line' }}" value="{{ $line->id }}" {{ $line->id == old('line') ? 'checked' : '' }} style="cursor:pointer">
+                                                                        <label class="small" for="{{ 'line' }}">{{ $line->name }}</label>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        @endfor
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-12 m-auto">
@@ -63,6 +88,7 @@
     </div>
 
     @include('includes.front.scripts')
+    @include('includes.admin.scripts')
 
     <script src="{{ asset('assets/js/owl.carousel.js') }}"></script>
     <script>

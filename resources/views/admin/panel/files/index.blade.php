@@ -74,14 +74,14 @@
                                 <span>{{ $file->sector_name . " | " }}</span>
                                 <span>{{ $file->line_name }}</span>
                             </td>
-                            <td>{{ $viewed->where('file_id', $file->id)->count() }}</td>
+                            <td>{{ $fileViewed->where('file_id', $file->id)->count() }}</td>
                             <td>{{ date('d-m-Y, h:m a', strtotime($file->created_at)) }}</td>
                             <td>
                                 <a href="{{ route('ea_files.viewed_by', $file->id) }}"
                                    class="btn btn-outline-warning btn-sm btn-rounded">
                                     Viewed By
                                 </a>
-                                <a href="{{ route('file.view', $file->id) }}"
+                                <a href="{{ route('file.view', $file->id) }}" target="_bluck"
                                    class="btn btn-outline-primary btn-sm btn-rounded">
                                     View
                                 </a>

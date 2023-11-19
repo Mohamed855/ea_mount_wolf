@@ -32,13 +32,13 @@ class UserController extends Controller
                     ->join('favorite_videos', 'videos.id', '=', 'favorite_videos.video_id')
                     ->select('videos.*', 'favorite_videos.user_id', 'favorite_videos.video_id')
                     ->where('favorite_videos.user_id', auth()->user()->id),
-                'downloaded' => DB::table('file_views')
+                'fileViewed' => DB::table('file_views')
                     ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
-                'viewed' => DB::table('video_views')
+                'videoViewed' => DB::table('video_views')
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
             ]);
         }
-        return $this->redirect('select-user');
+        return redirect()->route('select-user');
     }
 
     public function notifications()
@@ -46,7 +46,7 @@ class UserController extends Controller
         if (Auth::check()) {
             return $this->ifAuthenticated('front.user.notifications', null);
         }
-        return $this->redirect('select-user');
+        return redirect()->route('select-user');
     }
 
     public function profile($user_name) {

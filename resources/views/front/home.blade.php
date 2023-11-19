@@ -37,7 +37,7 @@
                         <div class="departments-section justify-content-evenly m-auto col-10 py-5">
                             @php($userSectors = [])
                             @if(auth()->user()->role != 1)
-                                @php($userSectors = array_map('intval', auth()->user()->sectors))
+                                @php($userSectors = auth()->user()->sectors)
                             @endif
                             @php(auth()->user()->role != 1 ? $isNotAdmin = true : $isNotAdmin = false)
                             @foreach($sectors as $sector)

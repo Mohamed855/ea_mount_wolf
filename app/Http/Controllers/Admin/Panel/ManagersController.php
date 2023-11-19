@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Line;
+use App\Models\ManagerLines;
 use App\Models\Sector;
 use App\Models\User;
 use App\Traits\AuthTrait;
@@ -37,7 +38,6 @@ class ManagersController extends Controller
                         'managers.phone_number',
                         'managers.profile_image',
                         'managers.sectors',
-                        'managers.lines',
                         'managers.activated',
                         'managers.created_at',
                         'titles.name as title_name',
@@ -80,26 +80,6 @@ class ManagersController extends Controller
                 $username .= $i;
             }
 
-            $managerSectors = [];
-            $managerLines = [];
-            $sectorIds = Sector::query()->get(['id']);
-            $lineIds = Line::query()->get(['id']);
-
-            foreach ($sectorIds as $sector) {
-                if ($request['s_' . $sector->id]) {
-                    $managerSectors[] = $sector->id;
-                    foreach ($lineIds as $line) {
-                        if ($request['s_' . $sector->id . 'l_' . $line->id]) {
-                            /////// this if should be solved
-                            if (! in_array($line->id, $managerLines)) {
-                                $managerLines[] = $line->id;
-                            }
-                            /////// end if
-                        }
-                    }
-                }
-            }
-
             $manager->first_name = $data['first_name'];
             $manager->middle_name = $data['middle_name'];
             $manager->last_name = $data['last_name'];
@@ -109,12 +89,36 @@ class ManagersController extends Controller
             $manager->phone_number = $data['phone_number'];
             $manager->password = bcrypt($data['password']);
             $manager->title_id = $data['title'];
-            $manager->sectors = $managerSectors;
-            $manager->lines = $managerLines;
+            $manager->sectors = [];
+            $manager->lines = [];
             $manager->role = 2;
             $manager->activated = 1;
 
             $manager->save();
+
+            $manager = User::query()->where('role', 2)->latest('id')->first();
+            $managerSectors = [];
+            $sectorIds = Sector::query()->get(['id']);
+            $lineIds = Line::query()->get(['id']);
+
+            foreach ($sectorIds as $sector) {
+                if ($request['s_' . $sector->id]) {
+                    $managerSectors[] = $sector->id;
+                    $managerSectorLines = [];
+                    foreach ($lineIds as $line) {
+                        if ($request['s_' . $sector->id . 'l_' . $line->id]) {
+                            $managerSectorLines[] = $line->id;
+                        }
+                    }
+                    $manager_lines = new ManagerLines();
+                    $manager_lines->user_id = $manager->id;
+                    $manager_lines->sector_id = $sector->id;
+                    $manager_lines->lines = $managerSectorLines;
+                    $manager_lines->save();
+                    unset($managerSectorLines);
+                }
+            }
+            $manager->update(['sectors' => $managerSectors]);
 
             return $this->backWithMessage('success', 'Manager added successfully');
         } catch (\Exception $e) {
@@ -134,15 +138,12 @@ class ManagersController extends Controller
         $decodedLines = json_decode($selected_manager->lines, true);
         $decodedSectors = json_decode($selected_manager->sectors, true);
 
-        $integerSectorIds = array_map('intval', $decodedSectors);
-        $integerLineIds = array_map('intval', $decodedLines);
-
         return $this->ifAdmin('admin.panel.managers.edit', [
             'selected_manager' => $selected_manager,
             'sectors' => $sectors,
             'titles' => $titles,
-            'integerSectorIds' => $integerSectorIds,
-            'integerLineIds' => $integerLineIds,
+            'integerSectorIds' => $decodedSectors,
+            'integerLineIds' => $decodedLines,
         ]);
     }
 
@@ -158,23 +159,27 @@ class ManagersController extends Controller
                 return $this->backWithMessage('error', $validator->errors()->first());
             }
 
+            ManagerLines::query()->where('user_id', $id)->delete();
+
             $managerSectors = [];
-            $managerLines = [];
             $sectorIds = Sector::query()->get(['id']);
             $lineIds = Line::query()->get(['id']);
 
             foreach ($sectorIds as $sector) {
                 if ($request['s_' . $sector->id]) {
                     $managerSectors[] = $sector->id;
+                    $managerSectorLines = [];
                     foreach ($lineIds as $line) {
                         if ($request['s_' . $sector->id . 'l_' . $line->id]) {
-                            /////// this if should be solved
-                            if (! in_array($line->id, $managerLines)) {
-                                $managerLines[] = $line->id;
-                            }
-                            /////// end if
+                            $managerSectorLines[] = $line->id;
                         }
                     }
+                    $manager_lines = new ManagerLines();
+                    $manager_lines->user_id = $id;
+                    $manager_lines->sector_id = $sector->id;
+                    $manager_lines->lines = $managerSectorLines;
+                    $manager_lines->save();
+                    unset($managerSectorLines);
                 }
             }
 
@@ -190,7 +195,7 @@ class ManagersController extends Controller
                     'phone_number' => $request->phone_number,
                     'title_id' => $request->title,
                     'sectors' => $managerSectors,
-                    'lines' => $managerLines,
+                    'lines' => [],
                     'role' => 2,
                     'activated' => 1,
                 ]);
@@ -207,6 +212,7 @@ class ManagersController extends Controller
     public function destroy(string $id)
     {
         $this->deleteFromDB('users', $id, 'storage/images/profile_images/', 'profile_image');
+        ManagerLines::query()->where('user_id', $id)->delete();
         return $this->backWithMessage('success', 'Manager has been deleted');
     }
 }

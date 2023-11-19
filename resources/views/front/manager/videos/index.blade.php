@@ -65,9 +65,13 @@
                                             <span>{{ $video->sector_name . " | " }}</span>
                                             <span>{{ $video->line_name }}</span>
                                         </td>
-                                        <td>{{ $viewed->where('video_id', $video->id)->count() }}</td>
+                                        <td>{{ $videoViewed->where('video_id', $video->id)->count() }}</td>
                                         <td>{{ date('d-m-Y, h:m a', strtotime($video->created_at)) }}</td>
                                         <td>
+                                            <a href="{{ route('video', $video->id) }}"
+                                               class="btn btn-outline-primary btn-sm btn-rounded">
+                                                View
+                                            </a>
                                             <form action="{{ route('toggle_show_video', $video->id) }}" method="post"
                                                   class="d-inline">
                                                 @csrf

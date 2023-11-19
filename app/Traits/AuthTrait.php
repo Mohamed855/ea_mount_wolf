@@ -12,11 +12,11 @@ trait AuthTrait {
     public function ifAdmin ($view, $data = []) {
         if(Auth::check()) {
             if (auth()->user()->role === 1) {
-                return $this->successView($view)->with($data);
+                return view($view)->with($data);
             }
-            return $this->redirect('not_authorized');
+            return redirect()->route('not_authorized');
         }
-        return $this->redirect('select-user');
+        return redirect()->route('select-user');
     }
     public function ifAuthenticated ($view, $data) {
          if(Auth::check()) {
@@ -39,16 +39,16 @@ trait AuthTrait {
                     $comment_notifications = DB::table('comment_notifications')->get();
                 }
                 elseif (auth()->user()->role == 2) {
-                    $video_notifications = DB::table('video_notifications')->where('sector_id', auth()->user()->sector_id)->get();
-                    $file_notifications = DB::table('file_notifications')->where('sector_id', auth()->user()->sector_id)->get();
+                    $video_notifications = DB::table('video_notifications')->whereIn('sector_id', auth()->user()->sectors)->get();
+                    $file_notifications = DB::table('file_notifications')->whereIn('sector_id', auth()->user()->sectors)->get();
                     $comment_notifications = DB::table('comment_notifications')->get();
                 }
                 elseif (auth()->user()->role == 3) {
-                    $video_notifications = DB::table('video_notifications')->where('sector_id', auth()->user()->sector_id)->where('line_id', auth()->user()->line_id)->get();
-                    $file_notifications = DB::table('file_notifications')->where('sector_id', auth()->user()->sector_id)->where('line_id', auth()->user()->line_id)->get();
+                    $video_notifications = DB::table('video_notifications')->whereIn('sector_id', auth()->user()->sectors)->whereIn('line_id', auth()->user()->lines)->get();
+                    $file_notifications = DB::table('file_notifications')->whereIn('sector_id', auth()->user()->sectors)->whereIn('line_id', auth()->user()->lines)->get();
                     $comment_notifications = DB::table('comment_notifications')->get();
                 }
-                return $this->successView($view)
+                return view($view)
                     ->with([
                         'user_details' => $current_user_details,
                         'video_notifications' => $video_notifications,
@@ -59,14 +59,14 @@ trait AuthTrait {
             } else {
                 Session::flush();
                 Auth::logout();
-                return $this->redirect('login')->with('activeRequest', 'Your account is not activated');
+                return redirect()->route('login')->with('activeRequest', 'Your account is not activated');
             }
         }
-        return $this->redirect('select-user');
+        return redirect()->route('select-user');
     }
     public function ifNotAuthenticated ($return) {
         if (!Auth::check())
             return $return;
-        return $this->redirect('home');
+        return redirect()->route('home');
     }
 }

@@ -27,21 +27,42 @@
                                     <div class="pb-3">
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="File Name">
                                     </div>
-                                    <div class="pb-3">
-                                        <select name="sector" class="form-control py-2">
-                                            <option value="0" disabled selected>Sector *</option>
+                                    <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                        <div class="row">
+                                            <h6 class="text-start">Choose sector</h6>
                                             @foreach($sectors as $sector)
-                                                <option value="{{ $sector->id }}">{{ $sector->name }}</option>
+                                                <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                    <input type="radio" id="{{ 's_' . $sector->id }}" name="{{ 'sector' }}" value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'checked' : '' }} style="cursor:pointer" onchange="generateOneSectorLines({{ $sector->id }})">
+                                                    <label class="small" for="{{ 'sector' }}">{{ $sector->name }}</label>
+                                                </div>
                                             @endforeach
-                                        </select>
+                                        </div>
                                     </div>
-                                    <div class="pb-3">
-                                        <select name="line" class="form-control py-2">
-                                            <option value="0" disabled selected>Line *</option>
-                                            @foreach($lines as $line)
-                                                <option value="{{ $line->id }} {{ $line->id == old('line') ? 'selected' : '' }}">{{ $line->name }}</option>
-                                            @endforeach
-                                        </select>
+
+                                    <div class="col-12 p-3 mb-3 border rounded">
+                                        <h6 class="text-start">Choose line</h6>
+                                        @foreach($sectors as $sl)
+                                            <div id="{{ 'sl_' . $sl->id }}" style="display: {{ $sl->id == old('s_' . $sl->id) ? 'flex' : 'none' }}">
+                                                @php($lines = \Illuminate\Support\Facades\DB::table('lines as l')
+                                                        ->join('line_sector as ls', 'ls.line_id', '=', 'l.id')
+                                                        ->where('ls.sector_id', $sl->id)
+                                                        ->where('l.status', 1)
+                                                        ->select(['l.id', 'l.name'])
+                                                        ->orderBy('l.id')->get()
+                                                    )
+                                                <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                                    <div class="row">
+                                                        <h6 class="text-start">{{ $sl->name }}</h6>
+                                                        @foreach($lines as $line)
+                                                            <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                                <input type="radio" name="{{ 'line' }}" value="{{ $line->id }}" {{ $line->id == old('line') ? 'checked' : '' }} style="cursor:pointer">
+                                                                <label class="small" for="{{ 'line' . $line->id }}">{{ $line->name }}</label>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                                 <div class="col-md-10 col-12 m-auto">
@@ -60,4 +81,5 @@
             </div>
         </div>
     </div>
+    @include('includes.admin.scripts')
 @endsection

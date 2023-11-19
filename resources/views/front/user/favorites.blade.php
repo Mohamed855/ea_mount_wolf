@@ -40,7 +40,7 @@
                                                          style="max-width: 16px">
                                                 </a>
                                             </span>
-                                            <a href="{{ route('file.view', $file->id) }}">
+                                            <a href="{{ route('file.view', $file->id) }}" target="_bluck">
                                                 <div class="incentive-title">{{ $file->name }}</div>
                                                 <div class="incentive-body">
                                                     <div class="incentive-txt">Published<br>{{ $file->created_at }}
@@ -49,7 +49,7 @@
                                                         <div class="incentive-info in-views">
                                                             <img src="{{ asset('storage/images/icons/eye_light.svg') }}"
                                                                  style="max-width: 16px" alt="">
-                                                            {{ $downloaded->where('file_id', $file->id)->count() }}
+                                                            {{ $fileViewed->where('file_id', $file->id)->count() }}
                                                         </div>
                                                         @php($file_icon = "")
                                                         @if (str_contains($file->type, 'word'))
@@ -133,7 +133,7 @@
                                                                 <div class="incentive-info in-views">
                                                                     <img src="{{ asset('storage/images/icons/eye_light.svg') }}"
                                                                          style="max-width: 16px" alt="">
-                                                                    {{ $viewed->where('video_id', $video->id)->count() }}
+                                                                    {{ $videoViewed->where('video_id', $video->id)->count() }}
                                                                 </div>
                                                                 <div class="incentive-info in-files">
                                                                     <img

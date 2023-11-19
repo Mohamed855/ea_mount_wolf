@@ -58,7 +58,7 @@
                                      alt=""
                                      style="width: 45px; height: 45px"
                                      class="rounded-circle"/>
-                                <div class="ms-3">
+                                <div class="ms-3" style="overflow:auto;">
                                     <p class="fw-bold mb-1 text-start">{{ $manager->first_name . ' ' . $manager->middle_name . ' ' . $manager->last_name }}</p>
                                     <p class="text-muted mb-0">{{ ucfirst($manager->user_name) }}</p>
                                 </div>
@@ -73,10 +73,9 @@
                         <td>{{ $manager->title_name }}</td>
                         <td>
                             @php($decodedSectors = json_decode($manager->sectors, true))
-                            @php($integerSectorIds = array_map('intval', $decodedSectors))
-                            @php($manager_sectors = \App\Models\Sector::query()->whereIn('id', $integerSectorIds)->get())
+                            @php($manager_sectors = \App\Models\Sector::query()->whereIn('id', $decodedSectors)->get())
                             @if(count($manager_sectors) > 0)
-                                <div class="text-start" style="max-height:100px; overflow-y:auto;">
+                                <div class="text-start" style="max-height:100px; overflow:auto;">
                                     @for($i = 0; $i < count($manager_sectors); $i++)
                                         {{ $i + 1 }} - {{ $manager_sectors[$i]->name }}
                                         <br>
@@ -87,15 +86,28 @@
                             @endif
                         </td>
                         <td>
-                            @php($decodedLines = json_decode($manager->lines, true))
-                            @php($integerLineIds = array_map('intval', $decodedLines))
-                            @php($manager_lines = \App\Models\Line::query()->whereIn('id', $integerLineIds)->get())
+                            @php($manager_lines = \App\Models\ManagerLines::query()
+                                ->join('sectors as s', 's.id', '=', 'manager_lines.sector_id')
+                                ->where('user_id', $manager->id)
+                                ->whereIn('sector_id', $decodedSectors)
+                                ->select([
+                                    'manager_lines.*',
+                                    's.name as sectorName'
+                                ])->get())
                             @if(count($manager_lines) > 0)
-                                <div class="text-start" style="max-height:100px; overflow-y:auto;">
+                                <div class="text-start" style="max-height:100px; overflow:auto;">
+                                    @php($lines = \App\Models\Line::query()->get())
                                     @for($i = 0; $i < count($manager_lines); $i++)
-                                        {{ $i + 1 }} - {{ $manager_lines[$i]->name }}
-                                        <br>
+                                        @php($currentSectorLines = [])
+                                        @foreach($lines as $l)
+                                            @if(in_array($l->id, $manager_lines[$i]->lines))
+                                                @php($currentSectorLines[] = $l->name)
+                                            @endif
+                                        @endforeach
+                                        <h6>{{ $manager_lines[$i]->sectorName }}</h6>
+                                        <p>[{{ implode(', ', $currentSectorLines) }}]</p>
                                     @endfor
+                                    @unset($currentSectorLines)
                                 </div>
                             @else
                                 No Lines

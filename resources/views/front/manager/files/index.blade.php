@@ -39,7 +39,7 @@
                                 <th>Size</th>
                                 <th>Uploaded By</th>
                                 <th>Sector | Line</th>
-                                <th>Downloaded</th>
+                                <th>Viewed</th>
                                 <th>Uploaded at</th>
                                 <th>Actions</th>
                             </tr>
@@ -86,9 +86,17 @@
                                             <span>{{ $file->sector_name . " | " }}</span>
                                             <span>{{ $file->line_name }}</span>
                                         </td>
-                                        <td>{{ $downloaded->where('file_id', $file->id)->count() }}</td>
+                                        <td>{{ $fileViewed->where('file_id', $file->id)->count() }}</td>
                                         <td>{{ date('d-m-Y, h:m a', strtotime($file->created_at)) }}</td>
                                         <td>
+                                            <a href="{{ route('file.view', $file->id) }}" target="_bluck"
+                                               class="btn btn-outline-primary btn-sm btn-rounded">
+                                                View
+                                            </a>
+                                            <a href="{{ route('file.download', $file->id) }}"
+                                               class="btn btn-outline-primary btn-sm btn-rounded">
+                                                Download
+                                            </a>
                                             <form action="{{ route('toggle_show_file', $file->id) }}" method="post"
                                                   class="d-inline">
                                                 @csrf

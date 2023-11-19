@@ -33,7 +33,7 @@
                                 <div class="video-views">
                                     <img src="{{ asset('storage/images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
                                     <span
-                                            class="views-number">{{ $viewed->where('video_id', $video->id)->count() }}</span>
+                                            class="views-number">{{ $videoViewed->where('video_id', $video->id)->count() }}</span>
                                 </div>
                             </div>
                         </div>

@@ -37,7 +37,7 @@ class VideosController extends Controller
                     'sectors.name as sector_name',
                     'lines.name as line_name',
                 ),
-            'viewed' => DB::table('video_views')
+            'videoViewed' => DB::table('video_views')
                 ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
         ]);
     }
@@ -49,14 +49,13 @@ class VideosController extends Controller
     {
         if(Auth::check()){
             if(auth()->user()->role == 1 || auth()->user()->role == 2)
-                return $this->successView('admin.panel.videos.create')->with([
+                return view('admin.panel.videos.create')->with([
                     'sectors' => DB::table('sectors')->get(),
-                    'lines' => DB::table('lines')->where('status', 1)->get(),
                     'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
                 ]);
-            return $this->redirect('not_authorized');
+            return redirect()->route('not_authorized');
         } else {
-            return $this->redirect('select-user');
+            return redirect()->route('select-user');
         }
     }
 

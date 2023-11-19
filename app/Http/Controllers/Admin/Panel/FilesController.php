@@ -38,7 +38,7 @@ class FilesController extends Controller
                     'sectors.name as sector_name',
                     'lines.name as line_name',
                 ),
-            'viewed' => DB::table('file_views')
+            'fileViewed' => DB::table('file_views')
                 ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
         ]);
     }
@@ -50,14 +50,13 @@ class FilesController extends Controller
     {
         if(Auth::check()) {
             if (auth()->user()->role == 1 || auth()->user()->role == 2)
-                return $this->successView('admin.panel.files.create')->with([
+                return view('admin.panel.files.create')->with([
                     'sectors' => DB::table('sectors')->get(),
-                    'lines' => DB::table('lines')->where('status', 1)->get(),
                     'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
                 ]);
-            return $this->redirect('not_authorized');
+            return redirect()->route('not_authorized');
         } else {
-            return $this->redirect('select-user');
+            return redirect()->route('select-user');
         }
     }
 

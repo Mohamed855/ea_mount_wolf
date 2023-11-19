@@ -20,7 +20,7 @@ class AuthController extends Controller
 
     public function admin_login() {
         return $this->ifNotAuthenticated(
-            $this->successView('admin.login')
+            view('admin.login')
         );
     }
 
@@ -31,7 +31,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             if (auth()->user()->role == 1){
                 if (auth()->user()->activated){
-                    return $this->redirect('panel');
+                    return redirect()->route('panel');
                 }
                 Session::flush();
                 Auth::logout();
