@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Line;
 use App\Models\Sector;
+use App\Models\Title;
 use App\Models\User;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,22 +24,22 @@ class EmployeesController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.employees.index', [
-            'employees' => DB::table('users as employees')
-            ->join('titles', 'employees.title_id', '=', 'titles.id')
+            'employees' => User::query()
+            ->join('titles', 'users.title_id', '=', 'titles.id')
             ->where('role', 3)
             ->select(
-                'employees.id',
-                'employees.first_name',
-                'employees.middle_name',
-                'employees.last_name',
-                'employees.user_name',
-                'employees.email',
-                'employees.phone_number',
-                'employees.sectors',
-                'employees.lines',
-                'employees.profile_image',
-                'employees.activated',
-                'employees.created_at',
+                'users.id',
+                'users.first_name',
+                'users.middle_name',
+                'users.last_name',
+                'users.user_name',
+                'users.email',
+                'users.phone_number',
+                'users.sectors',
+                'users.lines',
+                'users.profile_image',
+                'users.activated',
+                'users.created_at',
                 'titles.name as title_name',
             ),
         ]);
@@ -50,9 +51,9 @@ class EmployeesController extends Controller
     public function create()
     {
         return $this->ifAdmin('admin.panel.employees.create', [
-                'sectors' => DB::table('sectors')->select(['id', 'name'])->get(),
-                'lines' => DB::table('lines')->where('status', 1)->select(['id', 'name'])->get(),
-                'titles' => DB::table('titles')->select(['id', 'name'])->get(),
+                'sectors' => Sector::query()->select(['id', 'name'])->get(),
+                'lines' => Line::query()->where('status', 1)->select(['id', 'name'])->get(),
+                'titles' => Title::query()->select(['id', 'name'])->get(),
             ]);
     }
 
@@ -123,10 +124,10 @@ class EmployeesController extends Controller
      */
     public function edit(string $id)
     {
-        $selected_employee = DB::table('users')->where('id', '=', $id)->first();
-        $sectors = DB::table('sectors')->select(['id', 'name'])->get();
-        $lines = DB::table('lines')->where('status', 1)->select(['id', 'name'])->get();
-        $titles = DB::table('titles')->select(['id', 'name'])->get();
+        $selected_employee = User::query()->where('id', '=', $id)->first();
+        $sectors = Sector::query()->select(['id', 'name'])->get();
+        $lines = Line::query()->where('status', 1)->select(['id', 'name'])->get();
+        $titles = Title::query()->select(['id', 'name'])->get();
 
         $decodedLines = json_decode($selected_employee->lines, true);
         $decodedSectors = json_decode($selected_employee->sectors, true);
@@ -169,8 +170,7 @@ class EmployeesController extends Controller
                 }
             }
 
-            DB::table('users')
-                ->where('id', '=', $id)
+            User::query()->where('id', '=', $id)
                 ->update([
                     'first_name' => $request->first_name,
                     'middle_name' => $request->middle_name,

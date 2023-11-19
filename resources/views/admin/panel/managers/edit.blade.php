@@ -70,12 +70,12 @@
                                             <h6 class="text-start">Choose lines</h6>
                                             @foreach($sectors as $sl)
                                                 <div id="{{ 'sl_' . $sl->id }}" style="display: {{ in_array($sl->id, $integerSectorIds) ? 'flex' : 'none' }}">
-                                                    @php($lines = \Illuminate\Support\Facades\DB::table('lines as l')
-                                                            ->join('line_sector as ls', 'ls.line_id', '=', 'l.id')
+                                                    @php($lines = \App\Models\Line::query()
+                                                            ->join('line_sector as ls', 'ls.line_id', '=', 'lines.id')
                                                             ->where('ls.sector_id', $sl->id)
-                                                            ->where('l.status', 1)
-                                                            ->select(['l.id', 'l.name'])
-                                                            ->orderBy('l.id')->get()
+                                                            ->where('lines.status', 1)
+                                                            ->select(['lines.id', 'lines.name'])
+                                                            ->orderBy('lines.id')->get()
                                                         )
                                                     @php($manager_lines = \App\Models\ManagerLines::query()
                                                             ->where('user_id', $selected_manager->id)

@@ -9,9 +9,7 @@ use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use function Laravel\Prompts\select;
 
 class AdminsController extends Controller
 {
@@ -23,7 +21,7 @@ class AdminsController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.admins.index', [
-            'admins' => DB::table('users')->where('role', 1)
+            'admins' => User::query()->where('role', 1)
             ->select('id', 'first_name', 'email', 'profile_image', 'activated', 'created_at')
         ]);
     }
@@ -95,7 +93,7 @@ class AdminsController extends Controller
     {
         if (auth()->id() == 1 || auth()->id() == $id) {
             return $this->ifAdmin('admin.panel.admins.edit', [
-                'selected_admin' => DB::table('users')->where('id', '=', $id)->
+                'selected_admin' =>User::query()->where('id', '=', $id)->
                 select('id', 'first_name', 'email')->first(),
             ]);
         }
@@ -124,7 +122,7 @@ class AdminsController extends Controller
                     $code .= $i;
                 }
 
-                DB::table('users')
+                User::query()
                     ->where('id', '=', $id)
                     ->update([
                         'first_name' => $request->name,

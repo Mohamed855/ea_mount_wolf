@@ -8,7 +8,6 @@ use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,7 +24,7 @@ class AnnouncementsController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.announcements.index',[
-            'announcements' => DB::table('announcements')
+            'announcements' => Announcement::query()
                 ->join('users', 'announcements.user_id', '=', 'users.id')
                 ->select(
                     'announcements.*',
@@ -61,7 +60,7 @@ class AnnouncementsController extends Controller
 
             $announcement->title = $request->title;
             $announcement->image = $announcement_image;
-            $announcement->user_id = auth()->user()->id;
+            $announcement->user_id = auth()->id();
             $announcement->status = 1;
 
             $announcement->save();

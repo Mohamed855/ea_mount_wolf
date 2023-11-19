@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Announcement;
+use App\Models\File;
+use App\Models\Line;
+use App\Models\Sector;
+use App\Models\Topic;
+use App\Models\User;
+use App\Models\Video;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
-use Illuminate\Support\Facades\DB;
 
 class OverviewController extends Controller
 {
@@ -15,18 +21,18 @@ class OverviewController extends Controller
     public function overview()
     {
         return $this->ifAdmin('admin.panel.index', [
-                'announcements_count' => DB::table('announcements')->count(),
-                'sectors_count' => DB::table('sectors')->count(),
-                'lines_count' => DB::table('lines')->count(),
-                'admins_count' => DB::table('users')->where('role', 1)->count(),
-                'managers_count' => DB::table('users')->where('role', 2)->count(),
-                'employees_count' => DB::table('users')->where('role', 3)->count(),
-                'topics_count' => DB::table('topics')->count(),
-                'files_count' => DB::table('files')->count(),
-                'videos_count' => DB::table('videos')->count(),
-                'sectors' => DB::table('sectors')->get(),
-                'files' => DB::table('files'),
-                'videos' => DB::table('videos'),
+                'announcements_count' => Announcement::query()->count(),
+                'sectors_count' => Sector::query()->count(),
+                'lines_count' => Line::query()->count(),
+                'admins_count' => User::query()->where('role', 1)->count(),
+                'managers_count' => User::query()->where('role', 2)->count(),
+                'employees_count' => User::query()->where('role', 3)->count(),
+                'topics_count' => Topic::query()->count(),
+                'files_count' => File::query()->count(),
+                'videos_count' => Video::query()->count(),
+                'sectors' => Sector::query()->get(),
+                'files' => File::query(),
+                'videos' => Video::query(),
             ]);
     }
 }

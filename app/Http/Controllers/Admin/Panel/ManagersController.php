@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Line;
 use App\Models\ManagerLines;
 use App\Models\Sector;
+use App\Models\Title;
 use App\Models\User;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,23 +25,21 @@ class ManagersController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.managers.index', [
-                    'managers' => DB::table('users as managers')
-                    ->join('titles', 'managers.title_id', '=', 'titles.id')
-                    ->where('role', 2)
-                    ->select(
-                        'managers.id',
-                        'managers.first_name',
-                        'managers.middle_name',
-                        'managers.last_name',
-                        'managers.user_name',
-                        'managers.email',
-                        'managers.phone_number',
-                        'managers.profile_image',
-                        'managers.sectors',
-                        'managers.activated',
-                        'managers.created_at',
-                        'titles.name as title_name',
-                    )
+            'managers' => User::query()->join('titles', 'users.title_id', '=', 'titles.id')
+            ->where('role', 2)->select([
+                    'users.id',
+                    'users.first_name',
+                    'users.middle_name',
+                    'users.last_name',
+                    'users.user_name',
+                    'users.email',
+                    'users.phone_number',
+                    'users.profile_image',
+                    'users.sectors',
+                    'users.activated',
+                    'users.created_at',
+                    'titles.name as title_name',
+                ])
         ]);
     }
 
@@ -51,8 +49,8 @@ class ManagersController extends Controller
     public function create()
     {
         return $this->ifAdmin('admin.panel.managers.create', [
-                'sectors' => DB::table('sectors')->select(['id', 'name'])->get(),
-                'titles' => DB::table('titles')->select(['id', 'name'])->get(),
+                'sectors' => Sector::query()->select(['id', 'name'])->get(),
+                'titles' => Title::query()->select(['id', 'name'])->get(),
             ]);
     }
 
@@ -131,9 +129,9 @@ class ManagersController extends Controller
      */
     public function edit(string $id)
     {
-        $selected_manager = DB::table('users')->where('id', '=', $id)->first();
-        $sectors = DB::table('sectors')->select(['id', 'name'])->get();
-        $titles = DB::table('titles')->select(['id', 'name'])->get();
+        $selected_manager = User::query()->where('id', '=', $id)->first();
+        $sectors = Sector::query()->select(['id', 'name'])->get();
+        $titles = Title::query()->select(['id', 'name'])->get();
 
         $decodedSectors = json_decode($selected_manager->sectors, true);
 
@@ -181,8 +179,7 @@ class ManagersController extends Controller
                 }
             }
 
-            DB::table('users')
-                ->where('id', '=', $id)
+            User::query()->where('id', '=', $id)
                 ->update([
                     'first_name' => $request->first_name,
                     'middle_name' => $request->middle_name,

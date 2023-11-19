@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Announcement;
+use App\Models\FileView;
+use App\Models\Sector;
+use App\Models\VideoView;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
-use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -14,21 +17,18 @@ class HomeController extends Controller
 
     public function index() {
 
-        $sectors = DB::table('sectors')->select('id', 'name')->get();
+        $sectors = Sector::query()->select('id', 'name')->get();
 
-        $announcements = DB::table('announcements')
-            ->select('image', 'status')
+        $announcements = Announcement::query()->select('image', 'status')
             ->where('announcements.status', '=',1)
             ->get();
 
-        $downloads = DB::table('file_views')
-            ->join('files', 'file_views.file_id', '=', 'files.id')
+        $downloads = FileView::query()->join('files', 'file_views.file_id', '=', 'files.id')
             ->select(
                 'files.sector_id as sector_id'
             )->get();
 
-        $views = DB::table('video_views')
-            ->join('videos', 'video_views.video_id', '=', 'videos.id')
+        $views = VideoView::query()->join('videos', 'video_views.video_id', '=', 'videos.id')
             ->select(
                 'videos.sector_id as sector_id'
             )->get();

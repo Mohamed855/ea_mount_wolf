@@ -3,12 +3,18 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
+use App\Models\File;
+use App\Models\FileView;
+use App\Models\Line;
 use App\Models\ManagerLines;
+use App\Models\Sector;
 use App\Models\Topic;
+use App\Models\Video;
+use App\Models\VideoView;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class SiteController extends Controller
 {
@@ -18,30 +24,42 @@ class SiteController extends Controller
     public function drive(string $sector_id, string $line_id)
     {
         if (Auth::check()) {
+            if (auth()->user()->role == 2) {
+                $manager_lines = ManagerLines::query()->where('user_id', auth()->id())
+                    ->where('sector_id', $sector_id)->first();
+                if (! $manager_lines || ! in_array($line_id, $manager_lines->lines)) {
+                    return redirect()->route('not_authorized');
+                }
+            }
+            elseif (auth()->user()->role == 3) {
+                if (! in_array($line_id, auth()->user()->lines)) {
+                    return redirect()->route('not_authorized');
+                }
+            }
             return $this->ifAuthenticated('front.drive', [
-                'user_files' => DB::table('files')
+                'user_files' => File::query()
                     ->where('files.sector_id', $sector_id)
                     ->where('files.line_id', $line_id)
                     ->where('files.status', '=',1),
-                'user_videos' => DB::table('videos')
+                'user_videos' => Video::query()
                     ->where('videos.sector_id', $sector_id)
                     ->where('videos.line_id', $line_id)
                     ->where('videos.status', '=',1),
-                'user_favorites_files' => DB::table('files')
+                'user_favorites_files' => File::query()
                     ->join('favorites', 'files.id', '=', 'favorites.file_id')
                     ->select('favorites.file_id as file_id')
-                    ->where('favorites.user_id', auth()->user()->id)
+                    ->where('favorites.user_id', auth()->id())
                     ->where('files.status', '=',1)
                     ->get(),
-                'user_favorites_videos' => DB::table('videos')
+                'user_favorites_videos' => Video::query()
                     ->join('favorite_videos', 'videos.id', '=', 'favorite_videos.video_id')
                     ->select('favorite_videos.video_id as video_id')
-                    ->where('favorite_videos.user_id', auth()->user()->id)
+                    ->where('favorite_videos.user_id', auth()->id())
                     ->where('videos.status', '=',1)
                     ->get(),
-                'fileViewed' => DB::table('file_views')
+                'fileViewed' => FileView::query()
                     ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
-                'videoViewed' => DB::table('video_views')
+                'videoViewed' => VideoView::query()
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
             ]);
         }
@@ -49,8 +67,8 @@ class SiteController extends Controller
     }
     public function choose_line(string $sector_id)
     {
-        $current_sector = DB::table('sectors')->select('id', 'name')->where('id', $sector_id)->first();
-        $selected_sector_lines = DB::table('lines')
+        $current_sector = Sector::query()->select('id', 'name')->where('id', $sector_id)->first();
+        $selected_sector_lines = Line::query()
             ->join('line_sector', 'lines.id', '=', 'line_sector.line_id')
             ->where('sector_id', $sector_id)
             ->where('lines.status', 1)
@@ -77,9 +95,9 @@ class SiteController extends Controller
 
     public function video(string $id)
     {
-        $video = DB::table('videos')->where('id', $id)->first();
+        $video = Video::query()->where('id', $id)->first();
 
-        $viewed = DB::table('video_views')
+        $viewed = VideoView::query()
             ->join('videos', 'video_views.video_id', '=', 'videos.id')->get();
 
         if($video) {
@@ -96,7 +114,7 @@ class SiteController extends Controller
 
     public function brain_box()
     {
-        $latest_topic = DB::table('topics')->latest('id')->first();
+        $latest_topic = Topic::query()->latest('id')->first();
 
         if(Auth::check())
             return redirect()->route('topic', $latest_topic->id);
@@ -105,9 +123,9 @@ class SiteController extends Controller
 
     public function topic(string $id)
     {
-        $active_topics = DB::table('topics')->where('status', 1)->get();
-        $current_topic = DB::table('topics')->where('id', $id)->first();
-        $comments_details = DB::table('comments')
+        $active_topics = Topic::query()->where('status', 1)->get();
+        $current_topic = Topic::query()->where('id', $id)->first();
+        $comments_details = Comment::query()
             ->join('users', 'comments.user_id', '=', 'users.id')
             ->join('titles', 'users.title_id', '=', 'titles.id')
             ->select(
@@ -139,7 +157,7 @@ class SiteController extends Controller
     {
         if (Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.videos.index', [
-                'videos' => DB::table('videos')
+                'videos' => Video::query()
                     ->join('users', 'videos.user_id', '=', 'users.id')
                     ->join('lines', 'videos.line_id', '=', 'lines.id')
                     ->join('sectors', 'videos.sector_id', '=', 'sectors.id')
@@ -150,7 +168,7 @@ class SiteController extends Controller
                         'sectors.name as sector_name',
                         'lines.name as line_name',
                     ),
-                'videoViewed' => DB::table('video_views')
+                'videoViewed' => VideoView::query()
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
             ]);
         } else {
@@ -161,7 +179,7 @@ class SiteController extends Controller
     {
         if (Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.videos.create',[
-                'sectors' => DB::table('sectors')->whereIn('id', auth()->user()->sectors)->get(),
+                'sectors' => Sector::query()->whereIn('id', auth()->user()->sectors)->get(),
             ]);
         } else {
             abort(404);
@@ -171,7 +189,7 @@ class SiteController extends Controller
     {
         if (Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.files.index', [
-                'files' => DB::table('files')
+                'files' => File::query()
                     ->join('users', 'files.user_id', '=', 'users.id')
                     ->join('lines', 'files.line_id', '=', 'lines.id')
                     ->join('sectors', 'files.sector_id', '=', 'sectors.id')
@@ -182,7 +200,7 @@ class SiteController extends Controller
                         'sectors.name as sector_name',
                         'lines.name as line_name',
                     ),
-                'fileViewed' => DB::table('file_views')
+                'fileViewed' => FileView::query()
                     ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
             ]);
         } else {
@@ -193,7 +211,7 @@ class SiteController extends Controller
     {
         if (Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.files.create',[
-                'sectors' => DB::table('sectors')->whereIn('id', auth()->user()->sectors)->get(),
+                'sectors' => Sector::query()->whereIn('id', auth()->user()->sectors)->get(),
             ]);
         } else {
             abort(404);

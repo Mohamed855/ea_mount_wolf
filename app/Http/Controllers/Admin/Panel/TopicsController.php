@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Topic;
 use App\Models\TopicNotification;
 use App\Traits\AuthTrait;
@@ -26,8 +27,7 @@ class TopicsController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.topics.index', [
-                'topics' => DB::table('topics')
-                ->join('users', 'topics.user_id', '=', 'users.id')
+                'topics' => Topic::query()->join('users', 'topics.user_id', '=', 'users.id')
                 ->select(
                     'topics.*',
                     'users.user_name',
@@ -64,7 +64,7 @@ class TopicsController extends Controller
             $topic->title = $request->title;
             $topic->description = $request->description;
             $topic->image = $topic_image;
-            $topic->user_id = auth()->user()->id;
+            $topic->user_id = auth()->id();
             $topic->status = 1;
 
             $topic->save();
@@ -75,7 +75,7 @@ class TopicsController extends Controller
             $notification = new TopicNotification;
 
             $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new topic - ' . $request->title;
-            $notification->topic_id = DB::table('topics')->latest('id')->first()->id;
+            $notification->topic_id = Topic::query()->latest('id')->first()->id;
 
             $notification->save();
 
@@ -92,7 +92,7 @@ class TopicsController extends Controller
     {
 
         return $this->ifAdmin('admin.panel.topics.edit', [
-                'selected_topic' => DB::table('topics')->where('id', '=', $id)->first(),
+                'selected_topic' => Topic::query()->where('id', '=', $id)->first(),
         ]);
     }
 
@@ -108,17 +108,16 @@ class TopicsController extends Controller
                 return $this->backWithMessage('error', $validator->errors()->first());
             }
 
-            $old_topic_name = DB::table('topics')->select('title')->where('id', $id)->first();
+            $old_topic_name = Topic::query()->select('title')->where('id', $id)->first();
 
-            $storedImage = DB::table('topics')->select('image')->where('id', $id)->first();
+            $storedImage = Topic::query()->select('image')->where('id', $id)->first();
             if (file_exists(asset('storage/images/topics/' . $storedImage->image)))
                 unlink(asset('storage/images/topics/' . $storedImage->image));
 
             $topic_title = str_replace(' ', '', $request->title);
             $topic_image = $topic_title . time() . '.' . $request->image->extension();
 
-            DB::table('topics')
-                ->where('id', '=', $id)
+            Topic::query()->where('id', '=', $id)
                 ->update([
                     'title' => $request->title,
                     'description' => $request->description,
@@ -151,7 +150,7 @@ class TopicsController extends Controller
     public function destroy(string $id)
     {
         $this->deleteFromDB('topics', $id, 'storage/images/topics/', 'image');
-        DB::table('comments')->where('topic_id', $id)->delete();
+        Comment::query()->where('topic_id', $id)->delete();
         return $this->backWithMessage('success', 'Topic has been deleted');
     }
 }

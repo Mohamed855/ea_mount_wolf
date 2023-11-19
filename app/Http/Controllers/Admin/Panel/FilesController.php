@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Favorite;
 use App\Models\File;
 use App\Models\FileNotification;
+use App\Models\FileView;
+use App\Models\Sector;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class FilesController extends Controller
@@ -28,7 +29,7 @@ class FilesController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.files.index', [
-            'files' => DB::table('files')
+            'files' => File::query()
                 ->join('users', 'files.user_id', '=', 'users.id')
                 ->join('lines', 'files.line_id', '=', 'lines.id')
                 ->join('sectors', 'files.sector_id', '=', 'sectors.id')
@@ -38,8 +39,7 @@ class FilesController extends Controller
                     'sectors.name as sector_name',
                     'lines.name as line_name',
                 ),
-            'fileViewed' => DB::table('file_views')
-                ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
+            'fileViewed' => FileView::query()->join('files', 'file_views.file_id', '=', 'files.id')->get(),
         ]);
     }
 
@@ -51,8 +51,8 @@ class FilesController extends Controller
         if(Auth::check()) {
             if (auth()->user()->role == 1 || auth()->user()->role == 2)
                 return view('admin.panel.files.create')->with([
-                    'sectors' => DB::table('sectors')->get(),
-                    'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
+                    'sectors' => Sector::query()->get(),
+                    'user_sector' => Sector::query()->where('id', '=', auth()->user()->sector_id)->first(),
                 ]);
             return redirect()->route('not_authorized');
         } else {
@@ -84,7 +84,7 @@ class FilesController extends Controller
             $file->status = 1;
             $file->stored_name = $fileName;
             $file->line_id = $request->line;
-            $file->user_id = auth()->user()->id;
+            $file->user_id = auth()->id();
 
             $file->save();
 
@@ -96,7 +96,7 @@ class FilesController extends Controller
             $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new file - ' . $request->name;
             $notification->sector_id = $request->sector;
             $notification->line_id = $request->line;
-            $notification->file_id = DB::table('files')->latest('id')->first()->id;
+            $notification->file_id = File::query()->latest('id')->first()->id;
 
             $notification->save();
 
@@ -107,8 +107,7 @@ class FilesController extends Controller
     }
 
     public function viewed_by($id) {
-        $file_user_views = DB::table('file_views')
-            ->join('users', 'file_views.user_id', '=', 'users.id')
+        $file_user_views = FileView::query()->join('users', 'file_views.user_id', '=', 'users.id')
             ->select(
                 'users.first_name',
                 'users.middle_name',
@@ -129,8 +128,8 @@ class FilesController extends Controller
     public function destroy(string $id)
     {
         $this->deleteFromDB('files', $id, 'files/', 'stored_name');
-        DB::table('favorites')->where('file_id', $id)->delete();
-        DB::table('file_views')->where('file_id', $id)->delete();
+        Favorite::query()->where('file_id', $id)->delete();
+        FileView::query()->where('file_id', $id)->delete();
         return $this->backWithMessage('success', 'File has been deleted');
     }
 }

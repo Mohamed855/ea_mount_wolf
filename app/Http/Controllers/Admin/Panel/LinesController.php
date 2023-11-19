@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\File;
 use App\Models\Line;
 use App\Models\LineSector;
 use App\Models\Sector;
+use App\Models\Video;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,7 +29,7 @@ class LinesController extends Controller
     {
         return $this->ifAdmin('admin.panel.lines.index', [
             'lines' => Line::query()->with('sector'),
-            'countOfFiles' => DB::table('files')->select('line_id')->get(),
+            'countOfFiles' => File::query()->select('line_id')->get(),
         ]);
     }
 
@@ -38,7 +39,7 @@ class LinesController extends Controller
     public function create()
     {
         return $this->ifAdmin('admin.panel.lines.create', [
-                'sectors' => DB::table('sectors')->get(),
+                'sectors' => Sector::query()->get(),
             ]);
     }
 
@@ -82,9 +83,9 @@ class LinesController extends Controller
     public function edit(string $id)
     {
         return $this->ifAdmin('admin.panel.lines.edit', [
-                'selected_line' => DB::table('lines')->where('id', '=', $id)->first(),
-                'sectors' => DB::table('sectors')->get(),
-                'selected_sectors' => DB::table('line_sector')->where('line_sector.line_id', '=', $id)->get(),
+                'selected_line' => Line::query()->where('id', '=', $id)->first(),
+                'sectors' => Sector::query()->get(),
+                'selected_sectors' => LineSector::query()->where('line_sector.line_id', '=', $id)->get(),
             ]);
     }
 
@@ -100,14 +101,14 @@ class LinesController extends Controller
                 return $this->backWithMessage('error', $validator->errors()->first());
             }
 
-            DB::table('lines')
+            Line::query()
                 ->where('id', '=', $id)
                 ->update([
                     'name' => $request->name
                 ]);
 
             $sectorIds = Sector::query()->get(['id']);
-            DB::table('line_sector')->where('line_id', $id)->delete();
+            LineSector::query()->where('line_id', $id)->delete();
             foreach ($sectorIds as $sector) {
                 if ($request['s_' . $sector->id]) {
                     $line_sector = new LineSector();
@@ -129,9 +130,9 @@ class LinesController extends Controller
     public function destroy(string $id)
     {
         $this->deleteFromDB('lines', $id, null, null);
-        DB::table('line_sector')->where('line_id', $id)->delete();
-        DB::table('files')->where('line_id', $id)->delete();
-        DB::table('videos')->where('line_id', $id)->delete();
+        LineSector::query()->where('line_id', $id)->delete();
+        File::query()->where('line_id', $id)->delete();
+        Video::query() ->where('line_id', $id)->delete();
         return $this->backWithMessage('success', 'Line has been deleted');
     }
 }

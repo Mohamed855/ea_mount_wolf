@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\FavoriteVideo;
+use App\Models\Sector;
 use App\Models\Video;
 use App\Models\VideoNotification;
+use App\Models\VideoView;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,7 +29,7 @@ class VideosController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.videos.index', [
-            'videos' => DB::table('videos')
+            'videos' => Video::query()
                 ->join('users', 'videos.user_id', '=', 'users.id')
                 ->join('lines', 'videos.line_id', '=', 'lines.id')
                 ->join('sectors', 'videos.sector_id', '=', 'sectors.id')
@@ -37,7 +39,7 @@ class VideosController extends Controller
                     'sectors.name as sector_name',
                     'lines.name as line_name',
                 ),
-            'videoViewed' => DB::table('video_views')
+            'videoViewed' => VideoView::query()
                 ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
         ]);
     }
@@ -50,8 +52,8 @@ class VideosController extends Controller
         if(Auth::check()){
             if(auth()->user()->role == 1 || auth()->user()->role == 2)
                 return view('admin.panel.videos.create')->with([
-                    'sectors' => DB::table('sectors')->get(),
-                    'user_sector' => DB::table('sectors')->where('id', '=', auth()->user()->sector_id)->first(),
+                    'sectors' => Sector::query()->get(),
+                    'user_sector' => Sector::query()->where('id', '=', auth()->user()->sector_id)->first(),
                 ]);
             return redirect()->route('not_authorized');
         } else {
@@ -81,7 +83,7 @@ class VideosController extends Controller
             $video->src = $video_id;
             $video->sector_id = $request->sector;
             $video->line_id = $request->line;
-            $video->user_id = auth()->user()->id;
+            $video->user_id = auth()->id();
             $video->status = 1;
 
             $video->save();
@@ -91,7 +93,7 @@ class VideosController extends Controller
             $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new video - ' . $request->name;
             $notification->sector_id = $request->sector;
             $notification->line_id = $request->line;
-            $notification->video_id = DB::table('videos')->latest('id')->first()->id;
+            $notification->video_id = Video::query()->latest('id')->first()->id;
 
             $notification->save();
 
@@ -102,7 +104,7 @@ class VideosController extends Controller
     }
 
     public function viewed_by($id) {
-        $video_user_views = DB::table('video_views')
+        $video_user_views = VideoView::query()
                 ->join('users', 'video_views.user_id', '=', 'users.id')
                 ->select(
                     'users.first_name',
@@ -124,8 +126,8 @@ class VideosController extends Controller
     public function destroy(string $id)
     {
         $this->deleteFromDB('videos', $id, null, null);
-        DB::table('favorite_videos')->where('video_id', $id)->delete();
-        DB::table('video_views')->where('video_id', $id)->delete();
+        FavoriteVideo::query()->where('video_id', $id)->delete();
+        VideoView::query()->where('video_id', $id)->delete();
         return $this->backWithMessage('success', 'Video has been deleted');
     }
 }

@@ -43,12 +43,12 @@
                                         <h6 class="text-start">Choose line</h6>
                                         @foreach($sectors as $sl)
                                             <div id="{{ 'sl_' . $sl->id }}" style="display: {{ $sl->id == old('s_' . $sl->id) ? 'flex' : 'none' }}">
-                                                @php($lines = \Illuminate\Support\Facades\DB::table('lines as l')
-                                                        ->join('line_sector as ls', 'ls.line_id', '=', 'l.id')
+                                                @php($lines = \App\Models\Line::query()
+                                                        ->join('line_sector as ls', 'ls.line_id', '=', 'lines.id')
                                                         ->where('ls.sector_id', $sl->id)
-                                                        ->where('l.status', 1)
-                                                        ->select(['l.id', 'l.name'])
-                                                        ->orderBy('l.id')->get()
+                                                        ->where('lines.status', 1)
+                                                        ->select(['lines.id', 'lines.name'])
+                                                        ->orderBy('lines.id')->get()
                                                     )
                                                 <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                                     <div class="row">
