@@ -72,8 +72,7 @@
                         </td>
                         <td>{{ $manager->title_name }}</td>
                         <td>
-                            @php($decodedSectors = json_decode($manager->sectors, true))
-                            @php($manager_sectors = \App\Models\Sector::query()->whereIn('id', $decodedSectors)->get())
+                            @php($manager_sectors = \App\Models\Sector::query()->whereIn('id', $manager->sectors)->get())
                             @if(count($manager_sectors) > 0)
                                 <div class="text-start" style="max-height:100px; overflow:auto;">
                                     @for($i = 0; $i < count($manager_sectors); $i++)
@@ -89,7 +88,7 @@
                             @php($manager_lines = \App\Models\ManagerLines::query()
                                 ->join('sectors as s', 's.id', '=', 'manager_lines.sector_id')
                                 ->where('user_id', $manager->id)
-                                ->whereIn('sector_id', $decodedSectors)
+                                ->whereIn('sector_id', $manager->sectors)
                                 ->select([
                                     'manager_lines.*',
                                     's.name as sectorName'
