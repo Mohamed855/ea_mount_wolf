@@ -59,9 +59,9 @@ class User extends Authenticatable
         'sectors' => 'array',
     ];
 
-    public function title(): HasOne
+    public function title(): BelongsTo
     {
-        return $this->HasOne(Title::class);
+        return $this->belongsTo(Title::class);
     }
 
     public function file(): HasMany

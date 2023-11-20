@@ -125,19 +125,7 @@ class SiteController extends Controller
     {
         $active_topics = Topic::query()->where('status', 1)->get();
         $current_topic = Topic::query()->where('id', $id)->first();
-        $comments_details = Comment::query()
-            ->join('users', 'comments.user_id', '=', 'users.id')
-            ->join('titles', 'users.title_id', '=', 'titles.id')
-            ->select(
-                'users.user_name',
-                'users.profile_image',
-                'comments.id',
-                'comments.comment',
-                'comments.user_id',
-                'titles.name as user_title',
-            )
-            ->where('comments.topic_id', $id)
-            ->get();
+        $comments_details = Comment::query()->with(['user'])->where('comments.topic_id', $id)->get();
 
         $topic = Topic::find($id);
 

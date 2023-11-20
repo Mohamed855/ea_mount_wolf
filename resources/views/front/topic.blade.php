@@ -29,14 +29,14 @@
                                 <div class="comment-box">
                                     <div class="comment-info">
                                         <div class="prof-pic bg-styles" style="background-image:url({{
-                                    $comment_details->profile_image == null ?
+                                    $comment_details->user->profile_image == null ?
                                     asset('storage/images/profile_images/default_profile_image.jpg') :
-                                    asset('storage/images/profile_images/'.$comment_details->profile_image)
+                                    asset('storage/images/profile_images/'.$comment_details->user->profile_image)
                                  }}); max-width: 50px; max-height: 50px">
                                         </div>
-                                        <span class="pt-2 comment-name">{{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : $user_details->title_name . '. ' . ucfirst($user_details->user_name) }}</span>
                                     </div>
                                     <div class="comment-txt">
+                                        <span class="small comment-name">{{ $comment_details->user->role == 1 ? ucfirst($comment_details->user->first_name) : $comment_details->user->title->name . '. ' . ucfirst($comment_details->user->user_name) }}</span>
                                         <p>{{ $comment_details->comment }}</p>
                                     </div>
                                     @if($comment_details->user_id === auth()->id() || auth()->user()->role == 1)
@@ -60,10 +60,9 @@
                                             asset('storage/images/profile_images/'. auth()->user()->profile_image)
                                          }}); max-width: 50px; max-height: 50px">
                                         </div>
-                                        <span class="pt-2 comment-name">{{ auth()->user()->role == 1 ? ucfirst(auth()->user()->first_name) : $user_details->title_name . '. ' . ucfirst($user_details->user_name) }}</span>
                                     </div>
                                     <div class="comment-txt">
-                                        <div class="input-group mb-3">
+                                        <div class="input-group">
                                             <input type="hidden" name="topic" value="{{ $current_topic->id }}">
                                             <textarea type="text" class="form-control py-2" placeholder="Write a comment.."
                                                       aria-label="Write a comment.." aria-describedby="button-addon2"
