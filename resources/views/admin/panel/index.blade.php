@@ -13,7 +13,7 @@
                 <div class="col-lg-12">
                     <div class="row justify-content-between py-2">
                         <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
-                            <h3 class="rounded text-center fs-6">Announces</h3>
+                            <h3 class="rounded text-center fs-6">Announcements</h3>
                             <span class="rounded fs-5">{{ $announcements_count }}</span>
                         </div>
                         <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
