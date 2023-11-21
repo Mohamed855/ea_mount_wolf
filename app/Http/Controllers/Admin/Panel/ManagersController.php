@@ -96,6 +96,7 @@ class ManagersController extends Controller
 
             $manager = User::query()->where('role', 2)->latest('id')->first();
             $managerSectors = [];
+            $allManagerLines = [];
             $sectorIds = Sector::query()->get(['id']);
             $lineIds = Line::query()->get(['id']);
 
@@ -106,6 +107,9 @@ class ManagersController extends Controller
                     foreach ($lineIds as $line) {
                         if ($request['s_' . $sector->id . 'l_' . $line->id]) {
                             $managerSectorLines[] = $line->id;
+                            if (! in_array($line->id, $allManagerLines)) {
+                                $allManagerLines[] = $line->id;
+                            }
                         }
                     }
                     $manager_lines = new ManagerLines();
@@ -116,7 +120,7 @@ class ManagersController extends Controller
                     unset($managerSectorLines);
                 }
             }
-            $manager->update(['sectors' => $managerSectors]);
+            $manager->update(['sectors' => $managerSectors, 'lines' => $allManagerLines]);
 
             return $this->backWithMessage('success', 'Manager added successfully');
         } catch (\Exception $e) {
@@ -156,6 +160,7 @@ class ManagersController extends Controller
             ManagerLines::query()->where('user_id', $id)->delete();
 
             $managerSectors = [];
+            $allManagerLines = [];
             $sectorIds = Sector::query()->get(['id']);
             $lineIds = Line::query()->get(['id']);
 
@@ -166,6 +171,9 @@ class ManagersController extends Controller
                     foreach ($lineIds as $line) {
                         if ($request['s_' . $sector->id . 'l_' . $line->id]) {
                             $managerSectorLines[] = $line->id;
+                            if (! in_array($line->id, $allManagerLines)) {
+                                $allManagerLines[] = $line->id;
+                            }
                         }
                     }
                     $manager_lines = new ManagerLines();
@@ -188,7 +196,7 @@ class ManagersController extends Controller
                     'phone_number' => $request->phone_number,
                     'title_id' => $request->title,
                     'sectors' => $managerSectors,
-                    'lines' => [],
+                    'lines' => $allManagerLines,
                     'role' => 2,
                     'activated' => 1,
                 ]);

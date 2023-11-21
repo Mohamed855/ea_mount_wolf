@@ -21,17 +21,44 @@ class SiteController extends Controller
     use GeneralTrait;
     use AuthTrait;
 
+    public function choose_line(string $sector_id)
+    {
+        $current_sector = Sector::query()->select('id', 'name')->where('id', $sector_id)->first();
+        $selected_sector_lines = Line::query()
+            ->join('line_sector', 'lines.id', '=', 'line_sector.line_id')
+            ->where('sector_id', $sector_id)
+            ->where('lines.status', 1)
+            ->select('lines.id as line_id', 'lines.name', 'line_sector.sector_id')
+            ->orderBy('lines.name');
+
+        if (Auth::check()){
+            if (Auth::user()->role != 1) {
+                $lineIds = auth()->user()->lines;
+                /*if (Auth::user()->role == 2) {
+                    $managerSector = ManagerLines::query()->where('user_id', auth()->id())
+                        ->where('sector_id', $sector_id)->first();
+                    $lineIds  = $managerSector ? $managerSector->lines : [];
+                }*/
+                $selected_sector_lines = $selected_sector_lines->whereIn('lines.id', $lineIds);
+            }
+        }
+
+        return $this->ifAuthenticated('front.chooseLine', [
+            'current_sector' => $current_sector,
+            'selected_sector_lines' => $selected_sector_lines->get(),
+        ]);
+    }
     public function drive(string $sector_id, string $line_id)
     {
         if (Auth::check()) {
-            if (auth()->user()->role == 2) {
+            /*if (auth()->user()->role == 2) {
                 $manager_lines = ManagerLines::query()->where('user_id', auth()->id())
                     ->where('sector_id', $sector_id)->first();
                 if (! $manager_lines || ! in_array($line_id, $manager_lines->lines)) {
                     return redirect()->route('not_authorized');
                 }
-            }
-            elseif (auth()->user()->role == 3) {
+            }*/
+            if (auth()->user()->role != 1) {
                 if (! in_array($line_id, auth()->user()->lines)) {
                     return redirect()->route('not_authorized');
                 }
@@ -64,33 +91,6 @@ class SiteController extends Controller
             ]);
         }
         return redirect()->route('select-user');
-    }
-    public function choose_line(string $sector_id)
-    {
-        $current_sector = Sector::query()->select('id', 'name')->where('id', $sector_id)->first();
-        $selected_sector_lines = Line::query()
-            ->join('line_sector', 'lines.id', '=', 'line_sector.line_id')
-            ->where('sector_id', $sector_id)
-            ->where('lines.status', 1)
-            ->select('lines.id as line_id', 'lines.name', 'line_sector.sector_id')
-            ->orderBy('lines.name');
-
-        if (Auth::check()){
-            if (Auth::user()->role != 1) {
-                $lineIds = auth()->user()->lines;
-                if (Auth::user()->role == 2) {
-                    $managerSector = ManagerLines::query()->where('user_id', auth()->id())
-                        ->where('sector_id', $sector_id)->first();
-                    $lineIds  = $managerSector ? $managerSector->lines : [];
-                }
-                $selected_sector_lines = $selected_sector_lines->whereIn('lines.id', $lineIds);
-            }
-        }
-
-        return $this->ifAuthenticated('front.chooseLine', [
-                'current_sector' => $current_sector,
-                'selected_sector_lines' => $selected_sector_lines->get(),
-            ]);
     }
 
     public function video(string $id)
