@@ -10,9 +10,7 @@ class Title extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-    ];
+    protected $guarded = [];
 
     public function user() : BelongsTo
     {

@@ -117,7 +117,12 @@ class SiteController extends Controller
         $latest_topic = Topic::query()->latest('id')->first();
 
         if(Auth::check())
-            return redirect()->route('topic', $latest_topic->id);
+            if ($latest_topic) {
+                return redirect()->route('topic', $latest_topic->id);
+            }
+            else {
+                return 'empty';
+            }
         return redirect()->route('select-user');
     }
 

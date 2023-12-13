@@ -35,14 +35,14 @@
             <tbody>
             @if(count($managers->get()) > 0)
                 @if(isset($_GET['search']))
-                    @php($managers = $managers->where('managers.first_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('managers.middle_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('managers.last_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('managers.user_name', 'like', '%' . $_GET['search'] . '%')
+                    @php($managers = $managers->where('users.first_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('users.middle_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('users.last_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('users.user_name', 'like', '%' . $_GET['search'] . '%')
                         )
                 @endif
                 @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($managers = $managers->whereDate('managers.created_at', $_GET['date'])->get())
+                    @php($managers = $managers->whereDate('users.created_at', $_GET['date'])->get())
                 @else
                     @php($managers = $managers->get())
                 @endif

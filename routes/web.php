@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Panel\LinesController;
 use App\Http\Controllers\Admin\Panel\ManagersController;
 use App\Http\Controllers\Admin\Panel\OverviewController;
 use App\Http\Controllers\Admin\Panel\SectorsController;
+use App\Http\Controllers\Admin\Panel\TitlesController;
 use App\Http\Controllers\Admin\Panel\TopicsController;
 use App\Http\Controllers\Admin\Panel\VideosController;
 use App\Http\Controllers\ChooseLoginController;
@@ -53,6 +54,8 @@ Route::middleware('db.connection')->group(function (){
         Route::resource('sectors', SectorsController::class)->except(['show']);
         // Lines
         Route::resource('lines', LinesController::class)->except(['show']);
+        // Titles
+        Route::resource('titles', TitlesController::class)->only(['index', 'create', 'store', 'destroy']);
         // Admins
         Route::resource('admins', AdminsController::class)->except(['show']);
         // Managers

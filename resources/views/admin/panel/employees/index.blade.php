@@ -35,14 +35,14 @@
             <tbody>
             @if(count($employees->get()) > 0)
                 @if(isset($_GET['search']))
-                    @php($employees = $employees->where('employees.first_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('employees.middle_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('employees.last_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('employees.user_name', 'like', '%' . $_GET['search'] . '%')
+                    @php($employees = $employees->where('users.first_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('users.middle_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('users.last_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orwhere('users.user_name', 'like', '%' . $_GET['search'] . '%')
                         )
                 @endif
                 @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($employees = $employees->whereDate('employees.created_at', $_GET['date'])->get())
+                    @php($employees = $employees->whereDate('users.created_at', $_GET['date'])->get())
                 @else
                     @php($employees = $employees->get())
                 @endif

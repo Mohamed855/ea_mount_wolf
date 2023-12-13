@@ -70,7 +70,8 @@
                 request()->is('panel') ||
                 check_url($currUrl, $panel_url . '/announcements') ||
                 check_url($currUrl, $panel_url . '/sectors') ||
-                check_url($currUrl, $panel_url . '/lines') ?
+                check_url($currUrl, $panel_url . '/lines') ||
+                check_url($currUrl, $panel_url . '/titles') ?
                 'block' : 'none'
             }}">
         <a href="{{ route('panel') }}">
@@ -91,6 +92,11 @@
         <a href="{{ route('lines.index') }}">
             <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/lines') ? 'active_dashboard_btn' : '' }}">
                 Lines
+            </div>
+        </a>
+        <a href="{{ route('titles.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/titles') ? 'active_dashboard_btn' : '' }}">
+                Titles
             </div>
         </a>
     </div>
