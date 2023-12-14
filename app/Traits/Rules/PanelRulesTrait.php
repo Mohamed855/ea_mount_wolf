@@ -103,7 +103,7 @@ trait PanelRulesTrait {
     {
         return [
             'name' => 'required',
-            'src' => 'required|regex:/https:\/\/www\.youtube\.com\/watch\?v=[^&]+/',
+            'video' => 'required|max:51200',
             'sector' => 'not_in:0',
             'line' => 'not_in:0',
         ];

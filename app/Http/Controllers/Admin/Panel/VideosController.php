@@ -14,7 +14,9 @@ use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class VideosController extends Controller
 {
@@ -73,14 +75,12 @@ class VideosController extends Controller
                 return $this->backWithMessage('error', $validator->errors()->first());
             }
 
+            $randomFileName = Str::random(20) . '.' . $request->file('video')->getClientOriginalExtension();
+            $videoPath = $request->file('video')->storeAs('public/videos', $randomFileName);
             $video = new Video();
 
-            $youtube_url = $request->src;
-            parse_str(parse_url($youtube_url, PHP_URL_QUERY), $params);
-            $video_id = $params['v'];
-
             $video->name = $request->name;
-            $video->src = $video_id;
+            $video->src = Storage::url($videoPath);
             $video->sector_id = $request->sector;
             $video->line_id = $request->line;
             $video->user_id = auth()->id();
@@ -93,13 +93,13 @@ class VideosController extends Controller
             $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new video - ' . $request->name;
             $notification->sector_id = $request->sector;
             $notification->line_id = $request->line;
-            $notification->video_id = Video::query()->latest('id')->first()->id;
+            $notification->video_id = $video->id;
 
             $notification->save();
 
             return $this->backWithMessage('success', 'Video added successfully');
         } catch (\Exception $e) {
-            return $this->backWithMessage('error', 'Something went error, please try again later');
+            return $this->backWithMessage('error', 'Something went wrong, please try again later');
         }
     }
 
@@ -125,9 +125,18 @@ class VideosController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('videos', $id, null, null);
-        FavoriteVideo::query()->where('video_id', $id)->delete();
-        VideoView::query()->where('video_id', $id)->delete();
-        return $this->backWithMessage('success', 'Video has been deleted');
+        try {
+            $video = Video::findOrFail($id);
+            $videoPath = str_replace('storage', 'public', $video->src);
+            Storage::delete($videoPath);
+            $video->delete();
+
+            FavoriteVideo::query()->where('video_id', $id)->delete();
+            VideoView::query()->where('video_id', $id)->delete();
+
+            return $this->backWithMessage('success', 'Video has been deleted');
+        } catch (\Exception $e) {
+            return $this->backWithMessage('error', 'Something went wrong, please try again later');
+        }
     }
 }

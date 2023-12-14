@@ -13,6 +13,9 @@
                 {{ session('error') }}
             </div>
         @endif
+        <div id="video_err" class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;">
+            The file is too big. Maximum allowed size is 50 MB
+        </div>
     </div>
     <div class="content-wraper withnav">
         <div class="body-content">
@@ -21,14 +24,17 @@
                     <div class="col-12 col-lg-8 m-auto">
                         <div class="overflow-scroll border bg-white shadow rounded-2 py-5 px-4 px-lg-5">
                             <h3 class="pb-4">Add New Video</h3>
-                            <form action="{{ route('videos.store') }}" method="POST">
+                            <div class="loader-container" id="loaderContainer">
+                                <div class="loader"></div>
+                            </div>
+                            <form action="{{ route('videos.store') }}" method="POST" enctype="multipart/form-data" id="videoForm">
                                 @csrf
                                 <div class="col-md-10 col-12 d-inline-block">
                                     <div class="pb-3">
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="Video Name">
                                     </div>
                                     <div class="pb-3">
-                                        <input type="text" name="src" class="form-control py-2" value="{{ old('src') }}" placeholder="Video Link">
+                                        <input type="file" name="video" id="video" class="form-control py-2" accept="video/*" placeholder="Video File">
                                     </div>
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                         <div class="row">
@@ -41,7 +47,6 @@
                                             @endforeach
                                         </div>
                                     </div>
-
                                     <div class="col-12 p-3 mb-3 border rounded">
                                         <h6 class="text-start">Choose line</h6>
                                         @foreach($sectors as $sl)
@@ -69,9 +74,28 @@
                                     </div>
                                 </div>
                                 <div class="col-md-10 col-12 m-auto">
-                                    <button type="submit" class="btn submit_btn p-2 my-3 w-100">Add video</button>
+                                    <button class="btn submit_btn p-2 my-3 w-100" onclick="checkFileSize()" id="submitButton">Add video</button>
                                 </div>
                             </form>
+                            <script>
+                                function checkFileSize() {
+                                    let fileInput = document.getElementById('video');
+                                    let videoErr = document.getElementById('video_err');
+                                    if (fileInput.files.length > 0) {
+                                        let fileSizeMB = fileInput.files[0].size / (1024 * 1024);
+                                        let maxFileSizeMB = 50;
+                                        if (fileSizeMB > maxFileSizeMB) {
+                                            videoErr.style.display = 'block';
+                                            return;
+                                        }
+                                    }
+                                    document.getElementById('videoForm').addEventListener('submit', function () {
+                                        document.getElementById('loaderContainer').style.display = 'flex';
+                                        document.getElementById('submitButton').setAttribute('disabled', 'disabled');
+                                    });
+                                    document.getElementById('videoForm').submit();
+                                }
+                            </script>
                         </div>
                     </div>
                 </div>

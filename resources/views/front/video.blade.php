@@ -17,10 +17,10 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="video-box ratio ratio-16x9">
-                            <iframe src="{{ 'https://www.youtube.com/embed/' . $video->src }}"
-                                    title="YouTube video player" frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen></iframe>
+                            <video width="200" controls>
+                                <source src="{{ $video->src }}" type="video/mp4">
+                                Your browser does not support the video.
+                            </video>
                         </div>
                         <div class="video-info pt-3">
                             <div class="video-caption">
@@ -32,8 +32,7 @@
                             <div class="video-statistics">
                                 <div class="video-views">
                                     <img src="{{ asset('storage/images/icons/eye_light.svg') }}" style="max-width: 16px" alt="">
-                                    <span
-                                            class="views-number">{{ $videoViewed->where('video_id', $video->id)->count() }}</span>
+                                    <span class="views-number">{{ $videoViewed->where('video_id', $video->id)->count() }}</span>
                                 </div>
                             </div>
                         </div>

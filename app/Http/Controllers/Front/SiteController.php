@@ -121,30 +121,38 @@ class SiteController extends Controller
                 return redirect()->route('topic', $latest_topic->id);
             }
             else {
-                return 'empty';
+                return redirect()->route('topic', 0);
             }
         return redirect()->route('select-user');
     }
 
     public function topic(string $id)
     {
-        $active_topics = Topic::query()->where('status', 1)->get();
-        $current_topic = Topic::query()->where('id', $id)->first();
-        $comments_details = Comment::query()->with(['user'])->where('comments.topic_id', $id)->get();
+        if ($id != 0) {
+            $active_topics = Topic::query()->where('status', 1)->get();
+            $current_topic = Topic::query()->where('id', $id)->first();
+            $comments_details = Comment::query()->with(['user'])->where('comments.topic_id', $id)->get();
 
-        $topic = Topic::find($id);
+            $topic = Topic::find($id);
 
-        if($topic) {
-            if ($topic->status) {
-                return $this->ifAuthenticated('front.topic', [
-                    'active_topics' => $active_topics,
-                    'current_topic' => $current_topic,
-                    'comments_details' => $comments_details,
-                ]);
+            if($topic) {
+                if ($topic->status) {
+                    return $this->ifAuthenticated('front.topic', [
+                        'active_topics' => $active_topics,
+                        'current_topic' => $current_topic,
+                        'comments_details' => $comments_details,
+                    ]);
+                }
+                return abort(404);
             }
             return abort(404);
+        } else {
+            return $this->ifAuthenticated('front.topic', [
+                'active_topics' => null,
+                'current_topic' => null,
+                'comments_details' => null,
+            ]);
         }
-        return abort(404);
     }
     public function managerVideos()
     {

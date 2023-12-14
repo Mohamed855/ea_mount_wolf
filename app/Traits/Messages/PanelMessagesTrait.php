@@ -168,11 +168,10 @@ trait PanelMessagesTrait {
     {
         return [
             'name.required' => 'Video name is required',
-            // 'name.min' => 'Video name must be between 2 and 20 characters',
-            // 'name.max' => 'Video name must be between 2 and 20 characters',
 
-            'src.required' => 'Youtube link is required',
-            'src.regex' => 'Enter a valid youtube link',
+            'video.required' => 'Video is required',
+            'video.mimes' => 'Video type is not valid',
+            'video.max' => 'Video is too big, max video size is 50 Mb',
 
             'sector.not_in' => 'Please select Sector',
             'line.not_in' => 'Please select line',

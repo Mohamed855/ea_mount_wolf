@@ -23,7 +23,7 @@
             <thead class="bg-light">
             <tr>
                 <th>Name</th>
-                <th>Video link</th>
+                <th>Video</th>
                 <th>Uploaded By</th>
                 <th>Sector | Line</th>
                 <th>Viewed</th>
@@ -46,7 +46,12 @@
                         <td>
                             <span>{{ $video->name}}</span>
                         </td>
-                        <td>{{ 'https://www.youtube.com/embed/' . $video->src }}</td>
+                        <td>
+                            <video width="200" controls>
+                                <source src="{{ $video->src }}" type="video/mp4">
+                                Your browser does not support the video.
+                            </video>
+                        </td>
                         <td>{{ ucfirst($video->user_name) }}</td>
                         <td>
                             <span>{{ $video->sector_name . " | " }}</span>
