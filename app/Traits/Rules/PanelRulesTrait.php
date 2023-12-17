@@ -27,7 +27,7 @@ trait PanelRulesTrait {
     {
         return [
             'title' => 'required',
-            'image' => 'required|max:10240|mimetypes:image/jpeg,image/png,image/gif'
+            'image' => 'required|max:20480|mimetypes:image/jpeg,image/png,image/gif'
         ];
     }
     public function titleRules(): array
@@ -40,7 +40,7 @@ trait PanelRulesTrait {
     {
         return [
             'name' => 'required',
-            'file' => 'required|max:10240',
+            'file' => 'required|max:20480',
         ];
     }
     public function lineRules(): array
@@ -60,7 +60,7 @@ trait PanelRulesTrait {
         return [
             'title' => 'required',
             'description' => 'required',
-            'image' => 'required|max:10240|mimetypes:image/jpeg,image/png,image/gif'
+            'image' => 'required|max:20480|mimetypes:image/jpeg,image/png,image/gif'
         ];
     }
     public function userRules(): array
@@ -101,7 +101,7 @@ trait PanelRulesTrait {
     {
         return [
             'name' => 'required',
-            'video' => 'required|max:51200',
+            'video' => 'required|max:307200',
         ];
     }
 }

@@ -9,7 +9,7 @@
 
 @section('panel_content')
 
-    @include('includes.admin.panel_filter')
+    @include('includes.admin.users_filter')
     <div class="scroll-bar overflow-scroll">
         <table class="table bg-white">
             <thead class="bg-light">
@@ -22,11 +22,14 @@
             </thead>
             <tbody>
                 @if(count($file_user_views->get()) > 0)
-                    @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                        @php($file_user_views = $file_user_views->whereDate('file_views.created_at', $_GET['date']))
-                    @endif
                     @if(isset($_GET['search']))
-                        @php($file_user_views = $file_user_views->where('users.first_name', 'like', '%' . $_GET['search'] . '%')->get())
+                        @php($file_user_views = $file_user_views->where('users.first_name', 'like', '%' . $_GET['search'] . '%')
+                            ->orWhere('users.middle_name', 'like', '%' . $_GET['search'] . '%')
+                            ->orWhere('users.last_name', 'like', '%' . $_GET['search'] . '%')
+                            ->orWhere('users.email', 'like', '%' . $_GET['search'] . '%')
+                            ->orWhere('users.crm_code', 'like', '%' . $_GET['search'] . '%')
+                            ->get()
+                        )
                     @else
                         @php($file_user_views = $file_user_views->get())
                     @endif

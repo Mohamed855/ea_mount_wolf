@@ -100,34 +100,6 @@
             </div>
         </a>
     </div>
-    <a onclick="showUserContainer()" style="cursor:pointer">
-        <div class="sidebar-title py-2 my-2 row justify-content-evenly">
-            <span class="col-3">Users</span>
-            <span class="col-3"><img src="{{ asset('storage/images/icons/down.png') }}" width="20px"></span>
-        </div>
-    </a>
-    <div id="users_container" style="display: {{
-                check_url($currUrl, $panel_url . '/admins') ||
-                check_url($currUrl, $panel_url . '/managers') ||
-                check_url($currUrl, $panel_url . '/employees') ?
-                'block' : 'none'
-            }}">
-        <a href="{{ route('admins.index') }}">
-            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/admins') ? 'active_dashboard_btn' : '' }}">
-                Admins
-            </div>
-        </a>
-        <a href="{{ route('managers.index') }}">
-            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/managers') ? 'active_dashboard_btn' : '' }}">
-                Managers
-            </div>
-        </a>
-        <a href="{{ route('employees.index') }}">
-            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/employees') ? 'active_dashboard_btn' : '' }}">
-                Employees
-            </div>
-        </a>
-    </div>
     <a onclick="showContentContainer()" style="cursor:pointer">
         <div class="sidebar-title py-2 my-2 row justify-content-evenly">
             <span class="col-3">Content</span>
@@ -153,6 +125,34 @@
         <a href="{{ route('videos.index') }}">
             <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/videos') ? 'active_dashboard_btn' : '' }}">
                 Videos
+            </div>
+        </a>
+    </div>
+    <a onclick="showUserContainer()" style="cursor:pointer">
+        <div class="sidebar-title py-2 my-2 row justify-content-evenly">
+            <span class="col-3">Users</span>
+            <span class="col-3"><img src="{{ asset('storage/images/icons/down.png') }}" width="20px"></span>
+        </div>
+    </a>
+    <div id="users_container" style="display: {{
+                check_url($currUrl, $panel_url . '/admins') ||
+                check_url($currUrl, $panel_url . '/managers') ||
+                check_url($currUrl, $panel_url . '/employees') ?
+                'block' : 'none'
+            }}">
+        <a href="{{ route('admins.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/admins') ? 'active_dashboard_btn' : '' }}">
+                Admins
+            </div>
+        </a>
+        <a href="{{ route('managers.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/managers') ? 'active_dashboard_btn' : '' }}">
+                Managers
+            </div>
+        </a>
+        <a href="{{ route('employees.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/employees') ? 'active_dashboard_btn' : '' }}">
+                Employees
             </div>
         </a>
     </div>

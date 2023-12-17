@@ -21,8 +21,11 @@
                         <div class="content">
                             <div class="row scroll-bar" style="height: auto">
                                 @if(count($user_files->get()) > 0)
-                                    @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                                        @php($user_files = $user_files->whereDate('created_at', $_GET['date']))
+                                    @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                                        @php($user_files = $user_files->whereDate('files.created_at', '>', $_GET['from']))
+                                    @endif
+                                    @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                                        @php($user_files = $user_files->whereDate('files.created_at', '<', $_GET['to']))
                                     @endif
                                     @if(isset($_GET['filter']))
                                         @if($_GET['filter'] === 'name')
@@ -37,7 +40,8 @@
                                     @else
                                         @php($user_files = $user_files->get())
                                     @endif
-                                    @foreach($user_files as $file)
+                                    @if(count($user_files) > 0)
+                                        @foreach($user_files as $file)
                                         <div class="col-6 col-md-4 col-lg-3 py-3">
                                             <div class="incentive-box favorite border pb-3 mb-3">
                                             <span>
@@ -95,6 +99,11 @@
                                             </div>
                                         </div>
                                     @endforeach
+                                    @else
+                                        <div class="m-auto">
+                                            <p class="fs-4 p-5 text-center">There is no files in this line</p>
+                                        </div>
+                                    @endif
                                 @else
                                     <div class="m-auto">
                                         <p class="fs-4 p-5 text-center">There is no files in this line</p>
@@ -113,8 +122,11 @@
                         <div class="content">
                             <div class="row scroll-bar py-3" style="height: auto">
                                 @if(count($user_videos->get()) > 0)
-                                    @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                                        @php($user_videos = $user_videos->whereDate('created_at', $_GET['date']))
+                                    @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                                        @php($user_videos = $user_videos->whereDate('videos.created_at', '>', $_GET['from']))
+                                    @endif
+                                    @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                                        @php($user_videos = $user_videos->whereDate('videos.created_at', '<', $_GET['to']))
                                     @endif
                                     @if(isset($_GET['filter']))
                                         @if($_GET['filter'] === 'name')
@@ -127,8 +139,9 @@
                                     @else
                                         @php($user_videos = $user_videos->get())
                                     @endif
-                                    @foreach($user_videos as $video)
-                                        <div class="col-6 col-md-4 col-lg-3">
+                                    @if(count($user_videos) > 0)
+                                        @foreach($user_videos as $video)
+                                            <div class="col-6 col-md-4 col-lg-3">
                                             <div class="incentive-box favorite border pb-3 mb-3">
                                             <span>
                                                 <a href="{{ route('favorite_videos.toggle', $video->id) }}">
@@ -161,7 +174,12 @@
                                                 </a>
                                             </div>
                                         </div>
-                                    @endforeach
+                                        @endforeach
+                                    @else
+                                        <div class="m-auto">
+                                            <p class="fs-4 p-5 text-center">There is no Videos in this line</p>
+                                        </div>
+                                    @endif
                                 @else
                                     <div class="m-auto">
                                         <p class="fs-4 p-5 text-center">There is no Videos in this line</p>

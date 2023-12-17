@@ -9,7 +9,12 @@
     </div>
     <div class="col-md-3">
         <div class="date">
-                <input type="date" onchange="this.form.submit()" name="date" value="{{ isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']) ? $_GET['date'] : 'mm/dd/yyyy' }}" class="form-control py-2">
+            <input type="date" onchange="this.form.submit()" name="from" value="{{ isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']) ? $_GET['from'] : 'mm/dd/yyyy' }}" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="date">
+            <input type="date" onchange="this.form.submit()" name="to" value="{{ isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']) ? $_GET['to'] : 'mm/dd/yyyy' }}" class="form-control">
         </div>
     </div>
 </form>

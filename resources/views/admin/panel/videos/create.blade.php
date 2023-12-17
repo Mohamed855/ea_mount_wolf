@@ -14,7 +14,7 @@
             </div>
         @endif
         <div id="video_err" class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;">
-            The file is too big. Maximum allowed size is 50 MB
+            The file is too big. Maximum allowed size is 300 MB
         </div>
     </div>
     <div class="content-wraper withnav">
@@ -39,57 +39,73 @@
 
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                         <div class="row">
-                                            <h6 class="text-start">Choose titles</h6>
+                                            <h6 class="text-start d-flex">Choose titles</h6>
+                                            <div class="col-12 text-start d-inline-block">
+                                                <input type="checkbox" id="select_all_titles" name="select_all_titles"
+                                                       value="select_all" checked style="cursor:pointer">
+                                                <label class="small" for="select_all_titles">Select All</label>
+                                            </div>
                                             @foreach($titles as $title)
-                                                <div class="col-12 col-md-6 col-xxl-4 text-start">
-                                                    <input type="checkbox" id="{{ 't_' . $title->id }}" name="{{ 't_' . $title->id }}" value="{{ $title->id }}" checked style="cursor:pointer">
-                                                    <label class="small" for="{{ 't_' . $title->id }}">{{ $title->name }}</label>
+                                                <div class="col-12 col-md-6 text-start">
+                                                    <input type="checkbox" id="{{ 't_' . $title->id }}"
+                                                           name="{{ 't_' . $title->id }}" value="{{ $title->id }}"
+                                                           checked style="cursor:pointer" class="title_checkbox">
+                                                    <label class="small"
+                                                           for="{{ 't_' . $title->id }}">{{ $title->name }}</label>
                                                 </div>
                                             @endforeach
                                         </div>
                                     </div>
-
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                         <div class="row">
-                                            <h6 class="text-start">Choose sector</h6>
+                                            <h6 class="text-start">Choose sectors</h6>
+                                            <div class="col-12 text-start">
+                                                <input type="checkbox" id="select_all_sectors" name="select_all_sectors" value="select_all_sectors" style="cursor:pointer">
+                                                <label class="small" for="select_all_sectors">Select All</label>
+                                            </div>
                                             @foreach($sectors as $sector)
                                                 <div class="col-12 col-md-6 col-xxl-4 text-start">
-                                                    <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ $sector->id == old('s_' . $sector->id) ? 'checked' : '' }} style="cursor:pointer" onchange="generateSectorLines({{ $sector->id }})">
+                                                    <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ $sector->id == old('s_' . $sector->id) ? 'checked' : '' }} style="cursor:pointer" class="sector_checkbox" onchange="generateSectorLines({{ $sector->id }})">
                                                     <label class="small" for="{{ 's_' . $sector->id }}">{{ $sector->name }}</label>
                                                 </div>
                                             @endforeach
                                         </div>
                                     </div>
-
                                     <div class="col-12 p-3 mb-3 border rounded">
-                                        <h6 class="text-start">Choose lines</h6>
-                                        @foreach($sectors as $sl)
-                                            <div id="{{ 'sl_' . $sl->id }}" style="display: {{ $sl->id == old('s_' . $sl->id) ? 'flex' : 'none' }}">
-                                                @php($lines = \App\Models\Line::query()
-                                                        ->join('line_sector as ls', 'ls.line_id', '=', 'lines.id')
-                                                        ->where('ls.sector_id', $sl->id)
-                                                        ->where('lines.status', 1)
-                                                        ->select(['lines.id', 'lines.name'])
-                                                        ->orderBy('lines.id')->get()
+                                        <div class="row">
+                                            <h6 class="text-start">Choose lines</h6>
+                                            <div class="col-12 text-start">
+                                                <input type="checkbox" id="select_all_lines" name="select_all_lines" value="select_all_lines" style="cursor:pointer">
+                                                <label class="small" for="select_all_lines">Select All</label>
+                                            </div>
+                                            @foreach($sectors as $sl)
+                                                <div id="{{ 'sl_' . $sl->id }}" style="display: {{ $sl->id == old('s_' . $sl->id) ? 'flex' : 'none' }}">
+                                                    @php($lines = \App\Models\Line::query()
+                                                      ->join('line_sector as ls', 'ls.line_id', '=', 'lines.id')
+                                                      ->where('ls.sector_id', $sl->id)
+                                                      ->where('lines.status', 1)
+                                                      ->select(['lines.id', 'lines.name'])
+                                                      ->orderBy('lines.id')->get()
                                                     )
-                                                <div class="col-12 p-3 mt-2 mb-3 border rounded">
-                                                    <div class="row">
-                                                        <h6 class="text-start">{{ $sl->name }}</h6>
-                                                        @foreach($lines as $line)
-                                                            <div class="col-12 col-md-6 col-xxl-4 text-start">
-                                                                <input type="checkbox" name="{{ 's_' . $sl->id . 'l_' . $line->id }}" value="{{ $line->id }}" checked style="cursor:pointer">
-                                                                <label class="small" for="{{ 's_' . $sl->id . 'l_' . $line->id }}">{{ $line->name }}</label>
-                                                            </div>
-                                                        @endforeach
+                                                    <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                                        <div class="row">
+                                                            <h6 class="text-start">{{ $sl->name }}</h6>
+                                                            @foreach($lines as $line)
+                                                                <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                                    <input type="checkbox" id="{{ 's_' . $sl->id . 'l_' . $line->id }}" name="{{ 's_' . $sl->id . 'l_' . $line->id }}" value="{{ $line->id }}" {{ $line->id == old('s_' . $sl->id . 'l_' . $line->id) ? 'checked' : '' }} style="cursor:pointer" class="line_checkbox">
+                                                                    <label class="small" for="{{ 's_' . $sl->id . 'l_' . $line->id }}">{{ $line->name }}</label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-10 col-12 m-auto">
                                     <button class="btn submit_btn p-2 my-3 w-100" onclick="checkFileSize()" id="submitButton">Add video</button>
-                                    <span class="text-dark">Max size is 50 MB</span>
+                                    <span class="text-dark">Max size is 300 MB</span>
                                 </div>
                             </form>
                             <script>
@@ -98,7 +114,7 @@
                                     let videoErr = document.getElementById('video_err');
                                     if (fileInput.files.length > 0) {
                                         let fileSizeMB = fileInput.files[0].size / (1024 * 1024);
-                                        let maxFileSizeMB = 50;
+                                        let maxFileSizeMB = 300;
                                         if (fileSizeMB > maxFileSizeMB) {
                                             videoErr.style.display = 'block';
                                             return;
@@ -118,4 +134,5 @@
         </div>
     </div>
     @include('includes.admin.scripts')
+    @include('includes.admin.selectAllScripts')
 @endsection

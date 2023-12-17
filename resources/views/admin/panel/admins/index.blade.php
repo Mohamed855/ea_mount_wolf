@@ -17,7 +17,7 @@
             {{ session('error') }}
         </div>
     @endif
-    @include('includes.admin.panel_filter')
+    @include('includes.admin.users_filter')
     <div class="scroll-bar overflow-scroll">
         <table class="table bg-white">
             <thead class="bg-light">
@@ -31,12 +31,13 @@
             </thead>
             <tbody>
             @if(count($admins->get()) > 0)
-                @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($admins = $admins->whereDate('users.created_at', $_GET['date']))
-
-                @endif
                 @if(isset($_GET['search']))
-                    @php($admins = $admins->where('users.first_name', 'like', '%' . $_GET['search'] . '%')->get())
+                    @php($admins = $admins->where('users.first_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orWhere('users.middle_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orWhere('users.last_name', 'like', '%' . $_GET['search'] . '%')
+                        ->orWhere('users.email', 'like', '%' . $_GET['search'] . '%')
+                        ->get()
+                    )
                 @else
                     @php($admins = $admins->get())
                 @endif

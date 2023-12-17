@@ -17,7 +17,7 @@
                                     {{ $current_topic ? ucfirst($current_topic->title) : '' }}
                                 </h2>
                             </div>
-                            <div class="brain-box ratio ratio-16x9 element-bg"
+                            <div class="brain-box ratio ratio-16x9 element-bg m-auto my-3"
                                  style="background-image: url({{ asset('storage/images/topics/'.$current_topic->image) }})">
                             </div>
 

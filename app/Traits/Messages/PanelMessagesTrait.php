@@ -171,7 +171,7 @@ trait PanelMessagesTrait {
 
             'video.required' => 'Video is required',
             'video.mimes' => 'Video type is not valid',
-            'video.max' => 'Video is too big, max video size is 50 Mb',
+            'video.max' => 'Video is too big, max video size is 300 Mb',
 
             'sector.not_in' => 'Please select Sector',
             'line.not_in' => 'Please select line',
