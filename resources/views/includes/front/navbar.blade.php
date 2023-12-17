@@ -208,7 +208,7 @@
                                     <li><a class="dropdown-item" href="{{ route('manager.files') }}">My Files</a></li>
                                     <li><a class="dropdown-item" href="{{ route('manager.videos') }}">My Video</a></li>
                                 @endif
-                                <li><a class="dropdown-item" href="{{ auth()->user()->role == 1 ? route('logout') : route('logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                             @endguest
                         </ul>
                     </li>

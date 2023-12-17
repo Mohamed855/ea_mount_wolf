@@ -153,7 +153,7 @@ class AdminsController extends Controller
     public function destroy(string $id)
     {
         if (auth()->id() == 1) {
-            $this->deleteFromDB('users', $id, 'storage/images/profile_images/', 'profile_image');
+            $this->deleteFromDB('users', $id, 'images/profile_images/', 'profile_image');
             return $this->backWithMessage('success', 'Admin has been deleted');
         }
         return back();

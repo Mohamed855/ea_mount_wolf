@@ -30,19 +30,33 @@
                                     <div class="pb-3">
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="File Name">
                                     </div>
+                                    <div class="pb-3">
+                                        <input type="file" name="file" id="file" class="form-control py-2" accept="*/*">
+                                    </div>
+                                    <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                        <div class="row">
+                                            <h6 class="text-start">Choose titles</h6>
+                                            @foreach($titles as $title)
+                                                <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                    <input type="checkbox" id="{{ 't_' . $title->id }}" name="{{ 't_' . $title->id }}" value="{{ $title->id }}" checked style="cursor:pointer">
+                                                    <label class="small" for="{{ 't_' . $title->id }}">{{ $title->name }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                         <div class="row">
                                             <h6 class="text-start">Choose sector</h6>
                                             @foreach($sectors as $sector)
                                                 <div class="col-12 col-md-6 col-xxl-4 text-start">
-                                                    <input type="radio" id="{{ 's_' . $sector->id }}" name="{{ 'sector' }}" value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'checked' : '' }} style="cursor:pointer" onchange="generateOneSectorLines({{ $sector->id }})">
-                                                    <label class="small" for="{{ 'sector' }}">{{ $sector->name }}</label>
+                                                    <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ $sector->id == old('s_' . $sector->id) ? 'checked' : '' }} style="cursor:pointer" onchange="generateSectorLines({{ $sector->id }})">
+                                                    <label class="small" for="{{ 's_' . $sector->id }}">{{ $sector->name }}</label>
                                                 </div>
                                             @endforeach
                                         </div>
                                     </div>
                                     <div class="col-12 p-3 mb-3 border rounded">
-                                        <h6 class="text-start">Choose line</h6>
+                                        <h6 class="text-start">Choose lines</h6>
                                         @foreach($sectors as $sl)
                                             @php($integerSectorIds = array_map('intval', auth()->user()->sectors))
                                             <div id="{{ 'sl_' . $sl->id }}" style="display: {{ $sl->id == old('s_' . $sl->id) ? 'flex' : 'none' }}">
@@ -50,7 +64,6 @@
                                                     ->where('user_id', auth()->id())
                                                     ->whereIn('sector_id', $integerSectorIds)
                                                     ->get())
-
                                                 <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                                     <div class="row">
                                                         <h6 class="text-start">{{ $sl->name }}</h6>
@@ -59,8 +72,8 @@
                                                             @foreach($lines as $line)
                                                                 @if($manager_lines[$i]->sector_id == $sl->id && in_array($line->id, $manager_lines[$i]->lines))
                                                                     <div class="col-12 col-md-6 col-xxl-4 text-start">
-                                                                        <input type="radio" name="{{ 'line' }}" value="{{ $line->id }}" {{ $line->id == old('line') ? 'checked' : '' }} style="cursor:pointer">
-                                                                        <label class="small" for="{{ 'line' }}">{{ $line->name }}</label>
+                                                                        <input type="checkbox" name="{{ 's_' . $sl->id . 'l_' . $line->id }}" value="{{ $line->id }}" checked style="cursor:pointer">
+                                                                        <label class="small" for="{{ 's_' . $sl->id . 'l_' . $line->id }}">{{ $line->name }}</label>
                                                                     </div>
                                                                 @endif
                                                             @endforeach
@@ -69,11 +82,6 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-12 m-auto">
-                                    <div class="pb-3">
-                                        <input type="file" name="file" id="file" class="form-control py-2" accept="*/*">
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-12 m-auto">

@@ -51,8 +51,16 @@
                                             Views <img
                                                 src="{{ asset(in_array($sector->id, $userSectors) && $isNotAdmin ?  'storage/images/icons/eye_light.svg' : 'storage/images/icons/eye.svg') }}"
                                                 style="max-width: 20px;"/>
-                                            <span
-                                                class="views-number">{{ $views->where('sector_id', '=', $sector->id)->count() + $downloads->where('sector_id', '=', $sector->id)->count() }}</span>
+                                            <span class="views-number">
+                                                {{ \app\Models\VideoView::query()
+                                                        ->join('videos', 'video_views.video_id', '=', 'videos.id')
+                                                        ->select('videos.sectors as sectors')
+                                                        ->whereJsonContains('sectors', $sector->id)->count() +
+                                                     \app\Models\FileView::query()
+                                                         ->join('files', 'file_views.file_id', '=', 'files.id')
+                                                         ->select('files.sectors as sectors')
+                                                         ->whereJsonContains('sectors', $sector->id)->count()
+                                                }}</span>
                                         </div>
                                     </a>
                                 </div>

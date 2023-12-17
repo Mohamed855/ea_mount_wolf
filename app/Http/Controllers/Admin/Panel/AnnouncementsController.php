@@ -8,6 +8,7 @@ use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -76,9 +77,9 @@ class AnnouncementsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
-        $this->deleteFromDB('announcements', $id, 'storage/images/announcements/', 'image');
+        $this->deleteFromDB('announcements', $id, 'images/announcements/', 'image');
         return $this->backWithMessage('success', 'Announcement has been deleted');
     }
 }

@@ -36,9 +36,11 @@
                             <thead class="bg-light">
                             <tr>
                                 <th>Name</th>
-                                <th>Video link</th>
+                                <th>Video</th>
                                 <th>Uploaded By</th>
-                                <th>Sector | Line</th>
+                                <th>Titles</th>
+                                <th>Sectors</th>
+                                <th>Lines</th>
                                 <th>Viewed</th>
                                 <th>Uploaded at</th>
                                 <th>Actions</th>
@@ -59,11 +61,66 @@
                                         <td>
                                             <span>{{ $video->name}}</span>
                                         </td>
-                                        <td>{{ 'https://www.youtube.com/embed/' . $video->src }}</td>
+                                        <td>
+                                            <video width="200" controls>
+                                                <source src="{{ $video->src }}" type="video/mp4">
+                                                Your browser does not support the video.
+                                            </video>
+                                        </td>
                                         <td>{{ ucfirst($video->user_name) }}</td>
                                         <td>
-                                            <span>{{ $video->sector_name . " | " }}</span>
-                                            <span>{{ $video->line_name }}</span>
+                                            @php($video_titles = \App\Models\Title::query()->whereIn('id', $video->titles)->get())
+                                            @if(count($video_titles) > 0)
+                                                <div class="text-start" style="max-height:100px; overflow:auto;">
+                                                    @for($i = 0; $i < count($video_titles); $i++)
+                                                        {{ $i + 1 }} - {{ $video_titles[$i]->name }}
+                                                        <br>
+                                                    @endfor
+                                                </div>
+                                            @else
+                                                No titles
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php($video_sectors = \App\Models\Sector::query()->whereIn('id', $video->sectors)->get())
+                                            @if(count($video_sectors) > 0)
+                                                <div class="text-start" style="max-height:100px; overflow:auto;">
+                                                    @for($i = 0; $i < count($video_sectors); $i++)
+                                                        {{ $i + 1 }} - {{ $video_sectors[$i]->name }}
+                                                        <br>
+                                                    @endfor
+                                                </div>
+                                            @else
+                                                No sectors
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php($video_lines = \App\Models\VideoLine::query()
+                                                ->join('sectors as s', 's.id', '=', 'video_lines.sector_id')
+                                                ->where('video_id', $video->id)
+                                                ->whereIn('sector_id', $video->sectors)
+                                                ->select([
+                                                    'video_lines.*',
+                                                    's.name as sectorName'
+                                                ])->get())
+                                            @if(count($video_lines) > 0)
+                                                <div class="text-start" style="max-height:100px; overflow:auto;">
+                                                    @php($lines = \App\Models\Line::query()->get())
+                                                    @for($i = 0; $i < count($video_lines); $i++)
+                                                        @php($currentSectorLines = [])
+                                                        @foreach($lines as $l)
+                                                            @if(in_array($l->id, $video_lines[$i]->lines))
+                                                                @php($currentSectorLines[] = $l->name)
+                                                            @endif
+                                                        @endforeach
+                                                        <h6>{{ $video_lines[$i]->sectorName }}</h6>
+                                                        <p>[{{ implode(', ', $currentSectorLines) }}]</p>
+                                                    @endfor
+                                                    @unset($currentSectorLines)
+                                                </div>
+                                            @else
+                                                No Lines
+                                            @endif
                                         </td>
                                         <td>{{ $videoViewed->where('video_id', $video->id)->count() }}</td>
                                         <td>{{ date('d-m-Y, h:m a', strtotime($video->created_at)) }}</td>

@@ -24,22 +24,37 @@
                     <div class="col-12 col-lg-8 m-auto">
                         <div class="overflow-scroll border bg-white shadow rounded-2 py-5 px-4 px-lg-5">
                             <h3 class="pb-4">Add New Video</h3>
-                            <form action="{{ route('videos.store') }}" method="POST">
+                            <div class="loader-container" id="loaderContainer">
+                                <div class="loader"></div>
+                            </div>
+                            <form action="{{ route('videos.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="col-md-8 col-12 d-inline-block">
                                     <div class="pb-3">
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="Video Name">
                                     </div>
                                     <div class="pb-3">
-                                        <input type="text" name="src" class="form-control py-2" value="{{ old('src') }}" placeholder="Video Link">
+                                        <input type="file" name="video" id="video" class="form-control py-2" accept="video/*" placeholder="Video File">
                                     </div>
+                                    <div class="col-12 p-3 mt-2 mb-3 border rounded">
+                                        <div class="row">
+                                            <h6 class="text-start">Choose sector</h6>
+                                            @foreach($titles as $title)
+                                                <div class="col-12 col-md-6 col-xxl-4 text-start">
+                                                    <input type="checkbox" id="{{ 't_' . $title->id }}" name="{{ 't_' . $title->id }}" value="{{ $title->id }}" checked style="cursor:pointer">
+                                                    <label class="small" for="{{ 't_' . $title->id }}">{{ $title->name }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                         <div class="row">
                                             <h6 class="text-start">Choose sector</h6>
                                             @foreach($sectors as $sector)
                                                 <div class="col-12 col-md-6 col-xxl-4 text-start">
-                                                    <input type="radio" id="{{ 's_' . $sector->id }}" name="{{ 'sector' }}" value="{{ $sector->id }}" {{ $sector->id == old('sector') ? 'checked' : '' }} style="cursor:pointer" onchange="generateOneSectorLines({{ $sector->id }})">
-                                                    <label class="small" for="{{ 'sector' }}">{{ $sector->name }}</label>
+                                                    <input type="checkbox" id="{{ 's_' . $sector->id }}" name="{{ 's_' . $sector->id }}" value="{{ $sector->id }}" {{ $sector->id == old('s_' . $sector->id) ? 'checked' : '' }} style="cursor:pointer" onchange="generateSectorLines({{ $sector->id }})">
+                                                    <label class="small" for="{{ 's_' . $sector->id }}">{{ $sector->name }}</label>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -63,8 +78,8 @@
                                                             @foreach($lines as $line)
                                                                 @if($manager_lines[$i]->sector_id == $sl->id && in_array($line->id, $manager_lines[$i]->lines))
                                                                     <div class="col-12 col-md-6 col-xxl-4 text-start">
-                                                                        <input type="radio" name="{{ 'line' }}" value="{{ $line->id }}" {{ $line->id == old('line') ? 'checked' : '' }} style="cursor:pointer">
-                                                                        <label class="small" for="{{ 'line' }}">{{ $line->name }}</label>
+                                                                        <input type="checkbox" name="{{ 's_' . $sl->id . 'l_' . $line->id }}" value="{{ $line->id }}" checked style="cursor:pointer">
+                                                                        <label class="small" for="{{ 's_' . $sl->id . 'l_' . $line->id }}">{{ $line->name }}</label>
                                                                     </div>
                                                                 @endif
                                                             @endforeach
@@ -76,7 +91,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-12 m-auto">
-                                    <button type="submit" class="btn submit_btn p-2 my-3 w-100">Add video</button>
+                                    <button class="btn submit_btn p-2 my-3 w-100" onclick="checkFileSize()" id="submitButton">Add video</button>
+                                    <span class="text-dark">Max size is 50 MB</span>
                                 </div>
                             </form>
                         </div>
@@ -91,6 +107,25 @@
     @include('includes.admin.scripts')
 
     <script src="{{ asset('assets/js/owl.carousel.js') }}"></script>
+    <script>
+        function checkFileSize() {
+            let fileInput = document.getElementById('video');
+            let videoErr = document.getElementById('video_err');
+            if (fileInput.files.length > 0) {
+                let fileSizeMB = fileInput.files[0].size / (1024 * 1024);
+                let maxFileSizeMB = 50;
+                if (fileSizeMB > maxFileSizeMB) {
+                    videoErr.style.display = 'block';
+                    return;
+                }
+            }
+            document.getElementById('videoForm').addEventListener('submit', function () {
+                document.getElementById('loaderContainer').style.display = 'flex';
+                document.getElementById('submitButton').setAttribute('disabled', 'disabled');
+            });
+            document.getElementById('videoForm').submit();
+        }
+    </script>
     <script>
         $(document).ready(function () {
             $("#topics-carousel").owlCarousel({

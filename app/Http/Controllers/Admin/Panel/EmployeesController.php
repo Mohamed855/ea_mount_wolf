@@ -24,24 +24,7 @@ class EmployeesController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.employees.index', [
-            'employees' => User::query()
-            ->join('titles', 'users.title_id', '=', 'titles.id')
-            ->where('role', 3)
-            ->select(
-                'users.id',
-                'users.first_name',
-                'users.middle_name',
-                'users.last_name',
-                'users.user_name',
-                'users.email',
-                'users.phone_number',
-                'users.sectors',
-                'users.lines',
-                'users.profile_image',
-                'users.activated',
-                'users.created_at',
-                'titles.name as title_name',
-            ),
+            'employees' => User::query()->where('role', 3),
         ]);
     }
 
@@ -90,7 +73,7 @@ class EmployeesController extends Controller
             }
 
             $employeeLines = [];
-            $lineIds = Sector::query()->get(['id']);
+            $lineIds = Line::query()->get(['id']);
             foreach ($lineIds as $lines) {
                 if ($request['l_' . $lines->id]) {
                     $employeeLines[] = $lines->id;
@@ -160,7 +143,7 @@ class EmployeesController extends Controller
             }
 
             $userLines = [];
-            $lineIds = Sector::query()->get(['id']);
+            $lineIds = Line::query()->get(['id']);
             foreach ($lineIds as $lines) {
                 if ($request['l_' . $lines->id]) {
                     $userLines[] = $lines->id;
@@ -194,7 +177,7 @@ class EmployeesController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('users', $id, 'storage/images/profile_images/', 'profile_image');
+        $this->deleteFromDB('users', $id, 'images/profile_images/', 'profile_image');
         return $this->backWithMessage('success', 'Employee has been deleted');
     }
 }

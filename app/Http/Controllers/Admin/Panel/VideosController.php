@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\FavoriteVideo;
+use App\Models\Line;
 use App\Models\Sector;
+use App\Models\Title;
 use App\Models\Video;
+use App\Models\VideoLine;
 use App\Models\VideoNotification;
 use App\Models\VideoView;
 use App\Traits\AuthTrait;
@@ -33,13 +36,9 @@ class VideosController extends Controller
         return $this->ifAdmin('admin.panel.videos.index', [
             'videos' => Video::query()
                 ->join('users', 'videos.user_id', '=', 'users.id')
-                ->join('lines', 'videos.line_id', '=', 'lines.id')
-                ->join('sectors', 'videos.sector_id', '=', 'sectors.id')
                 ->select(
                     'videos.*',
                     'users.user_name',
-                    'sectors.name as sector_name',
-                    'lines.name as line_name',
                 ),
             'videoViewed' => VideoView::query()
                 ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
@@ -54,6 +53,7 @@ class VideosController extends Controller
         if(Auth::check()){
             if(auth()->user()->role == 1 || auth()->user()->role == 2)
                 return view('admin.panel.videos.create')->with([
+                    'titles' => Title::query()->get(),
                     'sectors' => Sector::query()->get(),
                     'user_sector' => Sector::query()->where('id', '=', auth()->user()->sector_id)->first(),
                 ]);
@@ -81,21 +81,61 @@ class VideosController extends Controller
 
             $video->name = $request->name;
             $video->src = Storage::url($videoPath);
-            $video->sector_id = $request->sector;
-            $video->line_id = $request->line;
             $video->user_id = auth()->id();
             $video->status = 1;
+            $video->titles = [];
+            $video->sectors = [];
+            $video->lines = [];
 
             $video->save();
 
+            $videoTitles = [];
+            $videoSectors = [];
+            $allVideoLines = [];
+            $titleIds = Title::query()->get(['id']);
+            $sectorIds = Sector::query()->get(['id']);
+            $lineIds = Line::query()->get(['id']);
+
+            foreach ($titleIds as $title) {
+                if ($request['t_' . $title->id]) $videoTitles[] = $title->id;
+            }
+            foreach ($sectorIds as $sector) {
+                if ($request['s_' . $sector->id]) {
+                    $videoSectors[] = $sector->id;
+                    $videoSectorLines = [];
+                    foreach ($lineIds as $line) {
+                        if ($request['s_' . $sector->id . 'l_' . $line->id]) {
+                            $videoSectorLines[] = $line->id;
+                            if (! in_array($line->id, $allVideoLines)) {
+                                $allVideoLines[] = $line->id;
+                            }
+                        }
+                    }
+                    $video_lines = new VideoLine();
+                    $video_lines->video_id = $video->id;
+                    $video_lines->sector_id = $sector->id;
+                    $video_lines->lines = $videoSectorLines;
+                    $video_lines->save();
+                    unset($videoSectorLines);
+                }
+            }
+            $video->update(['titles' => $videoTitles, 'sectors' => $videoSectors, 'lines' => $allVideoLines]);
+
             $notification = new VideoNotification;
 
-            $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new video - ' . $request->name;
-            $notification->sector_id = $request->sector;
-            $notification->line_id = $request->line;
-            $notification->video_id = $video->id;
-
-            $notification->save();
+            foreach ($videoSectors as $sector) {
+                foreach ($allVideoLines as $line) {
+                    $videoNotification = VideoNotification::query()->where('sector_id', $sector)
+                        ->where('line_id', $line)->where('video_id', $video->id)->first();
+                    if (! $videoNotification) {
+                        $notification->text = auth()->user()->first_name . ' ' . auth()->user()->middle_name . ' added a new file - ' . $request->name;
+                        $notification->sector_id = $sector;
+                        $notification->line_id = $line;
+                        $notification->video_id = $video->id;
+                        $notification->save();
+                    }
+                }
+            }
 
             return $this->backWithMessage('success', 'Video added successfully');
         } catch (\Exception $e) {
@@ -113,7 +153,7 @@ class VideosController extends Controller
                     'users.user_name',
                     'users.role',
                     'users.created_at',
-                )->where('video_id', $id)->get();
+                )->where('video_id', $id);
         return $this->ifAdmin('admin.panel.videos.viewed_by')->with([
             'video_user_views' => $video_user_views,
             'video_id' => $id,
@@ -133,6 +173,7 @@ class VideosController extends Controller
 
             FavoriteVideo::query()->where('video_id', $id)->delete();
             VideoView::query()->where('video_id', $id)->delete();
+            VideoLine::query()->where('video_id', $id)->delete();
 
             return $this->backWithMessage('success', 'Video has been deleted');
         } catch (\Exception $e) {

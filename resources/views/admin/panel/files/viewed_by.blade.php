@@ -9,6 +9,7 @@
 
 @section('panel_content')
 
+    @include('includes.admin.panel_filter')
     <div class="scroll-bar overflow-scroll">
         <table class="table bg-white">
             <thead class="bg-light">
@@ -20,27 +21,37 @@
             </tr>
             </thead>
             <tbody>
-                @if(count($file_user_views) > 0)
-                    @foreach($file_user_views as $user)
-                        <tr>
-                            <td>{{ $user->role == 1 ? ucfirst($user->first_name) : ucfirst($user->first_name) . ' ' . ucfirst($user->middle_name) . ' ' . ucfirst($user->last_name) }}</td>
-                            <td>{{ $user->role == 1 ? '_____' : ucfirst($user->user_name) }}</td>
-                            <td>
-                                @if($user->role == 1)
-                                    Admin
-                                @elseif($user->role == 2)
-                                    Manager
-                                @else
-                                    Employee
-                                @endif
-                            </td>
-                            <td>{{ $user->created_at }}</td>
-                        </tr>
-                    @endforeach
+                @if(count($file_user_views->get()) > 0)
+                    @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
+                        @php($file_user_views = $file_user_views->whereDate('file_views.created_at', $_GET['date']))
+                    @endif
+                    @if(isset($_GET['search']))
+                        @php($file_user_views = $file_user_views->where('users.first_name', 'like', '%' . $_GET['search'] . '%')->get())
+                    @else
+                        @php($file_user_views = $file_user_views->get())
+                    @endif
+                    @if(count($file_user_views) > 0)
+                        @foreach($file_user_views as $user)
+                            <tr>
+                                <td>{{ $user->role == 1 ? ucfirst($user->first_name) : ucfirst($user->first_name) . ' ' . ucfirst($user->middle_name) . ' ' . ucfirst($user->last_name) }}</td>
+                                <td>{{ $user->role == 1 ? '_____' : ucfirst($user->user_name) }}</td>
+                                <td>
+                                    @if($user->role == 1)
+                                        Admin
+                                    @elseif($user->role == 2)
+                                        Manager
+                                    @else
+                                        Employee
+                                    @endif
+                                </td>
+                                <td>{{ $user->created_at }}</td>
+                            </tr>
+                        @endforeach
+                    @else
+                        @include('includes.admin.empty_message')
+                    @endif
                 @else
-                    <tr>
-                        <td colspan="3">No one view this file yet</td>
-                    </tr>
+                    @include('includes.admin.empty_message')
                 @endif
             </tbody>
         </table>

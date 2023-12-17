@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\File;
+use App\Models\FileLine;
 use App\Models\Line;
 use App\Models\LineSector;
 use App\Models\Sector;
 use App\Models\Video;
+use App\Models\VideoLine;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
@@ -29,7 +31,8 @@ class LinesController extends Controller
     {
         return $this->ifAdmin('admin.panel.lines.index', [
             'lines' => Line::query()->with('sector'),
-            'countOfFiles' => File::query()->select('line_id')->get(),
+            'countOfFiles' => FileLine::query(),
+            'countOfVideos' => VideoLine::query(),
         ]);
     }
 
@@ -131,8 +134,6 @@ class LinesController extends Controller
     {
         $this->deleteFromDB('lines', $id, null, null);
         LineSector::query()->where('line_id', $id)->delete();
-        File::query()->where('line_id', $id)->delete();
-        Video::query() ->where('line_id', $id)->delete();
         return $this->backWithMessage('success', 'Line has been deleted');
     }
 }

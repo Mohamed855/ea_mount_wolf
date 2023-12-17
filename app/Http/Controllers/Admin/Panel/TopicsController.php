@@ -149,7 +149,7 @@ class TopicsController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('topics', $id, 'storage/images/topics/', 'image');
+        $this->deleteFromDB('topics', $id, 'images/topics/', 'image');
         Comment::query()->where('topic_id', $id)->delete();
         return $this->backWithMessage('success', 'Topic has been deleted');
     }

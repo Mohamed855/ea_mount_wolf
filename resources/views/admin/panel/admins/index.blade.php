@@ -31,15 +31,12 @@
             </thead>
             <tbody>
             @if(count($admins->get()) > 0)
-                @if(isset($_GET['search']))
-                    @php($admins = $admins->where('users.first_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('users.middle_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('users.last_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orwhere('users.user_name', 'like', '%' . $_GET['search'] . '%')
-                        )
-                @endif
                 @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($admins = $admins->whereDate('users.created_at', $_GET['date'])->get())
+                    @php($admins = $admins->whereDate('users.created_at', $_GET['date']))
+
+                @endif
+                @if(isset($_GET['search']))
+                    @php($admins = $admins->where('users.first_name', 'like', '%' . $_GET['search'] . '%')->get())
                 @else
                     @php($admins = $admins->get())
                 @endif

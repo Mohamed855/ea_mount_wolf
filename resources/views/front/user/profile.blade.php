@@ -95,7 +95,7 @@
                             </div>
                             <div class="d-table-row">
                                 <div class="profile_details d-table-cell text-end">Title :</div>
-                                <div class="d-table-cell text-start px-2">{{ auth()->user()->role == 1 ? '_____' : $user_details->title_name }}</div>
+                                <div class="d-table-cell text-start px-2">{{ auth()->user()->role == 1 ? '_____' : $user_details->title_name ?? 'Not defined' }}</div>
                             </div>
                         </div>
                         <div class="m-auto pt-3">

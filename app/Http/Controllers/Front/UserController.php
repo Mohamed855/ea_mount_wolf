@@ -12,9 +12,11 @@ use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class UserController extends Controller
@@ -86,12 +88,10 @@ class UserController extends Controller
         }
         return $this->backWithMessage('success', 'Profile picture changed successfully');
     }
-    public function delete_profile_picture()
+    public function delete_profile_picture(): RedirectResponse
     {
-        $public_user_profile_image ='storage/images/profile_images/' . auth()->user()->profile_image;
-        if (file_exists(asset('storage/' . $public_user_profile_image))) {
-            unlink(asset('storage/' . $public_user_profile_image));
-        }
+        $public_user_profile_image ='public/images/profile_images/' . auth()->user()->profile_image;
+        if (Storage::exists($public_user_profile_image)) Storage::delete($public_user_profile_image);
         User::query()
             ->where('id', '=', auth()->id())
             ->update([

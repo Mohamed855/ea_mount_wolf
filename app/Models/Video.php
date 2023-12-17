@@ -15,9 +15,16 @@ class Video extends Model
         'name',
         'src',
         'user_id',
-        'line_id',
-        'sector_id',
+        'titles',
+        'lines',
+        'sectors',
         'status',
+    ];
+
+    protected $casts = [
+        'titles' => 'array',
+        'lines' => 'array',
+        'sectors' => 'array',
     ];
 
     public function user(): BelongsTo

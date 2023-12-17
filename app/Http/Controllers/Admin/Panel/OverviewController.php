@@ -31,8 +31,8 @@ class OverviewController extends Controller
                 'files_count' => File::query()->count(),
                 'videos_count' => Video::query()->count(),
                 'sectors' => Sector::query()->get(),
-                'files' => File::query(),
-                'videos' => Video::query(),
+                'files' => File::query()->join('file_lines as fl', 'files.id', 'fl.file_id'),
+                'videos' => Video::query()->join('video_lines as vl', 'videos.id', 'vl.video_id'),
             ]);
     }
 }

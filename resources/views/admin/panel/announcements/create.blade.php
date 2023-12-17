@@ -1,5 +1,7 @@
 @extends('layouts.panel')
 
+@section('title', 'Add Announcement')
+
 @section('panel_content')
     <div class="container px-4">
         @if(session()->has('success'))

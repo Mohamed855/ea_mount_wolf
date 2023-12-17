@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\File;
+use App\Models\FileLine;
 use App\Models\Line;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Video;
+use App\Models\VideoLine;
 use App\Traits\GeneralTrait;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
@@ -76,20 +78,8 @@ class ActionsController extends Controller
         if (auth()->user()->role = 1) {
 
             $fileOrVideo = $table == 'file_views' ?
-                File::query()->join('sectors', 'sectors.id', '=', 'files.sector_id')
-                    ->join('lines', 'lines.id', '=', 'files.line_id')
-                    ->where('files.id', $id)->select([
-                        'files.*',
-                        'sectors.name as sector_name',
-                        'lines.name as line_name'
-                    ])->first() :
-                Video::query()->join('sectors', 'sectors.id', '=', 'videos.sector_id')
-                    ->join('lines', 'lines.id', '=', 'videos.line_id')
-                    ->where('videos.id', $id)->select([
-                        'videos.*',
-                        'sectors.name as sector_name',
-                        'lines.name as line_name'
-                    ])->first();
+                File::query()->where('files.id', $id)->first() :
+                Video::query()->where('videos.id', $id)->first();
 
             $data = DB::table($table)
                 ->join('users', 'file_views.user_id', '=', 'users.id')

@@ -23,15 +23,8 @@ class HomeController extends Controller
             ->where('announcements.status', '=',1)
             ->get();
 
-        $downloads = FileView::query()->join('files', 'file_views.file_id', '=', 'files.id')
-            ->select(
-                'files.sector_id as sector_id'
-            )->get();
-
-        $views = VideoView::query()->join('videos', 'video_views.video_id', '=', 'videos.id')
-            ->select(
-                'videos.sector_id as sector_id'
-            )->get();
+        $downloads = FileView::query();
+        $views = VideoView::query();
 
         return $this->ifAuthenticated('front.home', [
             'announcements' => $announcements,

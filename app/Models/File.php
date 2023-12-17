@@ -16,10 +16,17 @@ class File extends Model
         'type',
         'size',
         'user_id',
-        'line_id',
-        'sector_id',
+        'titles',
+        'lines',
+        'sectors',
         'status',
         'stored_name',
+    ];
+
+    protected $casts = [
+        'titles' => 'array',
+        'lines' => 'array',
+        'sectors' => 'array',
     ];
 
     public function user(): BelongsTo

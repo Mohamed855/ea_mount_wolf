@@ -26,7 +26,7 @@
                     <th>Name</th>
                     <th>Lines</th>
                     <th>No. Files</th>
-                    <th>No. Views</th>
+                    <th>No. Videos</th>
                     <th>Created At</th>
                     <th>Actions</th>
                 </tr>
@@ -41,40 +41,44 @@
                     @else
                         @php($sectors = $sectors->get())
                     @endif
-                    @foreach($sectors as $sector)
-                        <tr>
-                            <td>{{ $sector->name }}</td>
-                            <td>
-                                @if(count($sector->line) > 0)
-                                    <div style="max-height:100px; min-width: 100px; overflow-y:auto;">
-                                        @for($i = 0; $i < count($sector->line); $i++)
-                                            {{ $i + 1 }} - {{ $sector->line[$i]->name }}
-                                            <br>
-                                        @endfor
-                                    </div>
-                                @else
-                                    No Lines
-                                @endif
-                            </td>
-                            <td>{{ $countOfFiles->where('sector_id', '=', $sector->id)->count() }}</td>
-                            <td>{{ $countOfFiles->where('sector_id', '=', $sector->id)->sum('viewed') }}</td>
-                            <td>{{ date('d-m-Y, h:m a', strtotime($sector->created_at)) }}</td>
-                            <td>
-                                <a href="{{ route('sectors.edit', $sector->id) }}"
-                                   class="btn btn-outline-primary btn-sm btn-rounded">
-                                    Edit
-                                </a>
-                                <form action="{{ route('sectors.destroy', $sector->id) }}" method="post"
-                                      class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
+                    @if(count($sectors) > 0)
+                        @foreach($sectors as $sector)
+                            <tr>
+                                <td>{{ $sector->name }}</td>
+                                <td>
+                                    @if(count($sector->line) > 0)
+                                        <div style="max-height:100px; min-width: 100px; overflow-y:auto;">
+                                            @for($i = 0; $i < count($sector->line); $i++)
+                                                {{ $i + 1 }} - {{ $sector->line[$i]->name }}
+                                                <br>
+                                            @endfor
+                                        </div>
+                                    @else
+                                        No Lines
+                                    @endif
+                                </td>
+                                <td>{{ $countOfFiles->where('sector_id', '=', $sector->id)->count() }}</td>
+                                <td>{{ $countOfVideos->where('sector_id', '=', $sector->id)->count() }}</td>
+                                <td>{{ date('d-m-Y, h:m a', strtotime($sector->created_at)) }}</td>
+                                <td>
+                                    <a href="{{ route('sectors.edit', $sector->id) }}"
+                                       class="btn btn-outline-primary btn-sm btn-rounded">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('sectors.destroy', $sector->id) }}" method="post"
+                                          class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        @include('includes.admin.empty_message')
+                    @endif
                 @else
                     @include('includes.admin.empty_message')
                 @endif

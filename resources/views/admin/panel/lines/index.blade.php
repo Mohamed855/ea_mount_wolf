@@ -25,7 +25,7 @@
                 <th>Name</th>
                 <th>Sectors</th>
                 <th>No. Files</th>
-                <th>No. Views</th>
+                <th>No. Videos</th>
                 <th>Status</th>
                 <th>Created At</th>
                 <th>Actions</th>
@@ -41,7 +41,8 @@
                 @else
                     @php($lines = $lines->get())
                 @endif
-                @foreach($lines as $line)
+                @if(count($lines) > 0)
+                    @foreach($lines as $line)
                     <tr>
                         <td>{{ $line->name }}</td>
                         <td>
@@ -56,8 +57,8 @@
                                 No sectors
                             @endif
                         </td>
-                        <td>{{ $countOfFiles->where('line_id', '=', $line->id)->count() }}</td>
-                        <td>{{ $countOfFiles->where('line_id', '=', $line->id)->sum('viewed') }}</td>
+                        <td>{{ \app\Models\FileLine::query()->whereJsonContains('lines', $line->id)->count() }}</td>
+                        <td>{{ \app\Models\VideoLine::query()->whereJsonContains('lines', $line->id)->count() }}</td>
                         <td>
                             <span
                                 class="{{ $line->status ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">
@@ -89,6 +90,9 @@
                         </td>
                     </tr>
                 @endforeach
+                @else
+                    @include('includes.admin.empty_message')
+                @endif
             @else
                 @include('includes.admin.empty_message')
             @endif

@@ -74,7 +74,7 @@ class ActionsController extends Controller
             $file_viewed->file_id = $id;
             $file_viewed->save();
         }
-        $file = File::query()->where('id', $id)->first();
+        $file = File::query()->findOrFail($id);
         $public_file_name = 'files/' . $file->stored_name;
         $headers = array('Content-Type: ' . $file->type,);
         return response()->file(public_path('storage/' . $public_file_name), $headers);

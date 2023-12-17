@@ -30,10 +30,10 @@
             <tbody>
             @if(count($titles->get()) > 0)
                 @if(isset($_GET['search']))
-                    @php($titles = $titles->where('announcements.title', 'like', '%' . $_GET['search'] . '%'))
+                    @php($titles = $titles->where('name', 'like', '%' . $_GET['search'] . '%'))
                 @endif
                 @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($titles = $titles->whereDate('announcements.created_at', $_GET['date'])->get())
+                    @php($titles = $titles->whereDate('created_at', $_GET['date'])->get())
                 @else
                     @php($titles = $titles->get())
                 @endif

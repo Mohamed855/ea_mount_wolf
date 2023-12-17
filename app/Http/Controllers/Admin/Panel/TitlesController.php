@@ -62,7 +62,7 @@ class TitlesController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('titles', $id, 'storage/images/announcements/', 'name');
+        $this->deleteFromDB('titles', $id, 'images/announcements/', 'name');
         return $this->backWithMessage('success', 'Title has been deleted');
     }
 }

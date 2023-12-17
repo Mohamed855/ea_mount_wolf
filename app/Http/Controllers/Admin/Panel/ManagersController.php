@@ -25,21 +25,7 @@ class ManagersController extends Controller
     public function index()
     {
         return $this->ifAdmin('admin.panel.managers.index', [
-            'managers' => User::query()->join('titles', 'users.title_id', '=', 'titles.id')
-            ->where('role', 2)->select([
-                    'users.id',
-                    'users.first_name',
-                    'users.middle_name',
-                    'users.last_name',
-                    'users.user_name',
-                    'users.email',
-                    'users.phone_number',
-                    'users.profile_image',
-                    'users.sectors',
-                    'users.activated',
-                    'users.created_at',
-                    'titles.name as title_name',
-                ])
+            'managers' => User::query()->where('role', 2)
         ]);
     }
 
@@ -212,7 +198,7 @@ class ManagersController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->deleteFromDB('users', $id, 'storage/images/profile_images/', 'profile_image');
+        $this->deleteFromDB('users', $id, 'images/profile_images/', 'profile_image');
         ManagerLines::query()->where('user_id', $id)->delete();
         return $this->backWithMessage('success', 'Manager has been deleted');
     }

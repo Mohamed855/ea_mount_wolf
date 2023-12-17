@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\File;
+use App\Models\FileLine;
 use App\Models\Line;
 use App\Models\LineSector;
 use App\Models\Sector;
 use App\Models\Video;
+use App\Models\VideoLine;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
@@ -29,7 +31,8 @@ class SectorsController extends Controller
     {
         return $this->ifAdmin('admin.panel.sectors.index', [
             'sectors' => Sector::query()->with('line'),
-            'countOfFiles' => File::query()->select('sector_id')->get(),
+            'countOfFiles' => File::query()->join('file_lines as fl', 'files.id','fl.file_id')->select('sector_id')->get(),
+            'countOfVideos' => Video::query()->join('video_lines as vl', 'videos.id','vl.video_id')->select('sector_id')->get(),
         ]);
     }
 
@@ -130,8 +133,8 @@ class SectorsController extends Controller
     {
         $this->deleteFromDB('sectors', $id, null, null);
         LineSector::query()->where('sector_id', $id)->delete();
-        File::query()->where('sector_id', $id)->delete();
-        Video::query()->where('sector_id', $id)->delete();
+        FileLine::query()->where('sector_id', $id)->delete();
+        VideoLine::query()->where('sector_id', $id)->delete();
         return $this->backWithMessage('success', 'Sector has been deleted');
     }
 }

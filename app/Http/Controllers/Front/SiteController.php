@@ -9,6 +9,7 @@ use App\Models\FileView;
 use App\Models\Line;
 use App\Models\ManagerLines;
 use App\Models\Sector;
+use App\Models\Title;
 use App\Models\Topic;
 use App\Models\Video;
 use App\Models\VideoView;
@@ -63,15 +64,23 @@ class SiteController extends Controller
                     return redirect()->route('not_authorized');
                 }
             }
+
+            $userFiles = File::query()->join('file_lines as fl', 'files.id', 'fl.file_id')
+                ->where('fl.sector_id', $sector_id)
+                ->whereJsonContains('fl.lines', intval($line_id))
+                ->where('files.status', '=',1)
+                ->select(['files.*', 'fl.file_id', 'fl.sector_id', 'fl.lines']);
+            $userVideos = Video::query()->join('video_lines as vl', 'videos.id', 'vl.video_id')
+                ->where('vl.sector_id', $sector_id)
+                ->whereJsonContains('vl.lines', intval($line_id))
+                ->where('videos.status', '=',1)
+                ->select(['videos.*', 'vl.video_id', 'vl.sector_id', 'vl.lines']);
+            $userFiles = auth()->user()->role == 1 ? $userFiles : $userFiles->whereJsonContains('files.titles', \auth()->user()->title_id);
+            $userVideos = auth()->user()->role == 1 ? $userVideos : $userVideos->whereJsonContains('videos.titles', \auth()->user()->title_id);
+
             return $this->ifAuthenticated('front.drive', [
-                'user_files' => File::query()
-                    ->where('files.sector_id', $sector_id)
-                    ->where('files.line_id', $line_id)
-                    ->where('files.status', '=',1),
-                'user_videos' => Video::query()
-                    ->where('videos.sector_id', $sector_id)
-                    ->where('videos.line_id', $line_id)
-                    ->where('videos.status', '=',1),
+                'user_files' => $userFiles,
+                'user_videos' => $userVideos,
                 'user_favorites_files' => File::query()
                     ->join('favorites', 'files.id', '=', 'favorites.file_id')
                     ->select('favorites.file_id as file_id')
@@ -156,18 +165,14 @@ class SiteController extends Controller
     }
     public function managerVideos()
     {
-        if (Auth::user()->role == 2) {
+        if (Auth::check() && Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.videos.index', [
                 'videos' => Video::query()
                     ->join('users', 'videos.user_id', '=', 'users.id')
-                    ->join('lines', 'videos.line_id', '=', 'lines.id')
-                    ->join('sectors', 'videos.sector_id', '=', 'sectors.id')
                     ->where('videos.user_id', auth()->id())
                     ->select(
                         'videos.*',
                         'users.user_name',
-                        'sectors.name as sector_name',
-                        'lines.name as line_name',
                     ),
                 'videoViewed' => VideoView::query()
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
@@ -178,8 +183,9 @@ class SiteController extends Controller
     }
     public function createVideo()
     {
-        if (Auth::user()->role == 2) {
+        if (Auth::check() && Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.videos.create',[
+                'titles' => Title::query()->get(),
                 'sectors' => Sector::query()->whereIn('id', auth()->user()->sectors)->get(),
             ]);
         } else {
@@ -188,18 +194,14 @@ class SiteController extends Controller
     }
     public function managerFiles()
     {
-        if (Auth::user()->role == 2) {
+        if (Auth::check() && Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.files.index', [
                 'files' => File::query()
                     ->join('users', 'files.user_id', '=', 'users.id')
-                    ->join('lines', 'files.line_id', '=', 'lines.id')
-                    ->join('sectors', 'files.sector_id', '=', 'sectors.id')
                     ->where('files.user_id', auth()->id())
                     ->select(
                         'files.*',
                         'users.user_name',
-                        'sectors.name as sector_name',
-                        'lines.name as line_name',
                     ),
                 'fileViewed' => FileView::query()
                     ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
@@ -210,8 +212,9 @@ class SiteController extends Controller
     }
     public function createFile()
     {
-        if (Auth::user()->role == 2) {
+        if (Auth::check() && Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.files.create',[
+                'titles' => Title::query()->get(),
                 'sectors' => Sector::query()->whereIn('id', auth()->user()->sectors)->get(),
             ]);
         } else {

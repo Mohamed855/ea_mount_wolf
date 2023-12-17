@@ -40,9 +40,7 @@ trait PanelRulesTrait {
     {
         return [
             'name' => 'required',
-            'sector' => 'not_in:0',
-            'line' => 'not_in:0',
-            'file' => 'required|max:10240|mimetypes:application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.oasis.opendocument.text,text/plain,application/pdf,application/zip,application/x-rar-compressed,application/x-7z-compressed,application/x-tar,application/gzip,image/jpeg,image/png,image/gif,image/bmp,image/tiff,image/svg+xml'
+            'file' => 'required|max:10240',
         ];
     }
     public function lineRules(): array
@@ -104,8 +102,6 @@ trait PanelRulesTrait {
         return [
             'name' => 'required',
             'video' => 'required|max:51200',
-            'sector' => 'not_in:0',
-            'line' => 'not_in:0',
         ];
     }
 }

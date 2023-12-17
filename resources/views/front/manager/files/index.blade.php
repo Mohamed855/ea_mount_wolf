@@ -38,7 +38,9 @@
                                 <th>Name | Type</th>
                                 <th>Size</th>
                                 <th>Uploaded By</th>
-                                <th>Sector | Line</th>
+                                <th>Titles</th>
+                                <th>Sectors</th>
+                                <th>Lines</th>
                                 <th>Viewed</th>
                                 <th>Uploaded at</th>
                                 <th>Actions</th>
@@ -83,8 +85,58 @@
                                         <td>{{ floor($file->size / 1000) < 1000 ?  floor($file->size / 1000) . ' K' :  floor($file->size / 1000 / 1000) . ' Mb' }}</td>
                                         <td>{{ ucfirst($file->user_name) }}</td>
                                         <td>
-                                            <span>{{ $file->sector_name . " | " }}</span>
-                                            <span>{{ $file->line_name }}</span>
+                                            @php($file_titles = \App\Models\Title::query()->whereIn('id', $file->titles)->get())
+                                            @if(count($file_titles) > 0)
+                                                <div class="text-start" style="max-height:100px; overflow:auto;">
+                                                    @for($i = 0; $i < count($file_titles); $i++)
+                                                        {{ $i + 1 }} - {{ $file_titles[$i]->name }}
+                                                        <br>
+                                                    @endfor
+                                                </div>
+                                            @else
+                                                No titles
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php($file_sectors = \App\Models\Sector::query()->whereIn('id', $file->sectors)->get())
+                                            @if(count($file_sectors) > 0)
+                                                <div class="text-start" style="max-height:100px; overflow:auto;">
+                                                    @for($i = 0; $i < count($file_sectors); $i++)
+                                                        {{ $i + 1 }} - {{ $file_sectors[$i]->name }}
+                                                        <br>
+                                                    @endfor
+                                                </div>
+                                            @else
+                                                No sectors
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php($file_lines = \App\Models\FileLine::query()
+                                                ->join('sectors as s', 's.id', '=', 'file_lines.sector_id')
+                                                ->where('file_id', $file->id)
+                                                ->whereIn('sector_id', $file->sectors)
+                                                ->select([
+                                                    'file_lines.*',
+                                                    's.name as sectorName'
+                                                ])->get())
+                                            @if(count($file_lines) > 0)
+                                                <div class="text-start" style="max-height:100px; overflow:auto;">
+                                                    @php($lines = \App\Models\Line::query()->get())
+                                                    @for($i = 0; $i < count($file_lines); $i++)
+                                                        @php($currentSectorLines = [])
+                                                        @foreach($lines as $l)
+                                                            @if(in_array($l->id, $file_lines[$i]->lines))
+                                                                @php($currentSectorLines[] = $l->name)
+                                                            @endif
+                                                        @endforeach
+                                                        <h6>{{ $file_lines[$i]->sectorName }}</h6>
+                                                        <p>[{{ implode(', ', $currentSectorLines) }}]</p>
+                                                    @endfor
+                                                    @unset($currentSectorLines)
+                                                </div>
+                                            @else
+                                                No Lines
+                                            @endif
                                         </td>
                                         <td>{{ $fileViewed->where('file_id', $file->id)->count() }}</td>
                                         <td>{{ date('d-m-Y, h:m a', strtotime($file->created_at)) }}</td>
