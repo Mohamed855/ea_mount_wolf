@@ -36,11 +36,13 @@
                     @if(isset($_GET['search']))
                         @php($sectors = $sectors->where('sectors.name', 'like', '%' . $_GET['search'] . '%'))
                     @endif
-                    @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                        @php($sectors = $sectors->whereDate('sectors.created_at', $_GET['date'])->get())
-                    @else
-                        @php($sectors = $sectors->get())
+                    @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                        @php($sectors = $sectors->whereDate('sectors.created_at', '>=' , $_GET['from']))
                     @endif
+                    @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                        @php($sectors = $sectors->whereDate('sectors.created_at', '<=' , $_GET['to']))
+                    @endif
+                    @php($sectors = $sectors->get())
                     @if(count($sectors) > 0)
                         @foreach($sectors as $sector)
                             <tr>

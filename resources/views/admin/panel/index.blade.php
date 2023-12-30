@@ -53,9 +53,9 @@
                         @foreach($sectors as $sector)
                             <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
                                 <h3 class="rounded text-center fs-6">{{ $sector->name }}</h3>
-                                <span class="rounded fs-6">{{ 'Files: ' . $files->where('fl.sector_id', $sector->id)->count() }}</span>
+                                <span class="rounded fs-6">{{ 'Files: ' . App\Models\FileLine::query()->where('sector_id', $sector->id)->count() }}</span>
                                 <br>
-                                <span class="rounded fs-6">{{ 'Videos: ' . $videos->where('vl.sector_id', $sector->id)->count() }}</span>
+                                <span class="rounded fs-6">{{ 'Videos: ' . App\Models\VideoLine::query()->where('sector_id', $sector->id)->count() }}</span>
                             </div>
                         @endforeach
                     </div>

@@ -36,11 +36,13 @@
                 @if(isset($_GET['search']))
                     @php($lines = $lines->where('lines.name', 'like', '%' . $_GET['search'] . '%'))
                 @endif
-                @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($lines = $lines->whereDate('lines.created_at', $_GET['date'])->get())
-                @else
-                    @php($lines = $lines->get())
+                @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                    @php($lines = $lines->whereDate('lines.created_at', '>=' , $_GET['from']))
                 @endif
+                @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                    @php($lines = $lines->whereDate('lines.created_at', '<=' , $_GET['to']))
+                @endif
+                @php($lines = $lines->get())
                 @if(count($lines) > 0)
                     @foreach($lines as $line)
                     <tr>

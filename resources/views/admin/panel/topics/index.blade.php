@@ -36,11 +36,13 @@
                 @if(isset($_GET['search']))
                     @php($topics = $topics->where('topics.title', 'like', '%' . $_GET['search'] . '%'))
                 @endif
-                @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($topics = $topics->whereDate('topics.created_at', $_GET['date'])->get())
-                @else
-                    @php($topics = $topics->get())
+                @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                    @php($topics = $topics->whereDate('topics.created_at', '>=' , $_GET['from']))
                 @endif
+                @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                    @php($topics = $topics->whereDate('topics.created_at', '<=' , $_GET['to']))
+                @endif
+                @php($topics = $topics->get())
                 @if(count($topics) > 0)
                     @foreach($topics as $topic)
                         <tr>

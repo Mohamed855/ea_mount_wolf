@@ -153,7 +153,7 @@ class FilesController extends Controller
                 'users.last_name',
                 'users.user_name',
                 'users.role',
-                'users.created_at',
+                'file_views.created_at',
             )->where('file_id', $id);
         return $this->ifAdmin('admin.panel.files.viewed_by')->with([
             'file_user_views' => $file_user_views,

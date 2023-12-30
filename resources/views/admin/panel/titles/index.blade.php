@@ -32,11 +32,13 @@
                 @if(isset($_GET['search']))
                     @php($titles = $titles->where('name', 'like', '%' . $_GET['search'] . '%'))
                 @endif
-                @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($titles = $titles->whereDate('created_at', $_GET['date'])->get())
-                @else
-                    @php($titles = $titles->get())
+                @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                    @php($titles = $titles->whereDate('created_at', '>=' , $_GET['from']))
                 @endif
+                @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                    @php($titles = $titles->whereDate('created_at', '<=' , $_GET['to']))
+                @endif
+                @php($titles = $titles->get())
                 @if(count($titles) > 0)
                     @foreach($titles as $title)
                         <tr>

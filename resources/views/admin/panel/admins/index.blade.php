@@ -35,7 +35,7 @@
                     @php($admins = $admins->where('users.first_name', 'like', '%' . $_GET['search'] . '%')
                         ->orWhere('users.middle_name', 'like', '%' . $_GET['search'] . '%')
                         ->orWhere('users.last_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orWhere('users.email', 'like', '%' . $_GET['search'] . '%')
+                        ->orWhere('users.email', $_GET['search'])
                         ->get()
                     )
                 @else

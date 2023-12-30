@@ -38,11 +38,13 @@
                 @if(isset($_GET['search']))
                     @php($videos = $videos->where('videos.name', 'like', '%' . $_GET['search'] . '%'))
                 @endif
-                @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($videos = $videos->whereDate('videos.created_at', $_GET['date'])->get())
-                @else
-                    @php($videos = $videos->get())
+                @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                    @php($videos = $videos->whereDate('videos.created_at', '>=' , $_GET['from']))
                 @endif
+                @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                    @php($videos = $videos->whereDate('videos.created_at', '<=' , $_GET['to']))
+                @endif
+                @php($videos = $videos->get())
                 @if(count($videos) > 0)
                     @foreach($videos as $video)
                         <tr>

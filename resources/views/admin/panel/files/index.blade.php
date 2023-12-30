@@ -38,11 +38,13 @@
                 @if(isset($_GET['search']))
                     @php($files = $files->where('files.name', 'like', '%' . $_GET['search'] . '%'))
                 @endif
-                @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($files = $files->whereDate('files.created_at', $_GET['date'])->get())
-                @else
-                    @php($files = $files->get())
+                @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                    @php($files = $files->whereDate('files.created_at', '>=' , $_GET['date']))
                 @endif
+                @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                    @php($files = $files->whereDate('files.created_at', '<=' , $_GET['date']))
+                @endif
+                @php($files = $files->get())
                 @if(count($files) > 0)
                     @foreach($files as $file)
                         <tr>

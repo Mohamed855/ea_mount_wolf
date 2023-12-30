@@ -35,11 +35,13 @@
                 @if(isset($_GET['search']))
                     @php($announcements = $announcements->where('announcements.title', 'like', '%' . $_GET['search'] . '%'))
                 @endif
-                @if(isset($_GET['date']) && DateTime::createFromFormat('Y-m-d', $_GET['date']))
-                    @php($announcements = $announcements->whereDate('announcements.created_at', $_GET['date'])->get())
-                @else
-                    @php($announcements = $announcements->get())
+                @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                    @php($announcements = $announcements->whereDate('announcements.created_at', '>=' , $_GET['from']))
                 @endif
+                @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                    @php($announcements = $announcements->whereDate('announcements.created_at', '<=' , $_GET['to']))
+                @endif
+                @php($announcements = $announcements->get())
                 @if(count($announcements) > 0)
                     @foreach($announcements as $announcement)
                         <tr>

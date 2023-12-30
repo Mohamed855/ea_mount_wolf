@@ -22,10 +22,10 @@
                             <div class="row scroll-bar" style="height: auto">
                                 @if(count($user_files->get()) > 0)
                                     @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
-                                        @php($user_files = $user_files->whereDate('files.created_at', '>', $_GET['from']))
+                                        @php($user_files = $user_files->whereDate('files.created_at', '>=', $_GET['from']))
                                     @endif
                                     @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
-                                        @php($user_files = $user_files->whereDate('files.created_at', '<', $_GET['to']))
+                                        @php($user_files = $user_files->whereDate('files.created_at', '<=', $_GET['to']))
                                     @endif
                                     @if(isset($_GET['filter']))
                                         @if($_GET['filter'] === 'name')
@@ -123,10 +123,10 @@
                             <div class="row scroll-bar py-3" style="height: auto">
                                 @if(count($user_videos->get()) > 0)
                                     @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
-                                        @php($user_videos = $user_videos->whereDate('videos.created_at', '>', $_GET['from']))
+                                        @php($user_videos = $user_videos->whereDate('videos.created_at', '>=', $_GET['from']))
                                     @endif
                                     @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
-                                        @php($user_videos = $user_videos->whereDate('videos.created_at', '<', $_GET['to']))
+                                        @php($user_videos = $user_videos->whereDate('videos.created_at', '<=', $_GET['to']))
                                     @endif
                                     @if(isset($_GET['filter']))
                                         @if($_GET['filter'] === 'name')

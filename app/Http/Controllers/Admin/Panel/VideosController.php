@@ -152,7 +152,7 @@ class VideosController extends Controller
                     'users.last_name',
                     'users.user_name',
                     'users.role',
-                    'users.created_at',
+                    'video_views.created_at',
                 )->where('video_id', $id);
         return $this->ifAdmin('admin.panel.videos.viewed_by')->with([
             'video_user_views' => $video_user_views,

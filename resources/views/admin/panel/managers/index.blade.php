@@ -38,8 +38,8 @@
                     @php($managers = $managers->where('first_name', 'like', '%' . $_GET['search'] . '%')
                         ->orWhere('users.middle_name', 'like', '%' . $_GET['search'] . '%')
                         ->orWhere('users.last_name', 'like', '%' . $_GET['search'] . '%')
-                        ->orWhere('users.email', 'like', '%' . $_GET['search'] . '%')
-                        ->orWhere('users.crm_code', 'like', '%' . $_GET['search'] . '%')
+                        ->orWhere('users.email', $_GET['search'])
+                        ->orWhere('users.crm_code', $_GET['search'])
                         ->get()
                     )
                 @else

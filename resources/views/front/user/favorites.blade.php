@@ -16,10 +16,10 @@
                         <div class="row scroll-bar py-3" style="height: auto">
                             @if(count($favorites->get()) > 0)
                                 @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
-                                    @php($favorites = $favorites->whereDate('created_at', '>', $_GET['from']))
+                                    @php($favorites = $favorites->whereDate('created_at', '>=', $_GET['from']))
                                 @endif
                                 @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
-                                    @php($favorites = $favorites->whereDate('created_at', '<', $_GET['to']))
+                                    @php($favorites = $favorites->whereDate('created_at', '<=', $_GET['to']))
                                 @endif
                                 @if(isset($_GET['filter']))
                                     @if($_GET['filter'] === 'name')
@@ -105,10 +105,10 @@
                                 <div class="row scroll-bar py-3" style="height: auto">
                                     @if(count($favorite_videos->get()) > 0)
                                         @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
-                                            @php($favorite_videos = $favorite_videos->whereDate('created_at', '>', $_GET['from']))
+                                            @php($favorite_videos = $favorite_videos->whereDate('created_at', '>=', $_GET['from']))
                                         @endif
                                         @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
-                                            @php($favorite_videos = $favorite_videos->whereDate('created_at', '<', $_GET['to']))
+                                            @php($favorite_videos = $favorite_videos->whereDate('created_at', '<=', $_GET['to']))
                                         @endif
                                         @if(isset($_GET['filter']))
                                             @if($_GET['filter'] === 'name')
