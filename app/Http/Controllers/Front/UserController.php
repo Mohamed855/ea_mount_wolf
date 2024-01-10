@@ -8,6 +8,8 @@ use App\Models\FileView;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoView;
+use App\Models\Audio;
+use App\Models\AudioView;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
@@ -36,8 +38,12 @@ class UserController extends Controller
                 'favorite_videos' => Video::query()->join('favorite_videos', 'videos.id', '=', 'favorite_videos.video_id')
                     ->select('videos.*', 'favorite_videos.user_id', 'favorite_videos.video_id')
                     ->where('favorite_videos.user_id', auth()->id()),
+                'favorite_audios' => Audio::query()->join('favorite_audios', 'audios.id', '=', 'favorite_audios.audio_id')
+                    ->select('audios.*', 'favorite_audios.user_id', 'favorite_audios.audio_id')
+                    ->where('favorite_audios.user_id', auth()->id()),
                 'fileViewed' => FileView::query()->join('files', 'file_views.file_id', '=', 'files.id')->get(),
                 'videoViewed' => VideoView::query()->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
+                'audioViewed' => AudioView::query()->join('audios', 'audio_views.audio_id', '=', 'audios.id')->get(),
             ]);
         }
         return redirect()->route('select-user');

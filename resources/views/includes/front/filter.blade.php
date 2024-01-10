@@ -1,7 +1,7 @@
 <form method="get" class="controle row pb-5">
     <div class="col-md-3">
         <div class="date">
-            <span class="d-inline px-2 w-25 float-start pt-1">Group by:</span>
+            <span class="d-inline px-1 w-25 float-start pt-1">Group:</span>
             <select name="filter" onchange="this.form.submit()" class="form-control py-2 d-inline w-75">
                 <option value="none" {{ !isset($_GET['filter']) ? 'selected' : '' }} disabled selected>Select</option>
                 <option value="date" {{ isset($_GET['filter']) && $_GET['filter'] === 'date' ? 'selected' : '' }}>Date</option>

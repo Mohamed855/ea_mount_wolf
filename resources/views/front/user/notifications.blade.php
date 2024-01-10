@@ -31,6 +31,15 @@
                                     </div>
                                 </a>
                             @endforeach
+                            @foreach($audio_notifications as $audio_notification)
+                                <a class="notification_item" href="{{ route('audio', $audio_notification->audio_id) }}">
+                                    <div class="comment-box">
+                                        <div class="comment-txt">
+                                            <p>{{ $audio_notification->text }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
                             @foreach($file_notifications as $file_notification)
                                 <a class="notification_item"
                                    href="{{ route('file.view', $file_notification->file_id) }}" target="_bluck">

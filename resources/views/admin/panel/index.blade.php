@@ -48,6 +48,10 @@
                             <h3 class="rounded text-center fs-6">Videos</h3>
                             <span class="rounded fs-5">{{ $videos_count }}</span>
                         </div>
+                        <div class="py-4 px-5 mb-5 mx-3 text-center shadow rounded bg-white col-12 col-md-5 col-lg-3">
+                            <h3 class="rounded text-center fs-6">Audios</h3>
+                            <span class="rounded fs-5">{{ $audios_count }}</span>
+                        </div>
                     </div>
                     <div class="row justify-content-between py-5">
                         @foreach($sectors as $sector)
@@ -56,6 +60,8 @@
                                 <span class="rounded fs-6">{{ 'Files: ' . App\Models\FileLine::query()->where('sector_id', $sector->id)->count() }}</span>
                                 <br>
                                 <span class="rounded fs-6">{{ 'Videos: ' . App\Models\VideoLine::query()->where('sector_id', $sector->id)->count() }}</span>
+                                <br>
+                                <span class="rounded fs-6">{{ 'Audios: ' . App\Models\AudioLine::query()->where('sector_id', $sector->id)->count() }}</span>
                             </div>
                         @endforeach
                     </div>

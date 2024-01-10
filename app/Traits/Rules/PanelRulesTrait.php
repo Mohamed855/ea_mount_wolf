@@ -104,4 +104,11 @@ trait PanelRulesTrait {
             'video' => 'required|max:307200',
         ];
     }
+    public function audiosRules(): array
+    {
+        return [
+            'name' => 'required',
+            'audio' => 'required|max:307200',
+        ];
+    }
 }

@@ -7,12 +7,13 @@ use App\Models\Comment;
 use App\Models\File;
 use App\Models\FileView;
 use App\Models\Line;
-use App\Models\ManagerLines;
 use App\Models\Sector;
 use App\Models\Title;
 use App\Models\Topic;
 use App\Models\Video;
 use App\Models\VideoView;
+use App\Models\Audio;
+use App\Models\AudioView;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\Auth;
@@ -75,12 +76,19 @@ class SiteController extends Controller
                 ->whereJsonContains('vl.lines', intval($line_id))
                 ->where('videos.status', '=',1)
                 ->select(['videos.*', 'vl.video_id', 'vl.sector_id', 'vl.lines']);
+            $userAudios = Audio::query()->join('audio_lines as al', 'audios.id', 'al.audio_id')
+                ->where('al.sector_id', $sector_id)
+                ->whereJsonContains('al.lines', intval($line_id))
+                ->where('audios.status', '=',1)
+                ->select(['audios.*', 'al.audio_id', 'al.sector_id', 'al.lines']);
             $userFiles = auth()->user()->role == 1 ? $userFiles : $userFiles->whereJsonContains('files.titles', \auth()->user()->title_id);
             $userVideos = auth()->user()->role == 1 ? $userVideos : $userVideos->whereJsonContains('videos.titles', \auth()->user()->title_id);
+            $userAudios = auth()->user()->role == 1 ? $userAudios : $userAudios->whereJsonContains('audios.titles', \auth()->user()->title_id);
 
             return $this->ifAuthenticated('front.drive', [
                 'user_files' => $userFiles,
                 'user_videos' => $userVideos,
+                'user_audios' => $userAudios,
                 'user_favorites_files' => File::query()
                     ->join('favorites', 'files.id', '=', 'favorites.file_id')
                     ->select('favorites.file_id as file_id')
@@ -93,10 +101,18 @@ class SiteController extends Controller
                     ->where('favorite_videos.user_id', auth()->id())
                     ->where('videos.status', '=',1)
                     ->get(),
+                'user_favorites_audios' => Audio::query()
+                    ->join('favorite_audios', 'audios.id', '=', 'favorite_audios.audio_id')
+                    ->select('favorite_audios.audio_id as audio_id')
+                    ->where('favorite_audios.user_id', auth()->id())
+                    ->where('audios.status', '=',1)
+                    ->get(),
                 'fileViewed' => FileView::query()
                     ->join('files', 'file_views.file_id', '=', 'files.id')->get(),
                 'videoViewed' => VideoView::query()
                     ->join('videos', 'video_views.video_id', '=', 'videos.id')->get(),
+                'audioViewed' => AudioView::query()
+                    ->join('audios', 'audio_views.audio_id', '=', 'audios.id')->get(),
             ]);
         }
         return redirect()->route('select-user');
@@ -116,9 +132,28 @@ class SiteController extends Controller
                     'videoViewed' => $viewed,
                 ]);
             }
-            return abort(404);
+            abort(404);
         }
-        return abort(404);
+        abort(404);
+    }
+
+    public function audio(string $id)
+    {
+        $audio = Audio::query()->where('id', $id)->first();
+
+        $viewed = AudioView::query()
+            ->join('audios', 'audio_views.audio_id', '=', 'audios.id')->get();
+
+        if($audio) {
+            if ($audio->status) {
+                return $this->ifAuthenticated('front.audio', [
+                    'audio' => $audio,
+                    'audioViewed' => $viewed,
+                ]);
+            }
+            abort(404);
+        }
+        abort(404);
     }
 
     public function brain_box()
@@ -152,9 +187,9 @@ class SiteController extends Controller
                         'comments_details' => $comments_details,
                     ]);
                 }
-                return abort(404);
+                abort(404);
             }
-            return abort(404);
+            abort(404);
         } else {
             return $this->ifAuthenticated('front.topic', [
                 'active_topics' => null,
@@ -181,10 +216,39 @@ class SiteController extends Controller
             abort(404);
         }
     }
+    public function managerAudios()
+    {
+        if (Auth::check() && Auth::user()->role == 2) {
+            return $this->ifAuthenticated('front.manager.audios.index', [
+                'audios' => Audio::query()
+                    ->join('users', 'audios.user_id', '=', 'users.id')
+                    ->where('audios.user_id', auth()->id())
+                    ->select(
+                        'audios.*',
+                        'users.user_name',
+                    ),
+                'audioViewed' => AudioView::query()
+                    ->join('audios', 'audio_views.audio_id', '=', 'audios.id')->get(),
+            ]);
+        } else {
+            abort(404);
+        }
+    }
     public function createVideo()
     {
         if (Auth::check() && Auth::user()->role == 2) {
             return $this->ifAuthenticated('front.manager.videos.create',[
+                'titles' => Title::query()->get(),
+                'sectors' => Sector::query()->whereIn('id', auth()->user()->sectors)->get(),
+            ]);
+        } else {
+            abort(404);
+        }
+    }
+    public function createAudio()
+    {
+        if (Auth::check() && Auth::user()->role == 2) {
+            return $this->ifAuthenticated('front.manager.audios.create',[
                 'titles' => Title::query()->get(),
                 'sectors' => Sector::query()->whereIn('id', auth()->user()->sectors)->get(),
             ]);

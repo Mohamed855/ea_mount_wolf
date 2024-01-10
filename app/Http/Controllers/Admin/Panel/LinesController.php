@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Admin\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Models\File;
 use App\Models\FileLine;
 use App\Models\Line;
 use App\Models\LineSector;
 use App\Models\Sector;
-use App\Models\Video;
 use App\Models\VideoLine;
+use App\Models\AudioLine;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
@@ -33,6 +32,7 @@ class LinesController extends Controller
             'lines' => Line::query()->with('sector'),
             'countOfFiles' => FileLine::query(),
             'countOfVideos' => VideoLine::query(),
+            'countOfAudios' => AudioLine::query(),
         ]);
     }
 

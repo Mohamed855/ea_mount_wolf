@@ -26,6 +26,7 @@
                 <th>Sectors</th>
                 <th>No. Files</th>
                 <th>No. Videos</th>
+                <th>No. Audios</th>
                 <th>Status</th>
                 <th>Created At</th>
                 <th>Actions</th>
@@ -61,6 +62,7 @@
                         </td>
                         <td>{{ \app\Models\FileLine::query()->whereJsonContains('lines', $line->id)->count() }}</td>
                         <td>{{ \app\Models\VideoLine::query()->whereJsonContains('lines', $line->id)->count() }}</td>
+                        <td>{{ \app\Models\AudioLine::query()->whereJsonContains('lines', $line->id)->count() }}</td>
                         <td>
                             <span
                                 class="{{ $line->status ? 'bg-success' : 'bg-secondary' }} p-2 text-white small rounded">

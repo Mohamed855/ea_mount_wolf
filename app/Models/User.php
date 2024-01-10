@@ -94,4 +94,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Video::class, 'favorite_videos');
     }
+
+    public function audios() : BelongsToMany
+    {
+        return $this->belongsToMany(Audio::class, 'favorite_audios');
+    }
 }

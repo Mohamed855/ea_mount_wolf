@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Files Details')
+@section('title', 'Audios Details')
 
 @section('content')
 
@@ -24,8 +24,8 @@
 
                     <div class="text-center my-5">
                         <p class="d-inline fs-4">
-                            Files Details
-                            <a href="{{ route('file.add') }}" class="btn btn-outline-success mx-3">Add New</a>
+                            Audios Details
+                            <a href="{{ route('audio.add') }}" class="btn btn-outline-success mx-3">Add New</a>
                         </p>
                     </div>
 
@@ -35,8 +35,8 @@
                         <table class="table bg-white">
                             <thead class="bg-light">
                             <tr>
-                                <th>Name | Type</th>
-                                <th>Size</th>
+                                <th>Name</th>
+                                <th>Audio</th>
                                 <th>Uploaded By</th>
                                 <th>Titles</th>
                                 <th>Sectors</th>
@@ -47,51 +47,35 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @if(count($files->get()) > 0)
+                            @if(count($audios->get()) > 0)
                                 @if(isset($_GET['search']))
-                                    @php($files = $files->where('files.name', 'like', '%' . $_GET['search'] . '%'))
+                                    @php($audios = $audios->where('audios.name', 'like', '%' . $_GET['search'] . '%'))
                                 @endif
                                 @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
-                                    @php($files = $files->whereDate('files.created_at', '>=' , $_GET['from']))
+                                    @php($audios = $audios->whereDate('audios.created_at', '>=' , $_GET['from']))
                                 @endif
                                 @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
-                                    @php($files = $files->whereDate('files.created_at', '<=' , $_GET['to']))
+                                    @php($audios = $audios->whereDate('audios.created_at', '<=' , $_GET['to']))
                                 @endif
-                                @php($files = $files->get())
-                                @foreach($files as $file)
+                                @php($audios = $audios->get())
+                                @foreach($audios as $audio)
                                     <tr>
-                                        @php($file_type = "")
-                                        @if (str_contains($file->type, 'word'))
-                                            @php($file_type = "Word")
-                                        @elseif (str_contains($file->type, 'excel'))
-                                            @php($file_type = "Excel")
-                                        @elseif (str_contains($file->type, 'pdf'))
-                                            @php($file_type = "PDF")
-                                        @elseif (str_contains($file->type, 'video'))
-                                            @php($file_type = "Video")
-                                        @elseif (str_contains($file->type, 'zip'))
-                                            @php($file_type = "ZIP")
-                                        @elseif (str_contains($file->type, 'jpg') || str_contains($file->type, 'jpeg'))
-                                            @php($file_type = "Image/jpeg")
-                                        @elseif (str_contains($file->type, 'png'))
-                                            @php($file_type = "Image/png")
-                                        @elseif (str_contains($file->type, 'gif'))
-                                            @php($file_type = "Image/gif")
-                                        @else
-                                            @php($file_type = "file")
-                                        @endif
                                         <td>
-                                            <span>{{ $file->name . " | " }}</span>
-                                            <span>{{ $file_type }}</span>
+                                            <span>{{ $audio->name}}</span>
                                         </td>
-                                        <td>{{ floor($file->size / 1000) < 1000 ?  floor($file->size / 1000) . ' K' :  floor($file->size / 1000 / 1000) . ' Mb' }}</td>
-                                        <td>{{ ucfirst($file->user_name) }}</td>
                                         <td>
-                                            @php($file_titles = \App\Models\Title::query()->whereIn('id', $file->titles)->get())
-                                            @if(count($file_titles) > 0)
+                                            <audio controls>
+                                                <source src="{{ $audio->src }}" type="audio/mp3">
+                                                Your browser does not support the audio.
+                                            </audio>
+                                        </td>
+                                        <td>{{ ucfirst($audio->user_name) }}</td>
+                                        <td>
+                                            @php($audio_titles = \App\Models\Title::query()->whereIn('id', $audio->titles)->get())
+                                            @if(count($audio_titles) > 0)
                                                 <div class="text-start" style="max-height:100px; overflow:auto;">
-                                                    @for($i = 0; $i < count($file_titles); $i++)
-                                                        {{ $i + 1 }} - {{ $file_titles[$i]->name }}
+                                                    @for($i = 0; $i < count($audio_titles); $i++)
+                                                        {{ $i + 1 }} - {{ $audio_titles[$i]->name }}
                                                         <br>
                                                     @endfor
                                                 </div>
@@ -100,11 +84,11 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @php($file_sectors = \App\Models\Sector::query()->whereIn('id', $file->sectors)->get())
-                                            @if(count($file_sectors) > 0)
+                                            @php($audio_sectors = \App\Models\Sector::query()->whereIn('id', $audio->sectors)->get())
+                                            @if(count($audio_sectors) > 0)
                                                 <div class="text-start" style="max-height:100px; overflow:auto;">
-                                                    @for($i = 0; $i < count($file_sectors); $i++)
-                                                        {{ $i + 1 }} - {{ $file_sectors[$i]->name }}
+                                                    @for($i = 0; $i < count($audio_sectors); $i++)
+                                                        {{ $i + 1 }} - {{ $audio_sectors[$i]->name }}
                                                         <br>
                                                     @endfor
                                                 </div>
@@ -113,25 +97,25 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @php($file_lines = \App\Models\FileLine::query()
-                                                ->join('sectors as s', 's.id', '=', 'file_lines.sector_id')
-                                                ->where('file_id', $file->id)
-                                                ->whereIn('sector_id', $file->sectors)
+                                            @php($audio_lines = \App\Models\AudioLine::query()
+                                                ->join('sectors as s', 's.id', '=', 'audio_lines.sector_id')
+                                                ->where('audio_id', $audio->id)
+                                                ->whereIn('sector_id', $audio->sectors)
                                                 ->select([
-                                                    'file_lines.*',
+                                                    'audio_lines.*',
                                                     's.name as sectorName'
                                                 ])->get())
-                                            @if(count($file_lines) > 0)
+                                            @if(count($audio_lines) > 0)
                                                 <div class="text-start" style="max-height:100px; overflow:auto;">
                                                     @php($lines = \App\Models\Line::query()->get())
-                                                    @for($i = 0; $i < count($file_lines); $i++)
+                                                    @for($i = 0; $i < count($audio_lines); $i++)
                                                         @php($currentSectorLines = [])
                                                         @foreach($lines as $l)
-                                                            @if(in_array($l->id, $file_lines[$i]->lines))
+                                                            @if(in_array($l->id, $audio_lines[$i]->lines))
                                                                 @php($currentSectorLines[] = $l->name)
                                                             @endif
                                                         @endforeach
-                                                        <h6>{{ $file_lines[$i]->sectorName }}</h6>
+                                                        <h6>{{ $audio_lines[$i]->sectorName }}</h6>
                                                         <p>[{{ implode(', ', $currentSectorLines) }}]</p>
                                                     @endfor
                                                     @unset($currentSectorLines)
@@ -140,26 +124,22 @@
                                                 No Lines
                                             @endif
                                         </td>
-                                        <td>{{ $fileViewed->where('file_id', $file->id)->count() }}</td>
-                                        <td>{{ date('d-m-Y, h:m a', strtotime($file->created_at)) }}</td>
+                                        <td>{{ $audioViewed->where('audio_id', $audio->id)->count() }}</td>
+                                        <td>{{ date('d-m-Y, h:m a', strtotime($audio->created_at)) }}</td>
                                         <td>
-                                            <a href="{{ route('file.view', $file->id) }}" target="_bluck"
+                                            <a href="{{ route('audio', $audio->id) }}"
                                                class="btn btn-outline-primary btn-sm btn-rounded">
                                                 View
                                             </a>
-                                            <a href="{{ route('file.download', $file->id) }}"
-                                               class="btn btn-outline-primary btn-sm btn-rounded">
-                                                Download
-                                            </a>
-                                            <form action="{{ route('toggle_show_file', $file->id) }}" method="post"
+                                            <form action="{{ route('toggle_show_audio', $audio->id) }}" method="post"
                                                   class="d-inline">
                                                 @csrf
                                                 <button type="submit"
-                                                        class="{{ $file->status ? 'btn-outline-secondary' : 'btn-outline-success' }} btn btn-sm btn-rounded">
-                                                    {{ $file->status ? 'Hide' : 'Show' }}
+                                                        class="{{ $audio->status ? 'btn-outline-secondary' : 'btn-outline-success' }} btn btn-sm btn-rounded">
+                                                    {{ $audio->status ? 'Hide' : 'Show' }}
                                                 </button>
                                             </form>
-                                            <form action="{{ route('ea_files.destroy', $file->id) }}" method="post"
+                                            <form action="{{ route('audios.destroy', $audio->id) }}" method="post"
                                                   class="d-inline">
                                                 @csrf
                                                 @method('DELETE')

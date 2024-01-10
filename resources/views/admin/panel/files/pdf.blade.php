@@ -12,7 +12,7 @@
     <body>
         <h2>{{ ( $table == 'file_views' ? 'File' : 'Video' ) . ' Views Report' }}</h2>
         <div class="details">
-            <h3>Name: {{ ucfirst($fileOrVideo->name) }}</h3>
+            <h3>Name: {{ ucfirst($fileOrVideoOrAudio->name) }}</h3>
         </div>
         <table>
             <thead>

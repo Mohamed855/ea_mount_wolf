@@ -133,6 +133,7 @@
                             @php
                                $comment_notifications = count($comment_notifications) >= 5 ? $comment_notifications->take(5) : $comment_notifications;
                                $video_notifications = count($video_notifications) >= 5 ? $video_notifications->take(5) : $video_notifications;
+                               $audio_notifications = count($audio_notifications) >= 5 ? $audio_notifications->take(5) : $audio_notifications;
                                $file_notifications = count($file_notifications) >= 5 ? $file_notifications->take(5) : $file_notifications;
                                $topic_notifications = count($topic_notifications) >= 5 ? $topic_notifications->take(5) : $topic_notifications;
                             @endphp
@@ -148,6 +149,14 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('video', $video_notification->video_id) }}">
                                         {{ $video_notification->text }}
+                                    </a>
+                                    <hr>
+                                </li>
+                            @endforeach
+                            @foreach($audio_notifications as $audio_notification)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('audio', $audio_notification->audio_id) }}">
+                                        {{ $audio_notification->text }}
                                     </a>
                                     <hr>
                                 </li>
@@ -206,7 +215,8 @@
                                     <li><a class="dropdown-item" href="{{ route('panel') }}">Dashboard</a></li>
                                 @elseif(auth()->user()->role == 2)
                                     <li><a class="dropdown-item" href="{{ route('manager.files') }}">My Files</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('manager.videos') }}">My Video</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('manager.videos') }}">My Videos</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('manager.audios') }}">My Audios</a></li>
                                 @endif
                                 <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                             @endguest

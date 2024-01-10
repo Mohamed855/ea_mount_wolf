@@ -109,7 +109,8 @@
     <div id="content_container" style="display: {{
                 check_url($currUrl, $panel_url . '/ea_topics') ||
                 check_url($currUrl, $panel_url . '/ea_files') ||
-                check_url($currUrl, $panel_url . '/videos') ?
+                check_url($currUrl, $panel_url . '/videos') ||
+                check_url($currUrl, $panel_url . '/audios') ?
                 'block' : 'none'
             }}">
         <a href="{{ route('ea_topics.index') }}">
@@ -125,6 +126,11 @@
         <a href="{{ route('videos.index') }}">
             <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/videos') ? 'active_dashboard_btn' : '' }}">
                 Videos
+            </div>
+        </a>
+        <a href="{{ route('audios.index') }}">
+            <div class="panel_btn py-3 my-2 {{ check_url($currUrl, $panel_url . '/audios') ? 'active_dashboard_btn' : '' }}">
+                Audios
             </div>
         </a>
     </div>

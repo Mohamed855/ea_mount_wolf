@@ -10,6 +10,7 @@ use App\Models\Sector;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Video;
+use App\Models\Audio;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 
@@ -30,6 +31,7 @@ class OverviewController extends Controller
                 'topics_count' => Topic::query()->count(),
                 'files_count' => File::query()->count(),
                 'videos_count' => Video::query()->count(),
+                'audios_count' => Audio::query()->count(),
                 'sectors' => Sector::query()->get(),
             ]);
     }

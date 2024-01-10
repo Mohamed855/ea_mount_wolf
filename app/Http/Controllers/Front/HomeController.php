@@ -7,6 +7,7 @@ use App\Models\Announcement;
 use App\Models\FileView;
 use App\Models\Sector;
 use App\Models\VideoView;
+use App\Models\AudioView;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 
@@ -25,12 +26,14 @@ class HomeController extends Controller
 
         $downloads = FileView::query();
         $views = VideoView::query();
+        $plays = AudioView::query();
 
         return $this->ifAuthenticated('front.home', [
             'announcements' => $announcements,
             'sectors' => $sectors,
             'downloads' => $downloads,
             'views' => $views,
+            'plays' => $plays,
         ]);
     }
 }

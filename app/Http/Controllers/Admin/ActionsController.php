@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\File;
-use App\Models\FileLine;
 use App\Models\Line;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Video;
-use App\Models\VideoLine;
+use App\Models\Audio;
 use App\Traits\GeneralTrait;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
@@ -74,26 +73,58 @@ class ActionsController extends Controller
         }
         return back();
     }
+
+    public function toggle_show_audio($id) {
+        $audio = Audio::find($id);
+        if($audio) {
+            $audio->status ? $audio->status = 0 : $audio->status = 1;
+            $audio->save();
+        }
+        return back();
+    }
     public function download_report($table, $id) {
         if (auth()->user()->role = 1) {
 
-            $fileOrVideo = $table == 'file_views' ?
-                File::query()->where('files.id', $id)->first() :
-                Video::query()->where('videos.id', $id)->first();
+                if ($table == 'file_views') {
+                    $fileOrVideoOrAudio = File::query()->where('files.id', $id)->first();
+                } elseif ($table == 'video_views') {
+                    $fileOrVideoOrAudio = Video::query()->where('videos.id', $id)->first();
+                } elseif ($table == 'audio_views') {
+                    $fileOrVideoOrAudio = Audio::query()->where('audios.id', $id)->first();
+                } else {
+                    abort(404);
+                }
 
-            $data = DB::table($table)
-                ->join('users', 'file_views.user_id', '=', 'users.id')
-                ->select(
+            $data = DB::table($table);
+
+            if ($table == 'file_views') {
+                $data = $data->join('users', 'file_views.user_id', '=', 'users.id');
+            } elseif ($table == 'video_views') {
+                $data = $data->join('users', 'video_views.user_id', '=', 'users.id');
+            } elseif ($table == 'audio_views') {
+                $data = $data->join('users', 'audio_views.user_id', '=', 'users.id');
+            }
+
+            $data->select(
                     'users.first_name',
                     'users.middle_name',
                     'users.last_name',
                     'users.user_name',
                     'users.role',
                     'users.created_at',
-                )->where('file_id', $id)->get();
-            $pdf = PDF::loadView('admin.panel.files.pdf', compact(['data', 'fileOrVideo', 'table']));
-            return $pdf->download($fileOrVideo->name . '_views.pdf');
+                );
+
+            if ($table == 'file_views') {
+                $data = $data->where('file_id', $id)->get();
+            } elseif ($table == 'video_views') {
+                $data = $data->where('video_id', $id)->get();
+            } elseif ($table == 'audio_views') {
+                $data = $data->where('audio_id', $id)->get();
+            }
+
+            $pdf = PDF::loadView('admin.panel.files.pdf', compact(['data', 'fileOrVideoOrAudio', 'table']));
+            return $pdf->download($fileOrVideoOrAudio->name . '_views.pdf');
         }
-        return abort(404);
+        abort(404);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\User;
+use App\Models\Line;
+use App\Models\Sector;
+use App\Models\Audio;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,15 +14,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('videos', function (Blueprint $table) {
+        Schema::create('audio_notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('src');
-            $table->foreignIdFor(User::class);
-            $table->json('titles');
-            $table->json('sectors');
-            $table->json('lines');
-            $table->boolean('status')->default(1);
+            $table->text('text');
+            $table->foreignIdFor(Sector::class);
+            $table->foreignIdFor(Line::class);
+            $table->foreignIdFor(Audio::class);
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('videos');
+        Schema::dropIfExists('audio_notifications');
     }
 };

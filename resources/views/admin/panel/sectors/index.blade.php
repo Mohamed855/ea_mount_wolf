@@ -27,6 +27,7 @@
                     <th>Lines</th>
                     <th>No. Files</th>
                     <th>No. Videos</th>
+                    <th>No. Audios</th>
                     <th>Created At</th>
                     <th>Actions</th>
                 </tr>
@@ -61,6 +62,7 @@
                                 </td>
                                 <td>{{ $countOfFiles->where('sector_id', '=', $sector->id)->count() }}</td>
                                 <td>{{ $countOfVideos->where('sector_id', '=', $sector->id)->count() }}</td>
+                                <td>{{ $countOfAudios->where('sector_id', '=', $sector->id)->count() }}</td>
                                 <td>{{ date('d-m-Y, h:m a', strtotime($sector->created_at)) }}</td>
                                 <td>
                                     <a href="{{ route('sectors.edit', $sector->id) }}"

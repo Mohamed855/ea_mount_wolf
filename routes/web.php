@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Panel\SectorsController;
 use App\Http\Controllers\Admin\Panel\TitlesController;
 use App\Http\Controllers\Admin\Panel\TopicsController;
 use App\Http\Controllers\Admin\Panel\VideosController;
+use App\Http\Controllers\Admin\Panel\AudiosController;
 use App\Http\Controllers\ChooseLoginController;
 use App\Http\Controllers\Front\ActionsController;
 use App\Http\Controllers\Front\AuthController;
@@ -70,6 +71,9 @@ Route::middleware('db.connection')->group(function (){
         // Videos
         Route::resource('videos', VideosController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::get('panel/videos/viewed_by/{id}', [VideosController::class, 'viewed_by'])->name('ea_videos.viewed_by');
+        // Audios
+        Route::resource('audios', AudiosController::class)->only(['index', 'create', 'store', 'destroy']);
+        Route::get('panel/audios/viewed_by/{id}', [AudiosController::class, 'viewed_by'])->name('ea_audios.viewed_by');
         // Actions
         Route::post('toggle_active/{id}', [AdminActionsController::class, 'toggle_active'])->name('toggle_active');
         Route::post('toggle_publish_announcement/{id}', [AdminActionsController::class, 'toggle_publish_announcement'])->name('toggle_publish_announcement');
@@ -77,6 +81,7 @@ Route::middleware('db.connection')->group(function (){
         Route::post('toggle_publish_line/{id}', [AdminActionsController::class, 'toggle_publish_line'])->name('toggle_publish_line');
         Route::post('toggle_show_file/{id}', [AdminActionsController::class, 'toggle_show_file'])->name('toggle_show_file');
         Route::post('toggle_show_video/{id}', [AdminActionsController::class, 'toggle_show_video'])->name('toggle_show_video');
+        Route::post('toggle_show_audio/{id}', [AdminActionsController::class, 'toggle_show_audio'])->name('toggle_show_audio');
         Route::get('download_report/{table}/{id}', [AdminActionsController::class, 'download_report'])->name('report.download');
     });
     // Profile
@@ -95,9 +100,12 @@ Route::middleware('db.connection')->group(function (){
     Route::get('choose_line/{sector_id}', [SiteController::class, 'choose_line'])->name('sector_line.choose');
     Route::get('drive/{sector_id}/line/{line_id}', [SiteController::class, 'drive'])->name('drive');
     Route::get('video/{id}', [SiteController::class, 'video'])->name('video');
+    Route::get('audio/{id}', [SiteController::class, 'audio'])->name('audio');
     Route::get('topic/{id}', [SiteController::class, 'topic'])->name('topic');
     Route::get('my/video', [SiteController::class, 'managerVideos'])->name('manager.videos');
     Route::get('add/video', [SiteController::class, 'createVideo'])->name('video.add');
+    Route::get('my/audio', [SiteController::class, 'managerAudios'])->name('manager.audios');
+    Route::get('add/audio', [SiteController::class, 'createAudio'])->name('audio.add');
     Route::get('my/file', [SiteController::class, 'managerFiles'])->name('manager.files');
     Route::get('add/file', [SiteController::class, 'createFile'])->name('file.add');
     // Actions
@@ -105,6 +113,7 @@ Route::middleware('db.connection')->group(function (){
     Route::post('delete_comment/{id}', [ActionsController::class, 'delete_comment'])->name('comment.delete');
     Route::get('toggle_favorite/{id}', [ActionsController::class, 'toggle_favorite'])->name('favorites.toggle');
     Route::get('toggle_favorite_videos/{id}', [ActionsController::class, 'toggle_favorite_videos'])->name('favorite_videos.toggle');
+    Route::get('toggle_favorite_audios/{id}', [ActionsController::class, 'toggle_favorite_audios'])->name('favorite_audios.toggle');
     Route::get('download_file/{id}', [ActionsController::class, 'download_file'])->name('file.download');
     Route::get('view_file/{id}', [ActionsController::class, 'view_file'])->name('file.view');
     Route::get('not_authorized', [ActionsController::class, 'not_authorized'])->name('not_authorized');

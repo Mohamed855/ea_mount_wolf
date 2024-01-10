@@ -10,6 +10,8 @@ use App\Models\LineSector;
 use App\Models\Sector;
 use App\Models\Video;
 use App\Models\VideoLine;
+use App\Models\Audio;
+use App\Models\AudioLine;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
@@ -33,6 +35,7 @@ class SectorsController extends Controller
             'sectors' => Sector::query()->with('line'),
             'countOfFiles' => File::query()->join('file_lines as fl', 'files.id','fl.file_id')->select('sector_id')->get(),
             'countOfVideos' => Video::query()->join('video_lines as vl', 'videos.id','vl.video_id')->select('sector_id')->get(),
+            'countOfAudios' => Audio::query()->join('audio_lines as al', 'audios.id','al.audio_id')->select('sector_id')->get(),
         ]);
     }
 
@@ -135,6 +138,7 @@ class SectorsController extends Controller
         LineSector::query()->where('sector_id', $id)->delete();
         FileLine::query()->where('sector_id', $id)->delete();
         VideoLine::query()->where('sector_id', $id)->delete();
+        AudioLine::query()->where('sector_id', $id)->delete();
         return $this->backWithMessage('success', 'Sector has been deleted');
     }
 }

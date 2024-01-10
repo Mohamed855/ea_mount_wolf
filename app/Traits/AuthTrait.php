@@ -7,6 +7,7 @@ use App\Models\FileNotification;
 use App\Models\TopicNotification;
 use App\Models\User;
 use App\Models\VideoNotification;
+use App\Models\AudioNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -36,26 +37,31 @@ trait AuthTrait {
                     ->first();
 
                 $video_notifications = [];
+                $audio_notifications = [];
                 $file_notifications = [];
                 $topic_notifications = TopicNotification::query()->get();
                 $comment_notifications = CommentNotification::query()->get();
 
                 if (auth()->user()->role == 1) {
                     $video_notifications = VideoNotification::query()->get();
+                    $audio_notifications = AudioNotification::query()->get();
                     $file_notifications = FileNotification::query()->get();
                 }
                 elseif (auth()->user()->role == 2) {
                     $video_notifications = VideoNotification::query()->whereIn('sector_id', auth()->user()->sectors)->get();
+                    $audio_notifications = AudioNotification::query()->whereIn('sector_id', auth()->user()->sectors)->get();
                     $file_notifications = FileNotification::query()->whereIn('sector_id', auth()->user()->sectors)->get();
                 }
                 elseif (auth()->user()->role == 3) {
                     $video_notifications = VideoNotification::query()->whereIn('sector_id', auth()->user()->sectors)->whereIn('line_id', auth()->user()->lines)->get();
+                    $audio_notifications = AudioNotification::query()->whereIn('sector_id', auth()->user()->sectors)->whereIn('line_id', auth()->user()->lines)->get();
                     $file_notifications = FileNotification::query()->whereIn('sector_id', auth()->user()->sectors)->whereIn('line_id', auth()->user()->lines)->get();
                 }
                 return view($view)
                     ->with([
                         'user_details' => $current_user_details,
                         'video_notifications' => $video_notifications,
+                        'audio_notifications' => $audio_notifications,
                         'file_notifications' => $file_notifications,
                         'comment_notifications' => $comment_notifications,
                         'topic_notifications' => $topic_notifications,

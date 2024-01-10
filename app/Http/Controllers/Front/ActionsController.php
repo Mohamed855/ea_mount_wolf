@@ -11,6 +11,8 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoView;
+use App\Models\Audio;
+use App\Models\AudioView;
 use App\Traits\GeneralTrait;
 use Illuminate\Http\Request;
 
@@ -57,6 +59,12 @@ class ActionsController extends Controller
         $current_user->videos()->toggle($video->id);
         return back();
     }
+    public function toggle_favorite_audios($id) {
+        $current_user = User::find(auth()->id());
+        $audio = Audio::find($id);
+        $current_user->audios()->toggle($audio->id);
+        return back();
+    }
     public function download_file($id) {
         if (auth()->user()->role = 1) {
             $file = File::query()->where('id', $id)->first();
@@ -64,7 +72,7 @@ class ActionsController extends Controller
             $headers = array('Content-Type: ' . $file->type,);
             return response()->download(public_path('storage/' . $public_file_name), $file->stored_name, $headers);
         }
-        return abort(404);
+        abort(404);
     }
     public function view_file($id)
     {
@@ -85,6 +93,14 @@ class ActionsController extends Controller
             $video_viewed->user_id = auth()->id();
             $video_viewed->video_id = $id;
             $video_viewed->save();
+        }
+    }
+    public function viewed_audio($id) {
+        $audio_viewed = new AudioView();
+        if (!AudioView::where('user_id', auth()->id())->where('audio_id', $id)->exists()) {
+            $audio_viewed->user_id = auth()->id();
+            $audio_viewed->audio_id = $id;
+            $audio_viewed->save();
         }
     }
     public function not_authorized() {

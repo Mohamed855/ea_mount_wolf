@@ -59,6 +59,10 @@
                                                      \app\Models\FileView::query()
                                                          ->join('files', 'file_views.file_id', '=', 'files.id')
                                                          ->select('files.sectors as sectors')
+                                                         ->whereJsonContains('sectors', $sector->id)->count() +
+                                                     \app\Models\AudioView::query()
+                                                         ->join('audios', 'audio_views.audio_id', '=', 'audios.id')
+                                                         ->select('audios.sectors as sectors')
                                                          ->whereJsonContains('sectors', $sector->id)->count()
                                                 }}</span>
                                         </div>

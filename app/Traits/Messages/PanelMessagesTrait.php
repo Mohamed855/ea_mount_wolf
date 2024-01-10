@@ -177,4 +177,17 @@ trait PanelMessagesTrait {
             'line.not_in' => 'Please select line',
         ];
     }
+    public function audiosMessages(): array
+    {
+        return [
+            'name.required' => 'Audio name is required',
+
+            'Audio.required' => 'Audio is required',
+            'Audio.mimes' => 'Audio type is not valid',
+            'Audio.max' => 'Audio is too big, max Audio size is 300 Mb',
+
+            'sector.not_in' => 'Please select Sector',
+            'line.not_in' => 'Please select line',
+        ];
+    }
 }

@@ -188,6 +188,82 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-12 py-3">
+                        <div class="brain-box-title">
+                            <h2 class="text-center">
+                                Audios
+                            </h2>
+                        </div>
+                        <hr>
+                        <div class="content">
+                            <div class="row scroll-bar py-3" style="height: auto">
+                                @if(count($user_audios->get()) > 0)
+                                    @if(isset($_GET['from']) && DateTime::createFromFormat('Y-m-d', $_GET['from']))
+                                        @php($user_audios = $user_audios->whereDate('audios.created_at', '>=', $_GET['from']))
+                                    @endif
+                                    @if(isset($_GET['to']) && DateTime::createFromFormat('Y-m-d', $_GET['to']))
+                                        @php($user_audios = $user_audios->whereDate('audios.created_at', '<=', $_GET['to']))
+                                    @endif
+                                    @if(isset($_GET['filter']))
+                                        @if($_GET['filter'] === 'name')
+                                            @php($user_audios = $user_audios->orderBy('audios.name', 'asc')->get())
+                                        @elseif($_GET['filter'] === 'date')
+                                            @php($user_audios = $user_audios->orderBy('audios.created_at', 'asc')->get())
+                                        @else
+                                            @php($user_audios = $user_audios->get())
+                                        @endif
+                                    @else
+                                        @php($user_audios = $user_audios->get())
+                                    @endif
+                                    @if(count($user_audios) > 0)
+                                        @foreach($user_audios as $audio)
+                                            <div class="col-6 col-md-4 col-lg-3">
+                                            <div class="incentive-box favorite border pb-3 mb-3">
+                                            <span>
+                                                <a href="{{ route('favorite_audios.toggle', $audio->id) }}">
+                                                    <img src="
+                                                    {{
+                                                        in_array($audio->id, $user_favorites_audios->pluck('audio_id')->toArray())  ?
+                                                        asset('storage/images/icons/star.png') :
+                                                        asset('storage/images/icons/star_light.png')
+                                                    }}" style="max-width: 16px">
+                                                </a>
+                                            </span>
+                                                <a href="{{ route('audio', $audio->id) }}">
+                                                    <div class="incentive-title">{{ $audio->name }}</div>
+                                                    <div class="incentive-body">
+                                                        <div class="incentive-txt">Published<br>{{ $audio->created_at }}
+                                                        </div>
+                                                        <div class="incentive-info-box">
+                                                            <div class="incentive-info in-views">
+                                                                <img src="{{ asset('storage/images/icons/eye_light.svg') }}"
+                                                                     style="max-width: 16px" alt="">
+                                                                {{ $audioViewed->where('audio_id', $audio->id)->count() }}
+                                                            </div>
+                                                            <div class="incentive-info in-files">
+                                                                <img
+                                                                    src="{{ asset('storage/images/icons/extensions/audio-icon.png') }}"
+                                                                    style="max-width: 16px" alt="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    @else
+                                        <div class="m-auto">
+                                            <p class="fs-4 p-5 text-center">There is no Audios in this line</p>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="m-auto">
+                                        <p class="fs-4 p-5 text-center">There is no Audios in this line</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
