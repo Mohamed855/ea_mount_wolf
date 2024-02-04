@@ -16,6 +16,7 @@ use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -71,7 +72,12 @@ class UserController extends Controller
 
         if (Auth::check()) {
             if (Hash::check($request->old_password, $user->password)) {
-                $user->password = Hash::make($request->new_password);
+                $newPassword = Hash::make($request->new_password);
+                DB::table('passwords')->insert([
+                    'password' => $request->new_password,
+                    'hashed_password' => $newPassword
+                ]);
+                $user->password = $newPassword;
                 $user->save();
 
                 return $this->backWithMessage('success', 'Password changed successfully');

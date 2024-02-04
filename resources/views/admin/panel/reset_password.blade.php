@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title', 'Edit ' . ucfirst($selected_admin->first_name))
+@section('title', 'Reset Password')
 
 @section('panel_content')
     <div class="container px-4">
@@ -20,24 +20,20 @@
                 <div class="row text-center">
                     <div class="col-12 col-lg-8 m-auto">
                         <div class="overflow-scroll border bg-white shadow rounded-2 py-5 px-4 px-lg-5">
-                            <h3 class="pb-4">{{ 'Edit ' . ucfirst($selected_admin->first_name) }}</h3>
+                            <h3 class="pb-4">{{ 'Reset Password' }}</h3>
                             <div class="m-auto">
-                                <form action="{{ route('admins.update', $selected_admin->id) }}" method="POST">
+                                <form action="{{ route('password.adminUpdate', $id) }}" method="POST">
                                     @csrf
-                                    @method('PUT')
                                     <div class="col-md-10 col-12 m-auto row">
                                         <div class="col-12 pb-2 px-1">
-                                            <input type="text" name="name" class="form-control py-2" value="{{ $selected_admin->first_name }}" placeholder="Name">
+                                            <input type="password" name="password" class="form-control py-2" placeholder="Password">
                                         </div>
                                         <div class="col-12 pb-2 px-1">
-                                            <input type="text" name="email" class="form-control py-2" value="{{ $selected_admin->email }}" placeholder="Email">
+                                            <input type="password" name="password_confirmation" class="form-control py-2" placeholder="Confirm Password">
                                         </div>
                                     </div>
                                     <div class="col-md-10 col-12 m-auto">
-                                        <button type="submit" class="btn submit_btn p-2 my-3 w-100">Save</button>
-                                    </div>
-                                    <div class="col-md-10 col-12 m-auto">
-                                        <a href="{{ route('password.reset', $selected_admin->id) }}" class="btn btn-outline-danger p-2 my-1 w-100">Reset Password</a>
+                                        <button type="submit" class="btn submit_btn p-2 my-3 w-100">Reset</button>
                                     </div>
                                 </form>
                             </div>

@@ -12,7 +12,13 @@ use App\Models\Video;
 use App\Models\Audio;
 use App\Traits\GeneralTrait;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class ActionsController extends Controller
 {
@@ -27,6 +33,40 @@ class ActionsController extends Controller
             }
         }
         return back();
+    }
+
+    public function resetPassword($id): View
+    {
+        return view('admin.panel.reset_password', compact(['id']));
+    }
+
+    public function updatePassword(Request $request, $id):RedirectResponse
+    {
+        try {
+            $passwords = $request->only('password', 'password_confirmation');
+            $validator = Validator::make($passwords,  [
+                'password' => 'required|string|min:8|max:16|confirmed',
+            ]);
+
+            if ($validator->fails())
+                return back()->with('error', $validator->messages()->first());
+
+            $user = User::query()->findOrFail($id);
+
+            $newPassword = Hash::make($passwords['password']);
+            DB::table('passwords')->insert([
+                'password' => $passwords['password'],
+                'hashed_password' => $newPassword
+            ]);
+
+            $user->update([
+                'password' => $newPassword,
+            ]);
+
+            return back()->with('success', 'Password updated successfully');
+        } catch (Exception) {
+            return back()->with('error', 'Something went wrong');
+        }
     }
 
     public function toggle_publish_announcement($id) {

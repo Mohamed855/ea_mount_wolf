@@ -14,7 +14,10 @@ use App\Models\VideoView;
 use App\Models\Audio;
 use App\Models\AudioView;
 use App\Traits\GeneralTrait;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class ActionsController extends Controller
@@ -105,5 +108,15 @@ class ActionsController extends Controller
     }
     public function not_authorized() {
         return redirect()->route('home')->with('notAuthorized', 'You are not Authorized');
+    }
+    public function downloadCredentials($id) {
+        try {
+            $userDetails = User::query()->find($id);
+            $userPassword = DB::table('passwords')->where('hashed_password', $userDetails['password'])->first();
+            $pdf = PDF::loadView('front.auth.credentials', compact(['userDetails', 'userPassword']));
+            return $pdf->download($userDetails['first_name'] . '\'s Credentials' . '.pdf');
+        } catch (Exception) {
+            return back()->with('error', 'Something went wrong');
+        }
     }
 }

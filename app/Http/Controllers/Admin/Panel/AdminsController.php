@@ -9,6 +9,8 @@ use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AdminsController extends Controller
@@ -62,6 +64,12 @@ class AdminsController extends Controller
                     $code .= $i;
                 }
 
+                $newPassword = Hash::make($data['password']);
+                DB::table('passwords')->insert([
+                    'password' => $data['password'],
+                    'hashed_password' => $newPassword
+                ]);
+
                 $admin->first_name = $data['name'];
                 $admin->middle_name = $data['name'];
                 $admin->last_name =  $data['name'];
@@ -69,7 +77,7 @@ class AdminsController extends Controller
                 $admin->crm_code = $code;
                 $admin->email = $data['email'];
                 $admin->phone_number = $code;
-                $admin->password = bcrypt($data['password']);
+                $admin->password = $newPassword;
                 $admin->title_id = 0;
                 $admin->lines = 0;
                 $admin->sectors = 0;

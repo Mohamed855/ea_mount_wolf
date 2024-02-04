@@ -143,7 +143,8 @@
     <div id="users_container" style="display: {{
                 check_url($currUrl, $panel_url . '/admins') ||
                 check_url($currUrl, $panel_url . '/managers') ||
-                check_url($currUrl, $panel_url . '/employees') ?
+                check_url($currUrl, $panel_url . '/employees') ||
+                check_url($currUrl, $panel_url . '/password') ?
                 'block' : 'none'
             }}">
         <a href="{{ route('admins.index') }}">

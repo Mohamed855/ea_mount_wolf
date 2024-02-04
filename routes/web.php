@@ -76,6 +76,8 @@ Route::middleware('db.connection')->group(function (){
         Route::get('panel/audios/viewed_by/{id}', [AudiosController::class, 'viewed_by'])->name('ea_audios.viewed_by');
         // Actions
         Route::post('toggle_active/{id}', [AdminActionsController::class, 'toggle_active'])->name('toggle_active');
+        Route::get('password/reset/{id}', [AdminActionsController::class, 'resetPassword'])->name('password.reset');
+        Route::post('password/update/{id}', [AdminActionsController::class, 'updatePassword'])->name('password.adminUpdate');
         Route::post('toggle_publish_announcement/{id}', [AdminActionsController::class, 'toggle_publish_announcement'])->name('toggle_publish_announcement');
         Route::post('toggle_publish_topic/{id}', [AdminActionsController::class, 'toggle_publish_topic'])->name('toggle_publish_topic');
         Route::post('toggle_publish_line/{id}', [AdminActionsController::class, 'toggle_publish_line'])->name('toggle_publish_line');
@@ -108,6 +110,7 @@ Route::middleware('db.connection')->group(function (){
     Route::get('add/audio', [SiteController::class, 'createAudio'])->name('audio.add');
     Route::get('my/file', [SiteController::class, 'managerFiles'])->name('manager.files');
     Route::get('add/file', [SiteController::class, 'createFile'])->name('file.add');
+    Route::get('credentials/view', [SiteController::class, 'credentials'])->name('credentials.view');
     // Actions
     Route::post('post_comment', [ActionsController::class, 'post_comment'])->name('comment.post');
     Route::post('delete_comment/{id}', [ActionsController::class, 'delete_comment'])->name('comment.delete');
@@ -117,4 +120,5 @@ Route::middleware('db.connection')->group(function (){
     Route::get('download_file/{id}', [ActionsController::class, 'download_file'])->name('file.download');
     Route::get('view_file/{id}', [ActionsController::class, 'view_file'])->name('file.view');
     Route::get('not_authorized', [ActionsController::class, 'not_authorized'])->name('not_authorized');
+    Route::get('credentials/download/{id}', [ActionsController::class, 'downloadCredentials'])->name('credentials.download');
 });

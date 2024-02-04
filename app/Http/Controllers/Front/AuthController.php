@@ -34,7 +34,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             if (auth()->user()->role == 2){
                 if (auth()->user()->activated) {
-                    return redirect()->route('home');
+                    return redirect()->route('credentials.view');
                 }
                 Session::flush();
                 Auth::logout();
@@ -63,7 +63,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             if (auth()->user()->role == 3){
                 if (auth()->user()->activated) {
-                    return redirect()->route('home');
+                    return redirect()->route('credentials.view');
                 }
                 Session::flush();
                 Auth::logout();

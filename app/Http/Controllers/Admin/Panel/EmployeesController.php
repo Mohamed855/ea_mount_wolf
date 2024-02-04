@@ -12,6 +12,8 @@ use App\Traits\GeneralTrait;
 use App\Traits\Messages\PanelMessagesTrait;
 use App\Traits\Rules\PanelRulesTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeesController extends Controller
@@ -80,6 +82,12 @@ class EmployeesController extends Controller
                 }
             }
 
+            $newPassword = Hash::make($data['password']);
+            DB::table('passwords')->insert([
+                'password' => $data['password'],
+                'hashed_password' => $newPassword
+            ]);
+
             $employee->first_name = $data['first_name'];
             $employee->middle_name = $data['middle_name'];
             $employee->last_name =  $data['last_name'];
@@ -87,7 +95,7 @@ class EmployeesController extends Controller
             $employee->crm_code = $data['crm_code'];
             $employee->email = $data['email'];
             $employee->phone_number = $data['phone_number'];
-            $employee->password = bcrypt($data['password']);
+            $employee->password = $newPassword;
             $employee->title_id = $data['title'];
             $employee->sectors = $employeeSectors;
             $employee->lines = $employeeLines;

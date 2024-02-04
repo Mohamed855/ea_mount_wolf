@@ -17,6 +17,7 @@ use App\Models\AudioView;
 use App\Traits\AuthTrait;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SiteController extends Controller
 {
@@ -280,6 +281,16 @@ class SiteController extends Controller
             return $this->ifAuthenticated('front.manager.files.create',[
                 'titles' => Title::query()->get(),
                 'sectors' => Sector::query()->whereIn('id', auth()->user()->sectors)->get(),
+            ]);
+        } else {
+            abort(404);
+        }
+    }
+    public function credentials()
+    {
+        if (Auth::check()) {
+            return $this->ifAuthenticated('front.auth.download_credentials', [
+                'userPassword' => DB::table('passwords')->where('hashed_password', Auth::user()->password)->first(),
             ]);
         } else {
             abort(404);
