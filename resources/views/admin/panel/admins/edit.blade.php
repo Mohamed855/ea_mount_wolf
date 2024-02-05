@@ -37,7 +37,7 @@
                                         <button type="submit" class="btn submit_btn p-2 my-3 w-100">Save</button>
                                     </div>
                                     <div class="col-md-10 col-12 m-auto">
-                                        <a href="{{ route('password.reset', $selected_admin->id) }}" class="btn btn-outline-danger p-2 my-1 w-100">Reset Password</a>
+                                        <a href="{{ route('password.adminReset', $selected_admin->id) }}" class="btn btn-outline-danger p-2 my-1 w-100">Reset Password</a>
                                     </div>
                                 </form>
                             </div>

@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\Panel\TitlesController;
 use App\Http\Controllers\Admin\Panel\TopicsController;
 use App\Http\Controllers\Admin\Panel\VideosController;
 use App\Http\Controllers\Admin\Panel\AudiosController;
+use App\Http\Controllers\Front\Passwords\ForgetPasswordController;
+use App\Http\Controllers\Front\Passwords\ResetPasswordController;
 use App\Http\Controllers\ChooseLoginController;
 use App\Http\Controllers\Front\ActionsController;
 use App\Http\Controllers\Front\AuthController;
@@ -45,6 +47,14 @@ Route::middleware('db.connection')->group(function (){
     Route::post('admin', [AdminAuthController::class, 'admin_check_credentials'])->name('admin.check_credentials');
     Route::get('logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
     Route::post('logout', [AuthController::class, 'endSession'])->middleware('auth')->name('session.end');
+    // Reset Password
+    Route::prefix('password')->group(function () {
+        Route::get('request', [ForgetPasswordController::class, 'requestPassword'])->name('password.request');
+        Route::post('email', [ForgetPasswordController::class, 'sendEmailPassword'])->name('password.email');
+        Route::get('reset-sent-successfully', [ForgetPasswordController::class, 'emailSentSuccessfully'])->name('resetEmailSentSuccessfully');
+        Route::get('reset', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
+        Route::post('update', [ResetPasswordController::class, 'updatePassword'])->name('password.save');
+    });
     // Panel
     Route::group(['prefix' => 'panel'], function (){
         // Index
@@ -76,7 +86,7 @@ Route::middleware('db.connection')->group(function (){
         Route::get('panel/audios/viewed_by/{id}', [AudiosController::class, 'viewed_by'])->name('ea_audios.viewed_by');
         // Actions
         Route::post('toggle_active/{id}', [AdminActionsController::class, 'toggle_active'])->name('toggle_active');
-        Route::get('password/reset/{id}', [AdminActionsController::class, 'resetPassword'])->name('password.reset');
+        Route::get('password/reset/{id}', [AdminActionsController::class, 'resetPassword'])->name('password.adminReset');
         Route::post('password/update/{id}', [AdminActionsController::class, 'updatePassword'])->name('password.adminUpdate');
         Route::post('toggle_publish_announcement/{id}', [AdminActionsController::class, 'toggle_publish_announcement'])->name('toggle_publish_announcement');
         Route::post('toggle_publish_topic/{id}', [AdminActionsController::class, 'toggle_publish_topic'])->name('toggle_publish_topic');

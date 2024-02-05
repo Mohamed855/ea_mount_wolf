@@ -102,6 +102,9 @@
                             <a href="{{ route('password.change') }}" class="btn btn-sm btn-outline-primary btn-rounded">
                                 Change Password
                             </a>
+                            <a href="{{ route('credentials.download', auth()->id()) }}" class="btn btn-sm btn-outline-success btn-rounded">
+                                Download Credentials
+                            </a>
                         </div>
                     </div>
                 </div>

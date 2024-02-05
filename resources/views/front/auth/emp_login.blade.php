@@ -30,6 +30,9 @@
                                 <div class="form-btns">
                                     <button type="submit" class="ea-btns dark-btn">Log In</button>
                                 </div>
+                                <div class="form-btns pt-3">
+                                    <a href="{{ route('password.request') }}" class="btn-link text-decoration-none">Forget password</a>
+                                </div>
                             </form>
                         </div>
                     </div>
