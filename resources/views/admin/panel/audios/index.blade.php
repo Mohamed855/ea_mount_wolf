@@ -17,6 +17,11 @@
             {{ session('error') }}
         </div>
     @endif
+    @if(isset($_GET['success']))
+        <div class="alert alert-success text-center" role="alert">
+            Audio added successfully
+        </div>
+    @endif
     @include('includes.admin.panel_filter')
     <div class="scroll-bar overflow-scroll">
         <table class="table bg-white">

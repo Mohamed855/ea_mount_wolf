@@ -76,7 +76,7 @@ class SectorsController extends Controller
                 }
             }
 
-            return $this->backWithMessage('success', 'Sector created successfully');
+            return redirect()->route('sectors.index')->with(['success', 'Sector created successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
@@ -123,7 +123,7 @@ class SectorsController extends Controller
             }
 
 
-            return $this->backWithMessage('success', 'Sector saved successfully');
+            return redirect()->route('sectors.index')->with(['success', 'Sector saved successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

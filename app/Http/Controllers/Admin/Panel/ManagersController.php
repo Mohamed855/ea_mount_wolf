@@ -116,7 +116,7 @@ class ManagersController extends Controller
             }
             $manager->update(['sectors' => $managerSectors, 'lines' => $allManagerLines]);
 
-            return $this->backWithMessage('success', 'Manager added successfully');
+            return redirect()->route('managers.index')->with(['success', 'Manager added successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
@@ -195,7 +195,7 @@ class ManagersController extends Controller
                     'activated' => 1,
                 ]);
 
-            return $this->backWithMessage('success', 'Manager details saved successfully');
+            return redirect()->route('managers.index')->with(['success', 'Manager details saved successfully']);
         }  catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

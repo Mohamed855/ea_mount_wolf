@@ -155,8 +155,7 @@
                                     function onLoad(event) {
                                         document.getElementById('loaderContainer').style.display = 'none';
                                         document.getElementById('submitButton').removeAttribute('disabled');
-                                        audioSuccess.innerHTML = "Audio added successfully";
-                                        audioSuccess.style.display = 'block';
+                                        window.location.href = "{{ route('audios.index', 'success') }}"
                                     }
                                     function onError(event) {
                                         audioErr.innerHTML = "An error occurred during the upload process";

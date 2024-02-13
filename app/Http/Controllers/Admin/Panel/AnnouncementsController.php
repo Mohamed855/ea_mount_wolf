@@ -69,7 +69,7 @@ class AnnouncementsController extends Controller
             $request->image->storeAs('public/images/announcements', $announcement_image);
             $request->image->move(public_path('storage/images/announcements'), $announcement_image);
 
-            return $this->backWithMessage('success', 'Announcement shared successfully');
+            return redirect()->route('announcements.index')->with(['success', 'Announcement shared successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

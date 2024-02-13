@@ -137,7 +137,7 @@ class VideosController extends Controller
                 }
             }
 
-            return $this->backWithMessage('success', 'Video added successfully');
+            return redirect()->route('videos.index')->with(['success' => 'Video added successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went wrong, please try again later');
         }

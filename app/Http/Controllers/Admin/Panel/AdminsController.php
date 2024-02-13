@@ -86,7 +86,7 @@ class AdminsController extends Controller
 
                 $admin->save();
 
-                return $this->backWithMessage('success', 'Admin added successfully');
+                return redirect()->route('admins.index')->with(['success' => 'Admin added successfully']);
             } catch (\Exception $e) {
                 return $this->backWithMessage('error', 'Something went error, please try again later');
             }
@@ -147,7 +147,7 @@ class AdminsController extends Controller
                         'activated' => 1,
                     ]);
 
-                return $this->backWithMessage('success', 'Admin details saved successfully');
+                return redirect()->route('admins.index')->with(['success' => 'Admin details saved successfully']);
             } catch (\Exception $e) {
                 return $this->backWithMessage('error', 'Something went error, please try again later');
             }

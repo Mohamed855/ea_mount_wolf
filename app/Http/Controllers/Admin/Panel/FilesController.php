@@ -139,7 +139,7 @@ class FilesController extends Controller
                 }
             }
 
-            return $this->backWithMessage('success', 'File uploaded successfully');
+            return redirect()->route('ea_files.index')->with(['success', 'File uploaded successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

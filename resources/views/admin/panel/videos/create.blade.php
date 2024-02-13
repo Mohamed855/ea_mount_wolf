@@ -155,8 +155,7 @@
                                     function onLoad(event) {
                                         document.getElementById('loaderContainer').style.display = 'none';
                                         document.getElementById('submitButton').removeAttribute('disabled');
-                                        videoSuccess.innerHTML = "Video added successfully";
-                                        videoSuccess.style.display = 'block';
+                                        window.location.href = "{{ route('videos.index', 'success') }}"
                                     }
                                     function onError(event) {
                                         videoErr.innerHTML = "An error occurred during the upload process";

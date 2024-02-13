@@ -79,7 +79,7 @@ class TopicsController extends Controller
 
             $notification->save();
 
-            return $this->backWithMessage('success', 'Topic shared successfully');
+            return redirect()->route('ea_topics.index')->with(['success' => 'Topic shared successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
@@ -138,7 +138,7 @@ class TopicsController extends Controller
 
             $notification->save();
 
-            return $this->backWithMessage('success', 'Topic saved successfully');
+            return redirect()->route('ea_topics.index')->with(['success', 'Topic saved successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

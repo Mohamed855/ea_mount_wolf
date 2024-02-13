@@ -137,7 +137,7 @@ class AudiosController extends Controller
                 }
             }
 
-            return $this->backWithMessage('success', 'Audio added successfully');
+            return redirect()->route('audios.index')->with(['success', 'Audio added successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went wrong, please try again later');
         }

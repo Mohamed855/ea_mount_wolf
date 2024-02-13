@@ -52,7 +52,7 @@ class TitlesController extends Controller
 
             Title::query()->create($request->only('name'));
 
-            return $this->backWithMessage('success', 'Title added successfully');
+            return redirect()->route('titles.index')->with(['success', 'Title added successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }

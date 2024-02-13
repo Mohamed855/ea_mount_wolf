@@ -100,14 +100,14 @@ trait PanelRulesTrait {
     public function videosRules(): array
     {
         return [
-            'video' => 'required|max:307200',
+            'video' => 'required|max:314572800',
             'name' => 'required',
         ];
     }
     public function audiosRules(): array
     {
         return [
-            'audio' => 'required|max:307200',
+            'audio' => 'required|max:314572800',
             'name' => 'required',
         ];
     }

@@ -74,7 +74,7 @@ class LinesController extends Controller
                 }
             }
 
-            return $this->backWithMessage('success', 'Line created successfully');
+            return redirect()->route('lines.index')->with(['success' => 'Line created successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
@@ -121,7 +121,7 @@ class LinesController extends Controller
                 }
             }
 
-            return $this->backWithMessage('success', 'Line saved successfully');
+            return redirect()->route('lines.index')->with(['success' => 'Line saved successfully']);
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went error, please try again later');
         }
