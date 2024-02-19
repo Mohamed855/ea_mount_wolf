@@ -69,23 +69,41 @@ class VideosController extends Controller
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), $this->videosRules(), $this->videosMessages());
+            if ($request['is_youtube']) {
+                $rules = $this->youtubeVideosRules();
+                $messages = $this->youtubeVideosMessages();
+            } else {
+                $rules = $this->VideosRules();
+                $messages = $this->videosMessages();
+            }
+
+            $validator = Validator::make($request->all(), $rules, $messages);
 
             if ($validator->fails()) {
                 return $this->backWithMessage('error', $validator->errors()->first());
             }
 
-            $randomFileName = Str::random(20) . '.' . $request->file('video')->getClientOriginalExtension();
-            $videoPath = $request->file('video')->storeAs('public/videos', $randomFileName);
             $video = new Video();
-
             $video->name = $request->name;
-            $video->src = Storage::url($videoPath);
             $video->user_id = auth()->id();
             $video->status = 1;
             $video->titles = [];
             $video->sectors = [];
             $video->lines = [];
+
+
+            if ($request['is_youtube']) {
+                $youtube_url = $request['youtube_link'];
+                parse_str(parse_url($youtube_url, PHP_URL_QUERY), $params);
+                $youtube_video_id = $params['v'];
+                $video->src = $youtube_video_id;
+                $video->is_youtube = 1;
+            } else {
+                $randomFileName = Str::random(20) . '.' . $request->file('video')->getClientOriginalExtension();
+                $videoPath = $request->file('video')->storeAs('public/videos', $randomFileName);
+                $video->src = Storage::url($videoPath);
+                $video->is_youtube = 0;
+            }
 
             $video->save();
 

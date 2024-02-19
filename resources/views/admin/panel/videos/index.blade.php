@@ -57,10 +57,14 @@
                                 <span>{{ $video->name}}</span>
                             </td>
                             <td>
-                                <video width="200" controls>
-                                    <source src="{{ $video->src }}" type="video/mp4">
-                                    Your browser does not support the video.
-                                </video>
+                                @if($video->is_youtube)
+                                    {{ 'https://www.youtube.com/embed/' . $video->src }}
+                                @else
+                                    <video width="200" controls>
+                                        <source src="{{ $video->src }}" type="video/mp4">
+                                        Your browser does not support the video.
+                                    </video>
+                                @endif
                             </td>
                             <td>{{ ucfirst($video->user_name) }}</td>
                             <td>

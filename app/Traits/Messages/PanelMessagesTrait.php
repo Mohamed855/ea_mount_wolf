@@ -177,6 +177,18 @@ trait PanelMessagesTrait {
             'line.not_in' => 'Please select line',
         ];
     }
+    public function youtubeVideosMessages(): array
+    {
+        return [
+            'name.required' => 'Video name is required',
+
+            'youtube_link.required' => 'Youtube link is required',
+            'youtube_link.regex' => 'Enter a valid youtube link',
+
+            'sector.not_in' => 'Please select Sector',
+            'line.not_in' => 'Please select line',
+        ];
+    }
     public function audiosMessages(): array
     {
         return [

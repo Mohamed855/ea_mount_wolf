@@ -20,9 +20,8 @@
                                 {{ session('error') }}
                             </div>
                         @endif
-                        <div id="video_err" class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;">
-                            The file is too big. Maximum allowed size is 300 MB
-                        </div>
+                        <div id="video_err" class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;"></div>
+                        <div id="video_success" class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;"></div>
                     </div>
                     <div class="col-12 col-lg-8 m-auto">
                         <div class="overflow-scroll border bg-white shadow rounded-2 py-5 px-4 px-lg-5">
@@ -32,13 +31,26 @@
                             </div>
                             <form action="{{ route('videos.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <div class="col-md-8 col-12 d-inline-block">
+                                <div class="col-md-10 col-12 d-inline-block">
                                     <div class="pb-3">
-                                        <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="Video Name">
+                                        <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="Video Name" required>
                                     </div>
+
                                     <div class="pb-3">
+                                        <select class="form-control py-2" name="is_youtube" id="is_youtube">
+                                            <option disabled selected>Select video type</option>
+                                            <option value="0">Storage Video</option>
+                                            <option value="1">Youtube Video</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="pb-3" id="youtube_link_container" style="display: none;">
+                                        <input type="text" name="youtube_link" id="youtube_link" class="form-control py-2" value="{{ old('youtube_link') }}" placeholder="Youtube Link">
+                                    </div>
+                                    <div class="pb-3" id="video_container" style="display: none;">
                                         <input type="file" name="video" id="video" class="form-control py-2" accept="video/*" placeholder="Video File">
                                     </div>
+
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                         <div class="row">
                                             <h6 class="text-start">Choose sector</h6>
@@ -109,8 +121,8 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-12 m-auto">
-                                    <button class="btn submit_btn p-2 my-3 w-100" onclick="checkFileSize()" id="submitButton">Add video</button>
+                                <div class="col-md-10 col-12 m-auto">
+                                    <button class="btn submit_btn p-2 my-3 w-100" onclick="uploadVideo()" id="submitButton">Add video</button>
                                     <span class="text-dark">Max size is 300 MB</span>
                                 </div>
                             </form>
@@ -128,22 +140,91 @@
 
     <script src="{{ asset('assets/js/owl.carousel.js') }}"></script>
     <script>
-        function checkFileSize() {
+        let is_youtube = document.getElementById("is_youtube");
+        let youtube_link = document.getElementById("youtube_link_container");
+        let video = document.getElementById("video_container");
+
+        is_youtube.addEventListener("change", function() {
+            let value = is_youtube.value;
+            if (value === "0") {
+                youtube_link.style.display = "none";
+                video.style.display = "block";
+            } else if (value === "1") {
+                youtube_link.style.display = "block";
+                video.style.display = "none";
+            }
+        });
+        function uploadVideo() {
             let fileInput = document.getElementById('video');
             let videoErr = document.getElementById('video_err');
+            let videoSuccess = document.getElementById('video_success');
             if (fileInput.files.length > 0) {
-                let fileSize = fileInput.files[0].size / (1024 * 1024);
-                let maxFileSize = 300;
-                if (fileSize > maxFileSize) {
+                let fileSizeMB = fileInput.files[0].size / (1024 * 1024);
+                let maxFileSizeMB = 300;
+                if (fileSizeMB > maxFileSizeMB) {
+                    videoErr.innerHTML = "The file is too big. Maximum allowed size is 300 MB.";
                     videoErr.style.display = 'block';
-                    return;
+                    return false;
+                }
+
+                let form = document.getElementById("videoForm");
+                form.addEventListener("submit", function(event) {
+                    event.preventDefault();
+
+                    let fileInput = form.querySelector("input[type=file]");
+                    let file = fileInput.files[0];
+                    let formData = new FormData();
+
+                    formData.append("video", file);
+                    formData.append("_token", form.querySelector("input[name=_token]").value);
+                    formData.append("name", form.name.value);
+                    for (let title of document.getElementsByClassName("title_checkbox")) {
+                        if (title.checked) {
+                            formData.append(title.name, title.value);
+                        }
+                    }
+                    for (let sector of document.getElementsByClassName("sector_checkbox")) {
+                        if (sector.checked) {
+                            formData.append(sector.name, sector.value);
+                            for (let line of document.getElementsByClassName("line_checkbox")) {
+                                if (line.checked && line.id.startsWith(sector.id)) {
+                                    formData.append(line.name, line.value);
+                                }
+                            }
+                        }
+                    }
+
+                    let xhr = new XMLHttpRequest();
+
+                    xhr.addEventListener("load", onLoad);
+                    xhr.addEventListener("error", onError);
+                    xhr.upload.addEventListener("progress", onProgress);
+
+                    xhr.open("POST", "{{ route('videos.store') }}");
+
+                    xhr.send(formData);
+                });
+            }
+
+            function onLoad(event) {
+                document.getElementById('loaderContainer').style.display = 'none';
+                document.getElementById('submitButton').removeAttribute('disabled');
+                window.location.href = "{{ route('videos.index', 'success') }}"
+            }
+            function onError(event) {
+                videoErr.innerHTML = "An error occurred during the upload process";
+                videoErr.style.display = 'block';
+            }
+            function onProgress(event) {
+                document.getElementById('submitButton').setAttribute('disabled', 'disabled');
+                document.getElementById('loaderContainer').style.display = 'flex';
+                if (event.lengthComputable) {
+                    let loaded = event.loaded;
+                    let total = event.total;
+                    let percent = Math.round((loaded / total) * 100);
+                    document.getElementById('progressText').textContent = percent + '';
                 }
             }
-            document.getElementById('videoForm').addEventListener('submit', function () {
-                document.getElementById('loaderContainer').style.display = 'flex';
-                document.getElementById('submitButton').setAttribute('disabled', 'disabled');
-            });
-            document.getElementById('videoForm').submit();
         }
     </script>
     <script>

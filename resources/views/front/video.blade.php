@@ -17,10 +17,14 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="video-box ratio ratio-16x9">
-                            <video width="200" controls>
-                                <source src="{{ $video->src }}" type="video/mp4">
-                                Your browser does not support the video.
-                            </video>
+                            @if($video->is_youtube)
+                                <iframe src="{{ 'https://www.youtube.com/embed/' . $video->src }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            @else
+                                <video width="200" controls>
+                                    <source src="{{ $video->src }}" type="video/mp4">
+                                    Your browser does not support the video.
+                                </video>
+                            @endif
                         </div>
                         <div class="video-info pt-3">
                             <div class="video-caption">

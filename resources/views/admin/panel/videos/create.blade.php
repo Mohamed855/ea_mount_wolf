@@ -4,6 +4,15 @@
 
 @section('panel_content')
     <div class="container px-4">
+        @if(session()->has('success'))
+            <div class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert">
+                {{ session('success') }}
+            </div>
+        @elseif(session()->has('error'))
+            <div class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
         <div id="video_err" class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;"></div>
         <div id="video_success" class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;"></div>
     </div>
@@ -24,8 +33,20 @@
                                     <div class="pb-3">
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="Video Name" required>
                                     </div>
+
                                     <div class="pb-3">
-                                        <input type="file" name="video" id="video" class="form-control py-2" accept="video/*" placeholder="Video File" required>
+                                        <select class="form-control py-2" name="is_youtube" id="is_youtube">
+                                            <option disabled selected>Select video type</option>
+                                            <option value="0">Storage Video</option>
+                                            <option value="1">Youtube Video</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="pb-3" id="youtube_link_container" style="display: none;">
+                                        <input type="text" name="youtube_link" id="youtube_link" class="form-control py-2" value="{{ old('youtube_link') }}" placeholder="Youtube Link">
+                                    </div>
+                                    <div class="pb-3" id="video_container" style="display: none;">
+                                        <input type="file" name="video" id="video" class="form-control py-2" accept="video/*" placeholder="Video File">
                                     </div>
 
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
@@ -100,6 +121,20 @@
                                 </div>
                             </form>
                             <script>
+                                let is_youtube = document.getElementById("is_youtube");
+                                let youtube_link = document.getElementById("youtube_link_container");
+                                let video = document.getElementById("video_container");
+
+                                is_youtube.addEventListener("change", function() {
+                                    let value = is_youtube.value;
+                                    if (value === "0") {
+                                        youtube_link.style.display = "none";
+                                        video.style.display = "block";
+                                    } else if (value === "1") {
+                                        youtube_link.style.display = "block";
+                                        video.style.display = "none";
+                                    }
+                                });
                                 function uploadVideo() {
                                     let fileInput = document.getElementById('video');
                                     let videoErr = document.getElementById('video_err');

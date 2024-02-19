@@ -100,7 +100,16 @@ trait PanelRulesTrait {
     public function videosRules(): array
     {
         return [
+            'is_youtube' => 'required|in:0,1',
             'video' => 'required|max:314572800',
+            'name' => 'required',
+        ];
+    }
+    public function youtubeVideosRules(): array
+    {
+        return [
+            'is_youtube' => 'required|in:0,1',
+            'youtube_link' => 'required|regex:/https:\/\/www\.youtube\.com\/watch\?v=[^&]+/',
             'name' => 'required',
         ];
     }
