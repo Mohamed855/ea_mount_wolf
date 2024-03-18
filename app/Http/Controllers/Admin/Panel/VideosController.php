@@ -91,7 +91,6 @@ class VideosController extends Controller
             $video->sectors = [];
             $video->lines = [];
 
-
             if ($request['is_youtube']) {
                 $youtube_url = $request['youtube_link'];
                 parse_str(parse_url($youtube_url, PHP_URL_QUERY), $params);
@@ -197,5 +196,10 @@ class VideosController extends Controller
         } catch (\Exception $e) {
             return $this->backWithMessage('error', 'Something went wrong, please try again later');
         }
+    }
+
+    public function videoStored()
+    {
+        return redirect()->route('videos.index')->with(['success' => 'Video added successfully']);
     }
 }

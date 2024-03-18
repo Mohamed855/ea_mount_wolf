@@ -217,6 +217,10 @@ class SiteController extends Controller
             abort(404);
         }
     }
+    public function videoStored()
+    {
+        return redirect()->route('manager.videos')->with(['success' => 'Video added successfully']);
+    }
     public function managerAudios()
     {
         if (Auth::check() && Auth::user()->role == 2) {

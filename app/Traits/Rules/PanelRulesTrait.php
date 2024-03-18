@@ -27,7 +27,7 @@ trait PanelRulesTrait {
     {
         return [
             'title' => 'required',
-            'image' => 'required|max:20480|mimetypes:image/jpeg,image/png,image/gif'
+            'image' => 'required|max:20480||image|mimes:jpeg,jpg,png'
         ];
     }
     public function titleRules(): array
@@ -60,7 +60,7 @@ trait PanelRulesTrait {
         return [
             'title' => 'required',
             'description' => 'required',
-            'image' => 'required|max:20480|mimetypes:image/jpeg,image/png,image/gif'
+            'image' => 'required|max:20480|image|mimes:jpeg,jpg,png'
         ];
     }
     public function userRules(): array
@@ -101,7 +101,7 @@ trait PanelRulesTrait {
     {
         return [
             'is_youtube' => 'required|in:0,1',
-            'video' => 'required|max:314572800',
+            'video' => 'required|mimes:mp4,mov,ogg|max:314572800',
             'name' => 'required',
         ];
     }
@@ -116,7 +116,7 @@ trait PanelRulesTrait {
     public function audiosRules(): array
     {
         return [
-            'audio' => 'required|max:314572800',
+            'audio' => 'required|mimes:mp3,wav,ogg|max:314572800',
             'name' => 'required',
         ];
     }

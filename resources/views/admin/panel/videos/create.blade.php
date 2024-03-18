@@ -14,7 +14,6 @@
             </div>
         @endif
         <div id="video_err" class="alert alert-danger text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;"></div>
-        <div id="video_success" class="alert alert-success text-center m-auto mb-2 col-12 col-lg-8" role="alert" style="display:none;"></div>
     </div>
     <div class="content-wraper withnav">
         <div class="body-content">
@@ -138,7 +137,6 @@
                                 function uploadVideo() {
                                     let fileInput = document.getElementById('video');
                                     let videoErr = document.getElementById('video_err');
-                                    let videoSuccess = document.getElementById('video_success');
                                     if (fileInput.files.length > 0) {
                                         let fileSizeMB = fileInput.files[0].size / (1024 * 1024);
                                         let maxFileSizeMB = 300;
@@ -159,6 +157,7 @@
                                             formData.append("video", file);
                                             formData.append("_token", form.querySelector("input[name=_token]").value);
                                             formData.append("name", form.name.value);
+                                            formData.append("is_youtube", form.is_youtube.value);
                                             for (let title of document.getElementsByClassName("title_checkbox")) {
                                                 if (title.checked) {
                                                     formData.append(title.name, title.value);
@@ -190,7 +189,7 @@
                                     function onLoad(event) {
                                         document.getElementById('loaderContainer').style.display = 'none';
                                         document.getElementById('submitButton').removeAttribute('disabled');
-                                        window.location.href = "{{ route('videos.index', 'success') }}"
+                                        window.location.href = "{{ route('videoStored') }}"
                                     }
                                     function onError(event) {
                                         videoErr.innerHTML = "An error occurred during the upload process";

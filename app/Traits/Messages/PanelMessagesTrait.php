@@ -39,7 +39,7 @@ trait PanelMessagesTrait {
 
             'image.required' => 'You must upload image',
             'image.max' => 'Image is too big',
-            'image.mimetypes' => 'This type is not supported',
+            'image.mimes' => 'This type is not supported',
         ];
     }
     public function titleMessages(): array
@@ -62,7 +62,7 @@ trait PanelMessagesTrait {
 
             'file.required' => 'You must upload file',
             'file.max' => 'File is too big',
-            'file.mimetypes' => 'This type is not supported',
+            'file.mimes' => 'This type is not supported',
         ];
     }
     public function lineMessages(): array
@@ -92,7 +92,7 @@ trait PanelMessagesTrait {
 
             'image.required' => 'You must upload image',
             'image.max' => 'Image is too big',
-            'image.mimetypes' => 'This type is not supported',
+            'image.mimes' => 'This type is not supported',
         ];
     }
     public function userMessages(): array

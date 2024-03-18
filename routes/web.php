@@ -81,6 +81,7 @@ Route::middleware('db.connection')->group(function (){
         // Videos
         Route::resource('videos', VideosController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::get('panel/videos/viewed_by/{id}', [VideosController::class, 'viewed_by'])->name('ea_videos.viewed_by');
+        Route::get('videoStored', [VideosController::class, 'videoStored'])->name('videoStored');
         // Audios
         Route::resource('audios', AudiosController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::get('panel/audios/viewed_by/{id}', [AudiosController::class, 'viewed_by'])->name('ea_audios.viewed_by');
@@ -115,6 +116,7 @@ Route::middleware('db.connection')->group(function (){
     Route::get('audio/{id}', [SiteController::class, 'audio'])->name('audio');
     Route::get('topic/{id}', [SiteController::class, 'topic'])->name('topic');
     Route::get('my/video', [SiteController::class, 'managerVideos'])->name('manager.videos');
+    Route::get('videoStored', [SiteController::class, 'videoStored'])->name('managerVideoStored');
     Route::get('add/video', [SiteController::class, 'createVideo'])->name('video.add');
     Route::get('my/audio', [SiteController::class, 'managerAudios'])->name('manager.audios');
     Route::get('add/audio', [SiteController::class, 'createAudio'])->name('audio.add');

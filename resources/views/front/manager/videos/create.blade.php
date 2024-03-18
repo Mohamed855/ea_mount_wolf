@@ -48,7 +48,7 @@
                                         <input type="text" name="youtube_link" id="youtube_link" class="form-control py-2" value="{{ old('youtube_link') }}" placeholder="Youtube Link">
                                     </div>
                                     <div class="pb-3" id="video_container" style="display: none;">
-                                        <input type="file" name="video" id="video" class="form-control py-2" accept="video/*" placeholder="Video File">
+                                        <input type="file" name="video" id="video" class="form-control py-2" accept=".mp4,.mov,.ogg" placeholder="Video File">
                                     </div>
 
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
@@ -157,7 +157,6 @@
         function uploadVideo() {
             let fileInput = document.getElementById('video');
             let videoErr = document.getElementById('video_err');
-            let videoSuccess = document.getElementById('video_success');
             if (fileInput.files.length > 0) {
                 let fileSizeMB = fileInput.files[0].size / (1024 * 1024);
                 let maxFileSizeMB = 300;
@@ -178,6 +177,7 @@
                     formData.append("video", file);
                     formData.append("_token", form.querySelector("input[name=_token]").value);
                     formData.append("name", form.name.value);
+                    formData.append("is_youtube", form.is_youtube.value);
                     for (let title of document.getElementsByClassName("title_checkbox")) {
                         if (title.checked) {
                             formData.append(title.name, title.value);
@@ -209,7 +209,7 @@
             function onLoad(event) {
                 document.getElementById('loaderContainer').style.display = 'none';
                 document.getElementById('submitButton').removeAttribute('disabled');
-                window.location.href = "{{ route('videos.index', 'success') }}"
+                window.location.href = "{{ route('managerVideoStored') }}"
             }
             function onError(event) {
                 videoErr.innerHTML = "An error occurred during the upload process";

@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="col-md-10 col-12 m-auto">
                                     <div class="pb-3">
-                                        <input type="file" name="image" id="file" class="form-control py-2" accept="image/png, image/gif, image/jpeg">
+                                        <input type="file" name="image" id="file" class="form-control py-2" accept=".png,.jpg,.jpeg">
                                     </div>
                                 </div>
                                 <div class="col-md-10 col-12 m-auto">

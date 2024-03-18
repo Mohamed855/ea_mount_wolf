@@ -41,7 +41,7 @@
                                             @method('PUT')
                                             <label class="btn btn-sm btn-outline-primary btn-rounded">
                                                 <input type="file" name="profile_picture" id="profile_picture"
-                                                       accept=".png,.jpg">
+                                                       accept=".png,.jpg,.jpeg">
                                                 Upload
                                             </label>
                                         </form>
@@ -54,7 +54,7 @@
                                             @method('PUT')
                                             <label class="btn btn-sm btn-outline-primary btn-rounded">
                                                 <input type="file" name="profile_picture" id="profile_picture"
-                                                       accept=".png,.jpg">
+                                                       accept=".png,.jpg,.jpeg">
                                                 Change
                                             </label>
                                         </form>

@@ -37,7 +37,7 @@
                                         <input type="text" name="name" class="form-control py-2" value="{{ old('name') }}" placeholder="Audio Name">
                                     </div>
                                     <div class="pb-3">
-                                        <input type="file" name="audio" id="audio" class="form-control py-2" accept="audio/*" placeholder="Audio File">
+                                        <input type="file" name="audio" id="audio" class="form-control py-2" accept=".mp3,.wav,.ogg" placeholder="Audio File">
                                     </div>
                                     <div class="col-12 p-3 mt-2 mb-3 border rounded">
                                         <div class="row">
